@@ -1,13 +1,16 @@
 package io.github.mattlavallee.budgetbeaver;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.SubMenu;
+import android.widget.FrameLayout;
+
+import java.util.ArrayList;
+
 
 public class BudgetBeaverActivity extends AppCompatActivity {
 
@@ -15,38 +18,26 @@ public class BudgetBeaverActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_beaver);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.budget_beaver_drawer_layout);
+        FrameLayout activityContainer = (FrameLayout) drawerLayout.findViewById(R.id.budget_beaver_activity_content);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.budget_beaver_toolbar);
         setSupportActionBar(toolbar);
+        setTitle("Budget Beaver");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
+        NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
+        Menu drawerMenu = drawerMenuNav.getMenu();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_budget_beaver, menu);
-        return true;
-    }
+        SubMenu accountsSubMenu = drawerMenu.getItem(2).getSubMenu();
+        accountsSubMenu.clear();
+        ArrayList<String> accounts = new ArrayList<String>();
+        accounts.add("Pirate Booty");
+        accounts.add("Under the Mattress");
+        accounts.add("Mason Jars");
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        for(int i = 0; i < accounts.size(); i++){
+            accountsSubMenu.add(accounts.get(i));
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
