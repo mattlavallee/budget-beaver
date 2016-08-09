@@ -29,7 +29,7 @@
         android:id="@+id/menu_bottom"
         android:checkableBehavior="single">
         <item android:id="@+id/action_settings"
-            android:orderInCategory="102"
+            android:orderInCategory="103"
             android:title="Settings"
             app:showAsAction="never" />
     </group>
