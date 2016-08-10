@@ -25,26 +25,21 @@ public class BudgetBeaverActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout _drawerLayout;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_budget_beaver);
-
-        _drawerLayout = (DrawerLayout)findViewById(R.id.budget_beaver_drawer_layout);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.budget_beaver_toolbar);
-        setSupportActionBar(toolbar);
-        setTitle("Budget Beaver");
-
+    private void loadNavigationDrawerMenu(){
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
         Menu drawerMenu = drawerMenuNav.getMenu();
 
         SubMenu accountsSubMenu = drawerMenu.getItem(2).getSubMenu();
-        accountsSubMenu.clear();
+
+        //TODO: this should load accounts from the database when we get to that point
         ArrayList<String> accounts = new ArrayList<>();
         accounts.add("Pirate Booty");
         accounts.add("Under the Mattress");
         accounts.add("Mason Jars");
+
+        if(accounts.size() > 0){
+            accountsSubMenu.clear();
+        }
 
         for(int i = 0; i < accounts.size(); i++){
             int accountId = i;
@@ -53,17 +48,32 @@ public class BudgetBeaverActivity
 
         drawerMenuNav.setNavigationItemSelectedListener(this);
         drawerMenu.getItem(0).setChecked(true);
+    }
 
-        //set default fragment activity
+    private void loadDefaultFragment(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.budget_beaver_activity_content, new OverviewFragment());
         ft.commit();
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_budget_beaver);
+
+        _drawerLayout = (DrawerLayout)findViewById(R.id.budget_beaver_drawer_layout);
+
+        //set the toolbar title
+        Toolbar toolbar = (Toolbar) findViewById(R.id.budget_beaver_toolbar);
+        setSupportActionBar(toolbar);
+        setTitle("Budget Beaver");
+
+        //populate the menu with account information and set default menu item
+        loadNavigationDrawerMenu();
+        loadDefaultFragment();
+    }
+
+    private void setSelectedNavigationViewItem(MenuItem item){
         int order = item.getOrder() - 100;
         //less than zero we're in the accounts submenu; set checked item to accounts title
         if(order < 0){
@@ -71,7 +81,13 @@ public class BudgetBeaverActivity
         }
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
         drawerMenuNav.getMenu().getItem(order).setChecked(true);
+    }
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        setSelectedNavigationViewItem(item);
+
+        int id = item.getItemId();
         Fragment activeViewFragment;
 
         if (id == R.id.action_account_overview) {

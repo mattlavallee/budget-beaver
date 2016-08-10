@@ -21,7 +21,8 @@
             app:showAsAction="never"
             android:title="Accounts">
             <menu>
-                <item android:title="Placeholder"></item>
+                <item android:title="No accounts"
+                    android:enabled="false"></item>
             </menu>
         </item>
     </group>
