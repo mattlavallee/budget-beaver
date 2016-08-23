@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.clans.fab.FloatingActionMenu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bb_fab_menu_account"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_gravity="bottom|right"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    app:menu_fab_size="mini"
+    app:menu_showShadow="true"
+    app:menu_shadowColor="#66000000"
+    app:menu_shadowRadius="4dp"
+    app:menu_shadowXOffset="1dp"
+    app:menu_shadowYOffset="3dp"
+    app:menu_colorNormal="@color/colorAccent"
+    app:menu_colorPressed="@color/colorAccentDark"
+    app:menu_colorRipple="@color/colorLight"
+    app:menu_animationDelayPerItem="50"
+    app:menu_icon="@drawable/fab_add"
+    app:menu_buttonSpacing="0dp"
+    app:menu_labels_margin="0dp"
+    app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+    app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+    app:menu_labels_paddingTop="4dp"
+    app:menu_labels_paddingRight="8dp"
+    app:menu_labels_paddingBottom="4dp"
+    app:menu_labels_paddingLeft="8dp"
+    app:menu_labels_padding="8dp"
+    app:menu_labels_textColor="#FFFFFF"
+    app:menu_labels_textSize="14sp"
+    app:menu_labels_cornerRadius="3dp"
+    app:menu_labels_colorNormal="#333333"
+    app:menu_labels_colorPressed="#444444"
+    app:menu_labels_colorRipple="#66FFFFFF"
+    app:menu_labels_showShadow="true"
+    app:menu_labels_singleLine="false"
+    app:menu_labels_ellipsize="none"
+    app:menu_labels_maxLines="-1"
+    app:menu_labels_position="left"
+    app:menu_openDirection="up"
+    app:menu_backgroundColor="@android:color/transparent">
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_account_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        app:fab_size="mini"
+        app:fab_label="Sort Transactions" />
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_account_delete_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        app:fab_size="mini"
+        app:fab_label="Delete Account" />
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_account_delete_all_transactions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        app:fab_size="mini"
+        app:fab_label="Delete All Transactions" />
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_account_add_transaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        app:fab_size="mini"
+        app:fab_label="Add Transaction" />
+</com.github.clans.fab.FloatingActionMenu>
