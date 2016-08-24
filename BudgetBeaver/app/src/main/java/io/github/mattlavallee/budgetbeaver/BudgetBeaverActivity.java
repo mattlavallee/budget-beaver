@@ -14,10 +14,12 @@ import android.view.SubMenu;
 
 import java.util.ArrayList;
 
+import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.SettingsFragment;
+import io.github.mattlavallee.budgetbeaver.models.Account;
 
 
 public class BudgetBeaverActivity
@@ -32,18 +34,16 @@ public class BudgetBeaverActivity
         SubMenu accountsSubMenu = drawerMenu.getItem(2).getSubMenu();
 
         //TODO: this should load accounts from the database when we get to that point
-        ArrayList<String> accounts = new ArrayList<>();
-        accounts.add("Pirate Booty");
-        accounts.add("Under the Mattress");
-        accounts.add("Mason Jars");
+        DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
+        ArrayList<Account> accounts = dbDispatcher.Accounts.getAccounts();
 
         if(accounts.size() > 0){
             accountsSubMenu.clear();
         }
 
         for(int i = 0; i < accounts.size(); i++){
-            int accountId = i;
-            accountsSubMenu.add(2, accountId, i, accounts.get(i));
+            Account currAccount = accounts.get(i);
+            accountsSubMenu.add(2, currAccount.getId(), i, currAccount.getName());
         }
 
         drawerMenuNav.setNavigationItemSelectedListener(this);

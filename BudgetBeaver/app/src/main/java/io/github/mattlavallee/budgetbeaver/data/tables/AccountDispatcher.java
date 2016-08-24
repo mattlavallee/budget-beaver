@@ -2,6 +2,8 @@ package io.github.mattlavallee.budgetbeaver.data.tables;
 
 
 import io.github.mattlavallee.budgetbeaver.models.Account;
+
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -37,6 +39,15 @@ public class AccountDispatcher {
 
             result.moveToNext();
         }
+        Log.i("TEST", "total count: " + accounts.size());
         return accounts;
+    }
+
+    public long insertAccount( Account newAccount ){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("name", newAccount.getName());
+        content.put("active", newAccount.isActive() ? 1 : 0 );
+        return db.insert(TABLE_NAME, null, content);
     }
 }
