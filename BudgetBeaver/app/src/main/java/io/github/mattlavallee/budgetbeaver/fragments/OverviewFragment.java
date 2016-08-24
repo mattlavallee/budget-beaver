@@ -6,10 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
+import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.models.Account;
 
 public class OverviewFragment extends Fragment {
+    private DatabaseDispatcher dbDispatcher;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -18,6 +23,10 @@ public class OverviewFragment extends Fragment {
 
         BudgetBeaverFabSetup.addFabToView(getActivity(), inflater, R.id.budget_beaver_fragment_wrapper,
                 R.layout.fab_overview, R.id.bb_fab_menu_overview);
+
+        dbDispatcher = new DatabaseDispatcher(getContext());
+        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
+        //TODO: load accounts here
 
         return fragmentView;
     }
