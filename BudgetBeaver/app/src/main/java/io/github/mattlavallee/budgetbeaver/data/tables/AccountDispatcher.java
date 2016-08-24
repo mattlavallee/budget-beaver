@@ -50,4 +50,12 @@ public class AccountDispatcher {
         content.put("active", newAccount.isActive() ? 1 : 0 );
         return db.insert(TABLE_NAME, null, content);
     }
+
+    public long updateAccount( Account account ){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("name", account.getName());
+        content.put("active", account.isActive() ? 1 : 0);
+        return db.update(TABLE_NAME, content, "id = " + account.getId(), null);
+    }
 }
