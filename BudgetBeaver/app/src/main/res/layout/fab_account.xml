@@ -18,8 +18,8 @@
     app:menu_shadowXOffset="1dp"
     app:menu_shadowYOffset="3dp"
     app:menu_colorNormal="@color/colorAccent"
-    app:menu_colorPressed="@color/colorAccentDark"
-    app:menu_colorRipple="@color/colorLight"
+    app:menu_colorPressed="@color/colorAccentPressed"
+    app:menu_colorRipple="@color/colorAccent"
     app:menu_animationDelayPerItem="50"
     app:menu_icon="@drawable/fab_add"
     app:menu_buttonSpacing="0dp"
@@ -50,6 +50,9 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_add"
         app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_colorRipple="@color/colorAccent"
         app:fab_label="Sort Transactions" />
 
     <com.github.clans.fab.FloatingActionButton
@@ -58,6 +61,9 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_add"
         app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_colorRipple="@color/colorAccent"
         app:fab_label="Delete Account" />
 
     <com.github.clans.fab.FloatingActionButton
@@ -66,6 +72,9 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_add"
         app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_colorRipple="@color/colorAccent"
         app:fab_label="Delete All Transactions" />
 
     <com.github.clans.fab.FloatingActionButton
@@ -74,5 +83,8 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_add"
         app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_colorRipple="@color/colorAccent"
         app:fab_label="Add Transaction" />
 </com.github.clans.fab.FloatingActionMenu>
