@@ -6,4 +6,5 @@
     <color name="colorAccentPressed">#C2614E</color>
     <color name="colorAccentDark">#3E454C</color>
     <color name="colorLight">#FFF6E5</color>
+    <color name="colorLightGray">#9D9D9D</color>
 </resources>
