@@ -10,14 +10,22 @@ import android.widget.RelativeLayout;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 
-public class SettingsFragment extends Fragment {
+public class EditReminderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.fragment_settings, container, false);
-        getActivity().setTitle("Budget Beaver - Settings");
+        //retrieve the account id from the bundle
+        int reminderId = getArguments().getInt("reminderId");
 
+        // Inflate the layout for this fragment
+        View fragmentView = inflater.inflate(R.layout.fragment_edit_reminder, container, false);
+        if(reminderId == -1) {
+            getActivity().setTitle("Add a Reminder");
+        } else{
+            getActivity().setTitle("Edit Reminder");
+        }
+
+        //no FAB on Add/Edit account layout
         RelativeLayout parent = (RelativeLayout)getActivity().findViewById(R.id.budget_beaver_fragment_wrapper);
         BudgetBeaverFabSetup.removeExistingFab(parent);
 

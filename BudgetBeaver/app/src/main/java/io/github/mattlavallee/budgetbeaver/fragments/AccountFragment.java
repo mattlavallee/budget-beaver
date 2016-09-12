@@ -19,6 +19,7 @@ public class AccountFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
+        getActivity().setTitle("Account Name ($0.00)");
 
         TextView temp = (TextView)fragmentView.findViewById(R.id.account_test);
         temp.setText("Account page: " + Integer.toString(accountId) + "!");

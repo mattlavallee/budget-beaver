@@ -15,6 +15,7 @@ public class RemindersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_reminders, container, false);
+        getActivity().setTitle("Budget Beaver - Reminders");
 
         BudgetBeaverFabSetup.addFabToView(getActivity(), inflater, R.id.budget_beaver_fragment_wrapper,
                 R.layout.fab_reminder, R.id.bb_fab_menu_reminder);

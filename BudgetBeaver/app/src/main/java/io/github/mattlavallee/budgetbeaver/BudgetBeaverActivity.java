@@ -3,7 +3,6 @@ package io.github.mattlavallee.budgetbeaver;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +50,9 @@ public class BudgetBeaverActivity
     }
 
     private void loadDefaultFragment(){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.budget_beaver_activity_content, new OverviewFragment());
-        ft.commit();
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.budget_beaver_activity_content, new OverviewFragment())
+            .commit();
     }
 
     @Override
@@ -101,16 +100,17 @@ public class BudgetBeaverActivity
             //knows which account it should load
             Bundle dataBundle = new Bundle();
             dataBundle.putInt("accountId", id);
-            dataBundle.putString("test", "hi");
 
             activeViewFragment = new AccountFragment();
             activeViewFragment.setArguments(dataBundle);
         }
 
         //Load the new fragment
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.budget_beaver_activity_content, activeViewFragment);
-        ft.commit();
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.budget_beaver_activity_content, activeViewFragment)
+            .addToBackStack(null)
+            .commit();
 
         //close the app drawer
         _drawerLayout.closeDrawer(GravityCompat.START);
