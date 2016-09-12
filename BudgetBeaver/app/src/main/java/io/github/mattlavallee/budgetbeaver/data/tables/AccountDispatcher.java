@@ -39,8 +39,24 @@ public class AccountDispatcher {
 
             result.moveToNext();
         }
-        Log.i("TEST", "total count: " + accounts.size());
         return accounts;
+    }
+
+    public Account getAccountById(int accountId){
+        Account account = new Account();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME
+                + " WHERE active = 1 AND accountId = " + accountId, null);
+        result.moveToFirst();
+        while(result.isAfterLast() == false){
+            int id = result.getInt(result.getColumnIndex("id"));
+            String name = result.getString(result.getColumnIndex("name"));
+            int active = result.getInt(result.getColumnIndex("active"));
+            account = new Account(id, name, active);
+
+            result.moveToNext();
+        }
+        return account;
     }
 
     public long insertAccount( Account newAccount ){

@@ -18,20 +18,26 @@ import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 
 public class EditAccountFragment extends Fragment {
+    private DatabaseDispatcher dbDispatcher;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //retrieve the account id from the bundle
         final int accountId = getArguments().getInt("accountId");
 
+        // Inflate the layout for this fragment
+        final View fragmentView = inflater.inflate(R.layout.fragment_edit_account, container, false);
+        dbDispatcher = new DatabaseDispatcher(getContext());
+
         if (accountId == -1) {
             getActivity().setTitle("Add an Account");
         } else {
             getActivity().setTitle("Edit Account");
+            Account currentAccount = dbDispatcher.Accounts.getAccountById( accountId );
+            EditText accountNameContainer = (EditText)fragmentView.findViewById(R.id.edit_account_name);
+            accountNameContainer.setText(currentAccount.getName());
         }
-
-        // Inflate the layout for this fragment
-        final View fragmentView = inflater.inflate(R.layout.fragment_edit_account, container, false);
 
         //no FAB on Add/Edit account layout
         RelativeLayout parent = (RelativeLayout) getActivity().findViewById(R.id.budget_beaver_fragment_wrapper);
@@ -77,7 +83,6 @@ public class EditAccountFragment extends Fragment {
         }
 
         Account currentAccount = new Account(accountId, accountName, 1);
-        DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getContext());
         long result;
         if (accountId == -1) {
             result = dbDispatcher.Accounts.insertAccount(currentAccount);

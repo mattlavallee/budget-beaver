@@ -6,6 +6,12 @@ public class Account {
     private String name;
     private boolean isActive;
 
+    public Account(){
+        id = -1;
+        name = "";
+        isActive = false;
+    }
+
     public Account(int accountId, String accountName, int active){
         id = accountId;
         name = accountName;
