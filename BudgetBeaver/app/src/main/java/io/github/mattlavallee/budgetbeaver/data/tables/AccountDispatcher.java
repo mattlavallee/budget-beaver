@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -46,7 +45,7 @@ public class AccountDispatcher {
         Account account = new Account();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME
-                + " WHERE active = 1 AND accountId = " + accountId, null);
+                + " WHERE active = 1 AND id = " + accountId, null);
         result.moveToFirst();
         while(result.isAfterLast() == false){
             int id = result.getInt(result.getColumnIndex("id"));
