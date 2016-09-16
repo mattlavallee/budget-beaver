@@ -1,8 +1,10 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -128,11 +130,22 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     }
 
     public void deleteAccount(int accountId) {
-        Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
-        accountToDelete.setIsActive(false);
-        dbDispatcher.Accounts.updateAccount(accountToDelete);
+        final Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Delete Account")
+                .setIcon(android.R.drawable.ic_delete)
+                .setMessage("Do you really want to delete " + accountToDelete.getName())
+                .setNegativeButton(android.R.string.cancel, null) // dismisses by default
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        accountToDelete.setIsActive(false);
+                        dbDispatcher.Accounts.updateAccount(accountToDelete);
 
-        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
-        accountAdapter.updateData( allAccounts );
+                        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
+                        accountAdapter.updateData( allAccounts );
+                    }
+                })
+                .create()
+                .show();
     }
 }
