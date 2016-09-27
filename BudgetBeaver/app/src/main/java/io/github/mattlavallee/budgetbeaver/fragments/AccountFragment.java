@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
+import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
@@ -36,10 +37,8 @@ public class AccountFragment extends Fragment {
         getActivity().setTitle(activeAccount.getName() + " ($0.00)");
 
         //initialize the recycler view for the fragment
-        RecyclerView recyclerViewLayout = (RecyclerView)fragmentView.findViewById(R.id.account_recycler);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        recyclerViewLayout.setLayoutManager(llm);
-        recyclerViewLayout.setHasFixedSize(true);
+        RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
+                .createFragmentRecyclerView(R.id.account_recycler, fragmentView, getContext());
 
         //load all transactions
         ArrayList<Transaction> allTransactions = new ArrayList();

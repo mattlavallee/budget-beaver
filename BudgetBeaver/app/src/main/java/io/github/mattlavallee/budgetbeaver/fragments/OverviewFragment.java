@@ -17,6 +17,7 @@ import com.github.clans.fab.FloatingActionButton;
 import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
+import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
@@ -38,10 +39,8 @@ public class OverviewFragment extends Fragment {
                 R.layout.fab_overview, R.id.bb_fab_menu_overview);
 
         //initialize the recycler view for the fragment
-        RecyclerView recyclerViewLayout = (RecyclerView) fragmentView.findViewById(R.id.overview_recycler);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        recyclerViewLayout.setLayoutManager(llm);
-        recyclerViewLayout.setHasFixedSize(true);
+        RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
+                .createFragmentRecyclerView(R.id.overview_recycler, fragmentView, getContext());
 
         //Load all accounts
         dbDispatcher = new DatabaseDispatcher(getContext());
