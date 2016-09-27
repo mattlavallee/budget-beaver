@@ -36,6 +36,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             _container = container;
             cardView = (CardView) itemView.findViewById(R.id.card_view);
             accountName = (TextView) itemView.findViewById(R.id.info_text);
+            accountName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    _container.launchAccountFragment((Integer) view.getTag());
+                }
+            });
             overflow = itemView.findViewById(R.id.account_overflow);
             overflow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,6 +87,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
     public void onBindViewHolder(AccountViewHolder viewHolder, int position) {
         Account account = accounts.get(position);
         viewHolder.accountName.setText(account.getName());
+        viewHolder.accountName.setTag(account.getId());
         viewHolder.overflow.setTag(account.getId());
     }
 

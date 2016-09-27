@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.adapters.AccountAdapter;
 
-public class OverviewFragment extends Fragment implements View.OnClickListener {
+public class OverviewFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private AccountAdapter accountAdapter;
 
@@ -56,15 +55,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         return fragmentView;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.account_overflow:
-                Log.i("TEST", "overflow pressed");
-                break;
-        }
-    }
-
     private void registerFabClickEvents(FragmentActivity view) {
         FloatingActionButton reminderBtn = (FloatingActionButton) view.findViewById(R.id.fab_overview_add_reminder);
         FloatingActionButton transactionBtn = (FloatingActionButton) view.findViewById(R.id.fab_overview_add_transaction);
@@ -93,40 +83,39 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     public void editAccount(int accountId) {
         Fragment editAccountFragment = new EditAccountFragment();
         editAccountFragment.setArguments(generateIdBundle("accountId", accountId));
-
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.budget_beaver_activity_content, editAccountFragment)
-                .addToBackStack(null)
-                .commit();
+        launchNewFragment(editAccountFragment);
     }
 
     public void addTransaction() {
         Fragment editTransactionFragment = new EditTransactionFragment();
         editTransactionFragment.setArguments(generateIdBundle("transactionId", -1));
-
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.budget_beaver_activity_content, editTransactionFragment)
-                .addToBackStack(null)
-                .commit();
+        launchNewFragment(editTransactionFragment);
     }
 
     public void addReminder() {
         Fragment editReminderFragment = new EditReminderFragment();
         editReminderFragment.setArguments(generateIdBundle("reminderId", -1));
+        launchNewFragment(editReminderFragment);
+    }
 
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.budget_beaver_activity_content, editReminderFragment)
-                .addToBackStack(null)
-                .commit();
+    public void launchAccountFragment(int accountId){
+        Fragment accountFragment = new AccountFragment();
+        accountFragment.setArguments(generateIdBundle("accountId", accountId));
+        launchNewFragment(accountFragment);
     }
 
     private Bundle generateIdBundle(String name, int id) {
         Bundle dataBundle = new Bundle();
         dataBundle.putInt(name, id);
         return dataBundle;
+    }
+
+    private void launchNewFragment(Fragment newFragment){
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.budget_beaver_activity_content, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     public void deleteAccount(int accountId) {
