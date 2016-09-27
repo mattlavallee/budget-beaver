@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/account_card_view"
+    android:id="@+id/transaction_card_view"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             android:orientation="horizontal"
             android:weightSum="6">
             <TextView
-                android:id="@+id/info_text"
+                android:id="@+id/account_transaction_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textSize="24dp"
@@ -29,7 +29,7 @@
                 android:ellipsize="end"
                 android:layout_weight="5"/>
             <TextView
-                android:id="@+id/account_overflow"
+                android:id="@+id/transaction_overflow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/vertical_ellipsis"
@@ -42,11 +42,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/account_transaction_total"
+                android:id="@+id/account_transaction_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:text="-$99,999.00" />
+                android:textSize="24dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/account_transaction_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp" />
         </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

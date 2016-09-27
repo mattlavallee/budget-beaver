@@ -34,7 +34,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         AccountViewHolder(View itemView, OverviewFragment container) {
             super(itemView);
             _container = container;
-            cardView = (CardView) itemView.findViewById(R.id.card_view);
+            cardView = (CardView) itemView.findViewById(R.id.account_card_view);
             accountName = (TextView) itemView.findViewById(R.id.info_text);
             accountName.setOnClickListener(new View.OnClickListener() {
                 @Override
