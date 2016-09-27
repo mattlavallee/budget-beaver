@@ -1,15 +1,16 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -98,7 +99,7 @@ public class OverviewFragment extends Fragment {
         launchNewFragment(editReminderFragment);
     }
 
-    public void launchAccountFragment(int accountId){
+    public void launchAccountFragment(int accountId) {
         Fragment accountFragment = new AccountFragment();
         accountFragment.setArguments(generateIdBundle("accountId", accountId));
         launchNewFragment(accountFragment);
@@ -110,7 +111,7 @@ public class OverviewFragment extends Fragment {
         return dataBundle;
     }
 
-    private void launchNewFragment(Fragment newFragment){
+    private void launchNewFragment(Fragment newFragment) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.budget_beaver_activity_content, newFragment)
@@ -120,21 +121,27 @@ public class OverviewFragment extends Fragment {
 
     public void deleteAccount(int accountId) {
         final Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Delete Account")
-                .setIcon(android.R.drawable.ic_delete)
-                .setMessage("Do you really want to delete " + accountToDelete.getName())
-                .setNegativeButton(android.R.string.cancel, null) // dismisses by default
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                        accountToDelete.setIsActive(false);
+
+        accountToDelete.setIsActive(false);
+        dbDispatcher.Accounts.updateAccount(accountToDelete);
+
+        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
+        accountAdapter.updateData(allAccounts);
+
+        Snackbar snack = Snackbar.make(getView(), accountToDelete.getName() + " deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        accountToDelete.setIsActive(true);
                         dbDispatcher.Accounts.updateAccount(accountToDelete);
 
-                        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
-                        accountAdapter.updateData( allAccounts );
+                        accountAdapter.updateData(dbDispatcher.Accounts.getAccounts());
                     }
-                })
-                .create()
-                .show();
+                });
+        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(Color.CYAN);
+        snack.show();
     }
 }
