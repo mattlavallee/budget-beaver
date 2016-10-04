@@ -1,6 +1,7 @@
 package io.github.mattlavallee.budgetbeaver.models;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Transaction {
@@ -25,14 +26,15 @@ public class Transaction {
     }
 
     public Transaction(int transactionId, int transAccountId, String transactionLocation,
-                       String transactionDescription, double transactionAmount, boolean isActive){
+                       String transactionDescription, double transactionAmount,
+                       Date transactionDate, boolean isActive){
         id = transactionId;
         accountId = transAccountId;
         location = transactionLocation;
         description = transactionDescription;
         amount = transactionAmount;
         active = isActive;
-        dateModified = new Date();
+        dateModified = transactionDate;
     }
 
     public int getId(){ return id; }
@@ -46,4 +48,16 @@ public class Transaction {
     }
     public boolean isActive(){ return active; }
     public Date getTransactionDate(){ return dateModified; }
+
+    public static String getFormattedTotal(ArrayList<Transaction> transactions){
+        double total = 0;
+        for(int i = 0; i < transactions.size(); i++){
+            if(transactions.get(i).isActive()) {
+                total += transactions.get(i).getAmount();
+            }
+        }
+
+        String formattedAmount = new DecimalFormat("0.00").format( total );
+        return "$" + formattedAmount;
+    }
 }

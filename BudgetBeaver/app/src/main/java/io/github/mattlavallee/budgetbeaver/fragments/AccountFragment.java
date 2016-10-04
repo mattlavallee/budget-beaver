@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
@@ -42,11 +43,11 @@ public class AccountFragment extends Fragment {
 
         //load all transactions
         ArrayList<Transaction> allTransactions = new ArrayList();
-        allTransactions.add(new Transaction(1, accountId, "Amazon", "Gift", 13.7, true));
-        allTransactions.add(new Transaction(2, accountId, "Big Y", "Groceries for the week", 65.17, true));
-        allTransactions.add(new Transaction(3, accountId, "Starbucks", "Gotta get that caffeine", 3.46, true));
-        allTransactions.add(new Transaction(4, accountId, "Home Depot", "Getting some tools to keep the house from falling apart", 40, true));
-        allTransactions.add(new Transaction(5, accountId, "Spa", "Gosh I'm exhausted", 80.70, true));
+        allTransactions.add(new Transaction(1, accountId, "Amazon", "Gift", 13.7, new Date(), true));
+        allTransactions.add(new Transaction(2, accountId, "Big Y", "Groceries for the week", 65.17, new Date(), true));
+        allTransactions.add(new Transaction(3, accountId, "Starbucks", "Gotta get that caffeine", 3.46, new Date(), true));
+        allTransactions.add(new Transaction(4, accountId, "Home Depot", "Getting some tools to keep the house from falling apart", 40, new Date(), true));
+        allTransactions.add(new Transaction(5, accountId, "Spa", "Gosh I'm exhausted", 80.70, new Date(), true));
 
         transAdapter = new TransactionAdapter(allTransactions, this);
         recyclerViewLayout.setAdapter(transAdapter);
