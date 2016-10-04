@@ -1,13 +1,18 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +56,74 @@ public class AccountFragment extends Fragment {
         BudgetBeaverFabSetup.addFabToView(getActivity(), inflater, R.id.budget_beaver_fragment_wrapper,
                 R.layout.fab_account, R.id.bb_fab_menu_account);
 
+        registerFabClickEvents( getActivity(), accountId );
         return fragmentView;
+    }
+
+    private void registerFabClickEvents(FragmentActivity view, final int accountId) {
+        FloatingActionButton addTransactionBtn = (FloatingActionButton) view.findViewById(R.id.fab_account_add_transaction);
+        FloatingActionButton deleteAccountBtn = (FloatingActionButton) view.findViewById(R.id.fab_account_delete_account);
+        FloatingActionButton deleteTransactionsBtn = (FloatingActionButton) view.findViewById(R.id.fab_account_delete_all_transactions);
+        FloatingActionButton sortTransactionsBtn = (FloatingActionButton) view.findViewById(R.id.fab_account_sort);
+
+        addTransactionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addTransaction();
+            }
+        });
+        deleteAccountBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteAccount(accountId);
+            }
+        });
+        deleteTransactionsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { deleteTransactions();
+            }
+        });
+        sortTransactionsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sortTransactions();
+            }
+        });
+    }
+
+    public void addTransaction(){
+        Snackbar.make(getView(), "TODO: Adding Transaction", Snackbar.LENGTH_SHORT).show();
+    }
+
+    //TODO: set active=false on all transactions associated with account as well
+    public void deleteAccount(int accountId){
+        final Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
+
+        accountToDelete.setIsActive(false);
+        dbDispatcher.Accounts.updateAccount(accountToDelete);
+
+        Snackbar snack = Snackbar.make(getView(), accountToDelete.getName() + " deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        accountToDelete.setIsActive(true);
+                        dbDispatcher.Accounts.updateAccount(accountToDelete);
+                    }
+                });
+        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(Color.CYAN);
+        snack.show();
+
+        getActivity().getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    public void deleteTransactions(){
+        Snackbar.make(getView(), "TODO: delete all transactions", Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void sortTransactions(){
+        Snackbar.make(getView(), "TODO: sort transactions", Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,7 @@ import io.github.mattlavallee.budgetbeaver.models.adapters.AccountAdapter;
 public class OverviewFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private AccountAdapter accountAdapter;
+    private ArrayList<Account> allAccounts;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +44,7 @@ public class OverviewFragment extends Fragment {
 
         //Load all accounts
         dbDispatcher = new DatabaseDispatcher(getContext());
-        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
+        allAccounts = dbDispatcher.Accounts.getAccounts();
 
         //set account adapter on the recycle view
         accountAdapter = new AccountAdapter(allAccounts, this);
@@ -53,6 +53,22 @@ public class OverviewFragment extends Fragment {
         registerFabClickEvents(getActivity());
 
         return fragmentView;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        //TODO: there must be a better way!
+        new android.os.Handler().postDelayed( new Runnable() {
+            public void run() {
+                ArrayList<Account> accountIntegrity = dbDispatcher.Accounts.getAccounts();
+                if(accountIntegrity.size() != allAccounts.size()){
+                    accountAdapter.updateData(accountIntegrity);
+                }
+            }
+        //about the length of Snackbar.LENGTH_LONG
+        }, 3000);
     }
 
     private void registerFabClickEvents(FragmentActivity view) {
