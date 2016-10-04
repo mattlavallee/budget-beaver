@@ -25,7 +25,7 @@ public class TransactionDispatcher {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
         "id integer primary key, accountId integer not null, location text, amount double, " +
-        "description text, dateModified text, active integer, currencyId integer");
+        "description text, dateModified text, active integer, currencyId integer)");
     }
 
     public ArrayList<Transaction> getTransactionsForAccount(int accountId){

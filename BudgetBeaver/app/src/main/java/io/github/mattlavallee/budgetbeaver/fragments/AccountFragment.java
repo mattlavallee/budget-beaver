@@ -33,21 +33,17 @@ public class AccountFragment extends Fragment {
         dbDispatcher = new DatabaseDispatcher(getContext());
         Account activeAccount = dbDispatcher.Accounts.getAccountById(accountId);
 
+        //load all transactions
+        ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
+
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
-        getActivity().setTitle(activeAccount.getName() + " ($0.00)");
+        String transactionTotal = Transaction.getFormattedTotal(allTransactions);
+        getActivity().setTitle(activeAccount.getName() + " (" + transactionTotal + ")");
 
         //initialize the recycler view for the fragment
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
                 .createFragmentRecyclerView(R.id.account_recycler, fragmentView, getContext());
-
-        //load all transactions
-        ArrayList<Transaction> allTransactions = new ArrayList();
-        allTransactions.add(new Transaction(1, accountId, "Amazon", "Gift", 13.7, new Date(), true));
-        allTransactions.add(new Transaction(2, accountId, "Big Y", "Groceries for the week", 65.17, new Date(), true));
-        allTransactions.add(new Transaction(3, accountId, "Starbucks", "Gotta get that caffeine", 3.46, new Date(), true));
-        allTransactions.add(new Transaction(4, accountId, "Home Depot", "Getting some tools to keep the house from falling apart", 40, new Date(), true));
-        allTransactions.add(new Transaction(5, accountId, "Spa", "Gosh I'm exhausted", 80.70, new Date(), true));
 
         transAdapter = new TransactionAdapter(allTransactions, this);
         recyclerViewLayout.setAdapter(transAdapter);

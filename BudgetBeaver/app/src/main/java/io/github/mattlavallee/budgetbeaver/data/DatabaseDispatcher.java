@@ -9,12 +9,14 @@ import io.github.mattlavallee.budgetbeaver.data.tables.TransactionDispatcher;
 
 public class DatabaseDispatcher extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "BudgetBeaver.db";
+    //This should be incremented when onUpdate needs to run (new table, update to table, etc)
+    private static final int DB_VERSION = 2;
 
     public AccountDispatcher Accounts = new AccountDispatcher(this);
     public TransactionDispatcher Transactions = new TransactionDispatcher(this);
 
     public DatabaseDispatcher(Context context){
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, DB_VERSION);
     }
 
     @Override
