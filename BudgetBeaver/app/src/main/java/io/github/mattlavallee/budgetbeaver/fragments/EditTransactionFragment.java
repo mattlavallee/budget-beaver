@@ -5,11 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
@@ -40,6 +43,7 @@ public class EditTransactionFragment extends Fragment {
         BudgetBeaverFabSetup.removeExistingFab(parent);
 
         initializeButtons( fragmentView );
+        populateAccountSpinner( fragmentView, accountId );
 
         return fragmentView;
     }
@@ -66,5 +70,35 @@ public class EditTransactionFragment extends Fragment {
                 closeEditTransactionFragment();
             }
         });
+    }
+
+    private void populateAccountSpinner(View view, int accountId){
+        //get all account names and get the active account's position in the dropdown
+        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
+        Collections.sort(allAccounts, new Comparator<Account>() {
+            @Override
+            public int compare(Account account, Account t1) {
+                return account.getName().compareTo(t1.getName());
+            }
+        });
+        ArrayList<String> adapterValues = new ArrayList<>();
+        int activePosition = -1;
+        for(int i = 0; i < allAccounts.size(); i++){
+            adapterValues.add(allAccounts.get(i).getName());
+
+            if(allAccounts.get(i).getId() == accountId){
+                activePosition = i;
+            }
+        }
+
+        Spinner accountDropdown = (Spinner)view.findViewById(R.id.edit_transaction_account);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item,  adapterValues);
+        accountDropdown.setAdapter(adapter);
+        accountDropdown.setSelection(activePosition);
+
+        //if we're in a specific account, don't let the user change it
+        if(accountId != -1){
+            accountDropdown.setEnabled(false);
+        }
     }
 }
