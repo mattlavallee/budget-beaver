@@ -13,8 +13,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.R;
+import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Transaction;
 
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountViewHolder> {
     private ArrayList<Account> accounts;
@@ -29,12 +31,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         OverviewFragment _container;
         CardView cardView;
         TextView accountName;
+        TextView accountTotal;
         View overflow;
 
         AccountViewHolder(View itemView, OverviewFragment container) {
             super(itemView);
             _container = container;
             cardView = (CardView) itemView.findViewById(R.id.account_card_view);
+            accountTotal = (TextView) itemView.findViewById(R.id.account_transaction_total);
             accountName = (TextView) itemView.findViewById(R.id.info_text);
             accountName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,6 +92,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         Account account = accounts.get(position);
         viewHolder.accountName.setText(account.getName());
         viewHolder.accountName.setTag(account.getId());
+        ArrayList<Transaction> transactions = new DatabaseDispatcher(adapterContainer.getContext())
+                .Transactions.getTransactionsForAccount(account.getId());
+        String totalForAccount = Transaction.getFormattedTotal(transactions);
+        viewHolder.accountTotal.setText( totalForAccount );
         viewHolder.overflow.setTag(account.getId());
     }
 
