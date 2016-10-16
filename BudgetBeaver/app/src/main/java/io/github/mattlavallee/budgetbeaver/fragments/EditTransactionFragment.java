@@ -86,6 +86,8 @@ public class EditTransactionFragment extends Fragment {
         DatePicker date = (DatePicker)view.findViewById(R.id.edit_transaction_date);
         if(accountId == -1){
             //TODO: get the account to save the transaction to
+            displaySnack("Need to get the account to save!", view);
+            return;
         }
         String transLocation = location.getText().toString();
         String transDescription = description.getText().toString();

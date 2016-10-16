@@ -104,7 +104,9 @@ public class OverviewFragment extends Fragment {
 
     public void addTransaction() {
         Fragment editTransactionFragment = new EditTransactionFragment();
-        editTransactionFragment.setArguments(generateIdBundle("transactionId", -1));
+        Bundle bundle = generateIdBundle("transactionId", -1);
+        bundle.putInt("accountId", -1);
+        editTransactionFragment.setArguments(bundle);
         launchNewFragment(editTransactionFragment);
     }
 
