@@ -69,7 +69,7 @@ public class AccountFragment extends Fragment {
         addTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addTransaction();
+                addOrEditTransaction(-1, accountId);
             }
         });
         deleteAccountBtn.setOnClickListener(new View.OnClickListener() {
@@ -91,8 +91,14 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    public void addTransaction(){
-        Snackbar.make(getView(), "TODO: Adding Transaction", Snackbar.LENGTH_SHORT).show();
+    public void addOrEditTransaction(int transactionId, int accountId){
+        Fragment addTransactionFragment = new EditTransactionFragment();
+        Bundle dataBundle = new Bundle();
+        dataBundle.putInt("transactionId", transactionId);
+        dataBundle.putInt("accountId", accountId);
+        addTransactionFragment.setArguments(dataBundle);
+
+        launchNewFragment(addTransactionFragment);
     }
 
     //TODO: set active=false on all transactions associated with account as well
@@ -125,5 +131,13 @@ public class AccountFragment extends Fragment {
 
     public void sortTransactions(){
         Snackbar.make(getView(), "TODO: sort transactions", Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void launchNewFragment(Fragment newFragment) {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.budget_beaver_activity_content, newFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

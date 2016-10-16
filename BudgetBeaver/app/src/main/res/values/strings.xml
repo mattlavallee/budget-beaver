@@ -2,4 +2,6 @@
     <string name="app_name">Budget Beaver</string>
     <string name="action_settings">Settings</string>
     <string name="vertical_ellipsis">&#8942;</string>
+
+    <string name="account_prompt">Select an Account</string>
 </resources>
