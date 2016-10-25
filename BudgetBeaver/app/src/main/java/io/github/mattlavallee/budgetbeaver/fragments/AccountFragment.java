@@ -78,7 +78,7 @@ public class AccountFragment extends Fragment {
         });
         deleteTransactionsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { deleteTransactions();
+            public void onClick(View view) { deleteTransactions(accountId);
             }
         });
         sortTransactionsBtn.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +99,6 @@ public class AccountFragment extends Fragment {
         launchNewFragment(addTransactionFragment);
     }
 
-    //TODO: set active=false on all transactions associated with account as well
     public void deleteAccount(int accountId){
         final Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
         final ArrayList<Transaction> accountTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
@@ -133,8 +132,34 @@ public class AccountFragment extends Fragment {
         getActivity().getSupportFragmentManager().popBackStackImmediate();
     }
 
-    public void deleteTransactions(){
-        Snackbar.make(getView(), "TODO: delete all transactions", Snackbar.LENGTH_SHORT).show();
+    public void deleteTransactions(int accountId){
+        final ArrayList<Transaction> accountTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
+
+        for(int i = 0; i < accountTransactions.size(); i++){
+            accountTransactions.get(i).setIsActive(false);
+            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+        }
+        updateActivityTitle( accountTransactions );
+        transAdapter.updateData(new ArrayList<Transaction>());
+
+        Snackbar snack = Snackbar.make(getView(), "All Transactions Deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        for(int i = 0; i < accountTransactions.size(); i++){
+                            accountTransactions.get(i).setIsActive(true);
+                            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+                        }
+
+                        updateActivityTitle( accountTransactions );
+                        transAdapter.updateData(accountTransactions);
+                    }
+                });
+        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(Color.CYAN);
+        snack.show();
     }
 
     public void sortTransactions(){

@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
@@ -90,7 +92,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public void onBindViewHolder(TransactionViewHolder viewHolder, int position){
         Transaction transaction = transactions.get(position);
         viewHolder.transactionLocation.setText(transaction.getLocation());
-        viewHolder.transactionDescription.setText(transaction.getDescription());
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy");
+        String strDate = formatter.format(transaction.getTransactionDate());
+        viewHolder.transactionDescription.setText(strDate + ": " + transaction.getDescription());
         viewHolder.transactionAmount.setText(transaction.getFormattedAmount());
 
         viewHolder.overflow.setTag(transaction.getId());
