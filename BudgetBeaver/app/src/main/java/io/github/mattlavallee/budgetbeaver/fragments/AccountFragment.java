@@ -26,6 +26,7 @@ import io.github.mattlavallee.budgetbeaver.models.adapters.TransactionAdapter;
 public class AccountFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private TransactionAdapter transAdapter;
+    private Account activeAccount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,15 +35,14 @@ public class AccountFragment extends Fragment {
         int accountId = getArguments().getInt("accountId");
 
         dbDispatcher = new DatabaseDispatcher(getContext());
-        Account activeAccount = dbDispatcher.Accounts.getAccountById(accountId);
+        activeAccount = dbDispatcher.Accounts.getAccountById(accountId);
 
         //load all transactions
         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
-        String transactionTotal = Transaction.getFormattedTotal(allTransactions);
-        getActivity().setTitle(activeAccount.getName() + " (" + transactionTotal + ")");
+        updateActivityTitle( allTransactions );
 
         //initialize the recycler view for the fragment
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
@@ -102,14 +102,24 @@ public class AccountFragment extends Fragment {
     //TODO: set active=false on all transactions associated with account as well
     public void deleteAccount(int accountId){
         final Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
+        final ArrayList<Transaction> accountTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
 
         accountToDelete.setIsActive(false);
         dbDispatcher.Accounts.updateAccount(accountToDelete);
+        for(int i = 0; i < accountTransactions.size(); i++){
+            accountTransactions.get(i).setIsActive(false);
+            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+        }
 
         Snackbar snack = Snackbar.make(getView(), accountToDelete.getName() + " deleted", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        for(int i = 0; i < accountTransactions.size(); i++){
+                            accountTransactions.get(i).setIsActive(true);
+                            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+                        }
+
                         accountToDelete.setIsActive(true);
                         dbDispatcher.Accounts.updateAccount(accountToDelete);
                     }
@@ -143,6 +153,7 @@ public class AccountFragment extends Fragment {
 
         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId());
         transAdapter.updateData(allTransactions);
+        updateActivityTitle(dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId()));
 
         Snackbar snack = Snackbar.make(getView(), activeTransaction.getLocation() + " deleted", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener() {
@@ -151,7 +162,10 @@ public class AccountFragment extends Fragment {
                         activeTransaction.setIsActive(true);
                         dbDispatcher.Transactions.updateTransaction(activeTransaction);
 
-                        transAdapter.updateData(dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId()));
+                        ArrayList<Transaction> transactions =
+                                dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId());
+                        transAdapter.updateData(transactions);
+                        updateActivityTitle(transactions);
                     }
                 });
         TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -167,5 +181,10 @@ public class AccountFragment extends Fragment {
                 .replace(R.id.budget_beaver_activity_content, newFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void updateActivityTitle( ArrayList<Transaction> transactions ){
+        String transactionTotal = Transaction.getFormattedTotal(transactions);
+        getActivity().setTitle(activeAccount.getName() + " (" + transactionTotal + ")");
     }
 }

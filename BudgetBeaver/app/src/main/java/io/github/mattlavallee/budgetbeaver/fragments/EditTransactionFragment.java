@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -93,7 +94,7 @@ public class EditTransactionFragment extends Fragment {
 
         location.setText(transToEdit.getLocation());
         description.setText(transToEdit.getDescription());
-        amount.setText(Double.toString(transToEdit.getAmount()));
+        amount.setText(new DecimalFormat("0.00").format( transToEdit.getAmount() ));
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(transToEdit.getTransactionDate());
