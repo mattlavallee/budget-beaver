@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
@@ -131,6 +129,36 @@ public class AccountFragment extends Fragment {
 
     public void sortTransactions(){
         Snackbar.make(getView(), "TODO: sort transactions", Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void editTransaction( int transactionId ){
+        Transaction trans = dbDispatcher.Transactions.getTransactionById(transactionId);
+        addOrEditTransaction( transactionId, trans.getAccountId() );
+    }
+
+    public void deleteTransaction( int transactionId ){
+        final Transaction activeTransaction = dbDispatcher.Transactions.getTransactionById(transactionId);
+        activeTransaction.setIsActive(false);
+        dbDispatcher.Transactions.updateTransaction( activeTransaction );
+
+        ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId());
+        transAdapter.updateData(allTransactions);
+
+        Snackbar snack = Snackbar.make(getView(), activeTransaction.getLocation() + " deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        activeTransaction.setIsActive(true);
+                        dbDispatcher.Transactions.updateTransaction(activeTransaction);
+
+                        transAdapter.updateData(dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId()));
+                    }
+                });
+        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(Color.CYAN);
+        snack.show();
     }
 
     private void launchNewFragment(Fragment newFragment) {

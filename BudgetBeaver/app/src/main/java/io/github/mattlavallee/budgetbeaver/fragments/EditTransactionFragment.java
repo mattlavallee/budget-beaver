@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -45,6 +47,7 @@ public class EditTransactionFragment extends Fragment {
             getActivity().setTitle("Add a Transaction");
         } else{
             getActivity().setTitle("Edit Transaction");
+            initializeFields(fragmentView, transactionId);
         }
 
         //no FAB on Add/Edit transaction layout
@@ -78,6 +81,23 @@ public class EditTransactionFragment extends Fragment {
                 saveTransaction( view, transactionId, accountId );
             }
         });
+    }
+
+    private void initializeFields(final View view, final int transactionId ){
+        Transaction transToEdit = dbDispatcher.Transactions.getTransactionById(transactionId);
+
+        EditText location = (EditText)view.findViewById(R.id.edit_transaction_location);
+        EditText amount = (EditText)view.findViewById(R.id.edit_transaction_amount);
+        EditText description = (EditText)view.findViewById(R.id.edit_transaction_description);
+        DatePicker date = (DatePicker)view.findViewById(R.id.edit_transaction_date);
+
+        location.setText(transToEdit.getLocation());
+        description.setText(transToEdit.getDescription());
+        amount.setText(Double.toString(transToEdit.getAmount()));
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(transToEdit.getTransactionDate());
+        date.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
     }
 
     private void saveTransaction( View view, int transactionId, int accountId ){

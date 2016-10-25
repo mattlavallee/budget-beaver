@@ -2,8 +2,11 @@ package io.github.mattlavallee.budgetbeaver.models.adapters;
 
 
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,6 +46,30 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             transactionDescription = (TextView) itemView.findViewById(R.id.account_transaction_description);
 
             overflow = itemView.findViewById(R.id.transaction_overflow);
+            overflow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    final PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+                    final Menu menu = popupMenu.getMenu();
+                    final int transactionId = (Integer) view.getTag();
+
+                    popupMenu.getMenuInflater().inflate(R.menu.transaction_popup_menu, menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int itemId = item.getItemId();
+                            if (itemId == R.id.action_transaction_popup_edit) {
+                                _container.editTransaction(transactionId);
+                            } else if (itemId == R.id.action_transaction_popup_delete) {
+                                _container.deleteTransaction(transactionId);
+                            }
+                            return false;
+                        }
+                    });
+
+                    popupMenu.show();
+                }
+            });
         }
     }
 

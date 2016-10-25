@@ -60,4 +60,8 @@ public class Transaction {
         String formattedAmount = new DecimalFormat("0.00").format( total );
         return "$" + formattedAmount;
     }
+
+    public void setIsActive( boolean isActive ){
+        active = isActive;
+    }
 }
