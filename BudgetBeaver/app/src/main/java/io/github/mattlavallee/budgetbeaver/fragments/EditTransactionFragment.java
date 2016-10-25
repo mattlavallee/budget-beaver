@@ -29,6 +29,7 @@ import io.github.mattlavallee.budgetbeaver.models.Transaction;
 
 public class EditTransactionFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
+    private ArrayList<Account> allAccounts;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,10 +85,17 @@ public class EditTransactionFragment extends Fragment {
         EditText amount = (EditText)view.findViewById(R.id.edit_transaction_amount);
         EditText description = (EditText)view.findViewById(R.id.edit_transaction_description);
         DatePicker date = (DatePicker)view.findViewById(R.id.edit_transaction_date);
+        //accountId is -1 if we're adding a transaction from the Overview screen
         if(accountId == -1){
-            //TODO: get the account to save the transaction to
-            displaySnack("Need to get the account to save!", view);
-            return;
+            //try to get the user selected account
+            Spinner accountSelect = (Spinner)view.findViewById(R.id.edit_transaction_account);
+            int selectedAccountPosition = accountSelect.getSelectedItemPosition();
+            try {
+                accountId = allAccounts.get(selectedAccountPosition).getId();
+            } catch(NullPointerException except){
+                displaySnack("Could not get account information", view);
+                return;
+            }
         }
         String transLocation = location.getText().toString();
         String transDescription = description.getText().toString();
@@ -123,7 +131,7 @@ public class EditTransactionFragment extends Fragment {
 
     private void populateAccountSpinner(View view, int accountId){
         //get all account names and get the active account's position in the dropdown
-        ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
+        allAccounts = dbDispatcher.Accounts.getAccounts();
         Collections.sort(allAccounts, new Comparator<Account>() {
             @Override
             public int compare(Account account, Account t1) {
