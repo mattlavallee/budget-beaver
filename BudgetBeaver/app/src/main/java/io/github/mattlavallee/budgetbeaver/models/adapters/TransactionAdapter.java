@@ -18,16 +18,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.github.mattlavallee.budgetbeaver.R;
+import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
+import io.github.mattlavallee.budgetbeaver.models.Tag;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>{
     private ArrayList<Transaction> transactions;
     private AccountFragment adapterContainer;
+    private DatabaseDispatcher dbDispatcher;
 
-    public TransactionAdapter(ArrayList<Transaction> allTransactions, AccountFragment container){
+    public TransactionAdapter(ArrayList<Transaction> allTransactions, DatabaseDispatcher dispatcher, AccountFragment container){
         transactions = allTransactions;
         adapterContainer = container;
+        dbDispatcher = dispatcher;
     }
 
     public static class TransactionViewHolder extends RecyclerView.ViewHolder{
@@ -36,6 +40,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         TextView transactionAmount;
         TextView transactionLocation;
         TextView transactionDescription;
+        TextView transactionTags;
         View overflow;
 
         TransactionViewHolder(View itemView, AccountFragment container){
@@ -46,6 +51,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             transactionLocation = (TextView) itemView.findViewById(R.id.account_transaction_location);
             transactionAmount = (TextView) itemView.findViewById(R.id.account_transaction_amount);
             transactionDescription = (TextView) itemView.findViewById(R.id.account_transaction_description);
+            transactionTags = (TextView) itemView.findViewById(R.id.account_transaction_tags);
 
             overflow = itemView.findViewById(R.id.transaction_overflow);
             overflow.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +102,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         String strDate = formatter.format(transaction.getTransactionDate());
         viewHolder.transactionDescription.setText(strDate + ": " + transaction.getDescription());
         viewHolder.transactionAmount.setText(transaction.getFormattedAmount());
+
+        ArrayList<Tag> allTags = dbDispatcher.Tags.getTagsForTransaction(transaction.getId());
+        ArrayList<String> tagNames = new ArrayList<>();
+        for(Tag tag : allTags ){
+            tagNames.add(tag.getTagName());
+        }
+        viewHolder.transactionTags.setText( android.text.TextUtils.join(",", tagNames) );
 
         viewHolder.overflow.setTag(transaction.getId());
     }

@@ -48,7 +48,7 @@ public class AccountFragment extends Fragment {
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
                 .createFragmentRecyclerView(R.id.account_recycler, fragmentView, getContext());
 
-        transAdapter = new TransactionAdapter(allTransactions, this);
+        transAdapter = new TransactionAdapter(allTransactions, dbDispatcher, this);
         recyclerViewLayout.setAdapter(transAdapter);
 
         BudgetBeaverFabSetup.addFabToView(getActivity(), inflater, R.id.budget_beaver_fragment_wrapper,
