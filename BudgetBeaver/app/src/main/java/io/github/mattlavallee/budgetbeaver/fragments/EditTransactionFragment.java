@@ -62,10 +62,10 @@ public class EditTransactionFragment extends Fragment {
         populateAccountSpinner( fragmentView, accountId );
 
         Tag[] test = {
-                new Tag(-1, transactionId, "food", true ),
-                new Tag(-1, transactionId, "date", true ),
-                new Tag(-1, transactionId, "misc", true ),
-                new Tag(-1, transactionId, "home improvement", true )
+            new Tag(-1, transactionId, "food" ),
+            new Tag(-1, transactionId, "date" ),
+            new Tag(-1, transactionId, "misc" ),
+            new Tag(-1, transactionId, "home improvement" )
         };
         TagCompletionView tagTypeahead = (TagCompletionView)fragmentView.findViewById(R.id.edit_transaction_tags);
         ArrayAdapter<Tag> tempTags = new ArrayAdapter<>(fragmentView.getContext(), android.R.layout.simple_list_item_1, test);
