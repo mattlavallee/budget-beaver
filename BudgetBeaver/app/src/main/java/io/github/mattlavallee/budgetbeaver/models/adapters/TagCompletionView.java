@@ -29,6 +29,6 @@ public class TagCompletionView extends TokenCompleteTextView<Tag> {
 
     @Override
     protected  Tag defaultObject(String completionText){
-        return new Tag( -1, -1, completionText, true );
+        return new Tag( -1, -1, completionText );
     }
 }

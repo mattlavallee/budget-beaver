@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.tokenautocomplete.TokenCompleteTextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,15 +33,17 @@ import io.github.mattlavallee.budgetbeaver.models.Tag;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 import io.github.mattlavallee.budgetbeaver.models.adapters.TagCompletionView;
 
-public class EditTransactionFragment extends Fragment {
+public class EditTransactionFragment extends Fragment implements TokenCompleteTextView.TokenListener{
     private DatabaseDispatcher dbDispatcher;
     private ArrayList<Account> allAccounts;
+    private ArrayList<Tag> addedTags;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //retrieve the transaction id from the bundle
         int transactionId = getArguments().getInt("transactionId");
         int accountId = getArguments().getInt("accountId");
+        addedTags = new ArrayList<>();
 
         dbDispatcher = new DatabaseDispatcher(getContext());
 
@@ -59,18 +61,8 @@ public class EditTransactionFragment extends Fragment {
         BudgetBeaverFabSetup.removeExistingFab(parent);
 
         initializeButtons( fragmentView, transactionId, accountId );
+        initializeTagsTypeahead( fragmentView);
         populateAccountSpinner( fragmentView, accountId );
-
-        Tag[] test = {
-            new Tag(-1, transactionId, "food" ),
-            new Tag(-1, transactionId, "date" ),
-            new Tag(-1, transactionId, "misc" ),
-            new Tag(-1, transactionId, "home improvement" )
-        };
-        TagCompletionView tagTypeahead = (TagCompletionView)fragmentView.findViewById(R.id.edit_transaction_tags);
-        ArrayAdapter<Tag> tempTags = new ArrayAdapter<>(fragmentView.getContext(), android.R.layout.simple_list_item_1, test);
-        tagTypeahead.setAdapter(tempTags);
-        tagTypeahead.setThreshold(1);
 
         return fragmentView;
     }
@@ -98,6 +90,21 @@ public class EditTransactionFragment extends Fragment {
         });
     }
 
+    private void initializeTagsTypeahead(View view){
+        //get typeahead data
+        ArrayList<Tag> typeaheadData = dbDispatcher.Tags.getUniqueTags();
+        TagCompletionView tagTypeahead = (TagCompletionView)view.findViewById(R.id.edit_transaction_tags);
+        //set tag adapater
+        ArrayAdapter<Tag> tagTypeaheadAdapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, typeaheadData);
+        tagTypeahead.setAdapter(tagTypeaheadAdapter);
+        //begin typeahead results at 1 character
+        tagTypeahead.setThreshold(1);
+        //user can't select duplicates!
+        tagTypeahead.allowDuplicates(false);
+        //set add/remove listeners
+        tagTypeahead.setTokenListener(this);
+    }
+
     private void initializeFields(final View view, final int transactionId ){
         Transaction transToEdit = dbDispatcher.Transactions.getTransactionById(transactionId);
 
@@ -113,6 +120,13 @@ public class EditTransactionFragment extends Fragment {
         Calendar cal = Calendar.getInstance();
         cal.setTime(transToEdit.getTransactionDate());
         date.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+
+        addedTags = dbDispatcher.Tags.getTagsForTransaction(transactionId);
+        //restore tags for the transaction
+        TagCompletionView tagTypeahead = (TagCompletionView)view.findViewById(R.id.edit_transaction_tags);
+        for(Tag tag : addedTags){
+            tagTypeahead.addObject(tag);
+        }
     }
 
     private void saveTransaction( View view, int transactionId, int accountId ){
@@ -161,7 +175,54 @@ public class EditTransactionFragment extends Fragment {
             displaySnack("There was an error saving the transaction", view);
             return;
         }
+
+        int currentTransactionId = transactionId == -1 ? (int)result : transactionId;
+        //Handle tags for the transaction!
+        ArrayList<Tag> tagsOnTransaction = dbDispatcher.Tags.getTagsForTransaction(transactionId);
+        //get all new tags
+        long addResult = dbDispatcher.Tags.insertTags(findTagsToAdd(currentTransactionId, tagsOnTransaction));
+        //remove tags
+        long removalResult = dbDispatcher.Tags.deleteTags(findTagsToRemove(tagsOnTransaction));
+        if(addResult < 0 || removalResult < 0){
+            displaySnack("There was an error updating tags on the transaction", view);
+            return;
+        }
+
         closeEditTransactionFragment();
+    }
+
+    private ArrayList<Tag> findTagsToAdd(int transactionId, ArrayList<Tag> existingTags){
+        ArrayList<Tag> newTags = new ArrayList<>();
+        for(Tag currTag : addedTags ){
+            boolean found = false;
+            for(Tag existingTag : existingTags ){
+                if (existingTag.getTagName() != null && existingTag.getTagName().toLowerCase().equals(currTag.getTagName().toLowerCase())) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                newTags.add(new Tag(-1, transactionId, currTag.getTagName()));
+            }
+        }
+        return newTags;
+    }
+
+    private ArrayList<Tag> findTagsToRemove(ArrayList<Tag> existingTags){
+        ArrayList<Tag> deletedTags = new ArrayList<>();
+        for(Tag existingTag : existingTags){
+            boolean found = false;
+            for(Tag currTag : addedTags){
+                if (currTag.getTagName() != null && currTag.getTagName().toLowerCase().equals(existingTag.getTagName().toLowerCase())) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                deletedTags.add(existingTag);
+            }
+        }
+        return deletedTags;
     }
 
     private void populateAccountSpinner(View view, int accountId){
@@ -199,5 +260,34 @@ public class EditTransactionFragment extends Fragment {
         TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
         snackText.setTextColor(Color.CYAN);
         snack.show();
+    }
+
+    @Override
+    public void onTokenAdded(Object token) {
+        boolean found = false;
+        for(Tag tag : addedTags ){
+            if(tag.getTagName() != null && tag.getTagName().toLowerCase().equals(token.toString().toLowerCase())){
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            addedTags.add(new Tag(-1, -1, token.toString()));
+        }
+    }
+
+    @Override
+    public void onTokenRemoved(Object token) {
+        int tagIndex = -1;
+        for(int i = 0; i < addedTags.size(); i++ ){
+            Tag tag = addedTags.get(i);
+            if(tag.getTagName() != null && tag.getTagName().toLowerCase().equals(token.toString().toLowerCase())){
+                tagIndex = i;
+                break;
+            }
+        }
+        if(tagIndex >= 0) {
+            addedTags.remove(tagIndex);
+        }
     }
 }
