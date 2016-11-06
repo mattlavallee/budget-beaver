@@ -42,11 +42,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2">
-        <TextView
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TODO: tags go here"/>
+            android:layout_weight="1">
+            <io.github.mattlavallee.budgetbeaver.models.adapters.TagCompletionView
+                android:id="@+id/edit_transaction_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tags" />
+        </android.support.design.widget.TextInputLayout>
 
         <Spinner
             android:id="@+id/edit_transaction_account"

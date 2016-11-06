@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,7 +29,9 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Tag;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
+import io.github.mattlavallee.budgetbeaver.models.adapters.TagCompletionView;
 
 public class EditTransactionFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
@@ -57,6 +60,17 @@ public class EditTransactionFragment extends Fragment {
 
         initializeButtons( fragmentView, transactionId, accountId );
         populateAccountSpinner( fragmentView, accountId );
+
+        Tag[] test = {
+                new Tag(-1, transactionId, "food", true ),
+                new Tag(-1, transactionId, "date", true ),
+                new Tag(-1, transactionId, "misc", true ),
+                new Tag(-1, transactionId, "home improvement", true )
+        };
+        TagCompletionView tagTypeahead = (TagCompletionView)fragmentView.findViewById(R.id.edit_transaction_tags);
+        ArrayAdapter<Tag> tempTags = new ArrayAdapter<>(fragmentView.getContext(), android.R.layout.simple_list_item_1, test);
+        tagTypeahead.setAdapter(tempTags);
+        tagTypeahead.setThreshold(1);
 
         return fragmentView;
     }
