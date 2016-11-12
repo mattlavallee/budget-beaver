@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <RadioGroup
+        android:id="@+id/sort_selection_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/sort_selection_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:checked="true" />
+        <RadioButton
+            android:id="@+id/sort_selection_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tag"
+            android:visibility="gone"/>
+        <RadioButton
+            android:id="@+id/sort_selection_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount" />
+        <RadioButton
+            android:id="@+id/sort_selection_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date" />
+        <RadioButton
+            android:id="@+id/sort_selection_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description" />
+    </RadioGroup>
+    <View android:id="@+id/separator"
+        android:background="#eaeaea"
+        android:layout_width = "fill_parent"
+        android:layout_height="1dip"
+        android:layout_centerVertical ="true"/>
+    <CheckBox
+        android:id="@+id/sort_reverse_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reverse Direction"
+        android:checked="false" />
+</LinearLayout>

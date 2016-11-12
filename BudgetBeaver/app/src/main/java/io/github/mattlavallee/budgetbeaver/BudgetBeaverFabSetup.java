@@ -17,6 +17,7 @@ public class BudgetBeaverFabSetup {
 
         FloatingActionMenu childLayout = (FloatingActionMenu)inflater.inflate(fabLayoutId,
                 (ViewGroup)activity.findViewById(fabId));
+        childLayout.setClosedOnTouchOutside(true);
         parentView.addView(childLayout);
 
         //add new fab

@@ -1,17 +1,22 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 
@@ -22,6 +27,10 @@ import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 import io.github.mattlavallee.budgetbeaver.models.adapters.TransactionAdapter;
+import io.github.mattlavallee.budgetbeaver.models.enums.SortDirection;
+import io.github.mattlavallee.budgetbeaver.models.enums.SortType;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class AccountFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
@@ -84,7 +93,7 @@ public class AccountFragment extends Fragment {
         sortTransactionsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sortTransactions();
+                sortTransactions(view);
             }
         });
     }
@@ -162,8 +171,57 @@ public class AccountFragment extends Fragment {
         snack.show();
     }
 
-    public void sortTransactions(){
-        Snackbar.make(getView(), "TODO: sort transactions", Snackbar.LENGTH_SHORT).show();
+    public void sortTransactions(View view){
+        //close the FAB when launching the sort dialog
+        FloatingActionMenu menu = (FloatingActionMenu)getActivity().findViewById(R.id.bb_fab_menu_account);
+        menu.close(true);
+
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.account_sort_transactions_dialog, (ViewGroup)view.getParent(), false);
+
+        final RadioGroup sortType = (RadioGroup)layout.findViewById(R.id.sort_selection_group);
+        final CheckBox reverseSort = (CheckBox)layout.findViewById(R.id.sort_reverse_order);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setView(layout)
+               .setTitle("Sort Transactions")
+               .setIcon(android.R.drawable.ic_menu_sort_by_size)
+               .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+
+                        SortDirection direction = reverseSort.isChecked() ?
+                                SortDirection.Descending : SortDirection.Ascending;
+                        SortType sortTarget = getSortType( sortType.getCheckedRadioButtonId() );
+
+                        ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(activeAccount.getId());
+                        Transaction.sortTransactions( allTransactions, sortTarget, direction );
+                        transAdapter.updateData(allTransactions);
+                    }
+               })
+               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       dialogInterface.dismiss();
+                   }
+               });
+        builder.create().show();
+    }
+
+    public SortType getSortType( int selectedSortResourceTarget ){
+        switch( selectedSortResourceTarget ){
+            case R.id.sort_selection_tag:
+                return SortType.Tag;
+            case R.id.sort_selection_amount:
+                return SortType.Amount;
+            case R.id.sort_selection_date:
+                return SortType.Date;
+            case R.id.sort_selection_description:
+                return SortType.Description;
+            default:
+                return SortType.Location;
+        }
     }
 
     public void editTransaction( int transactionId ){
