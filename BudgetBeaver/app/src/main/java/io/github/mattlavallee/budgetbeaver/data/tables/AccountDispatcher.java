@@ -42,6 +42,8 @@ public class AccountDispatcher {
 
             result.moveToNext();
         }
+        result.close();
+        db.close();
         return accounts;
     }
 
@@ -61,6 +63,8 @@ public class AccountDispatcher {
 
             result.moveToNext();
         }
+        result.close();
+        db.close();
         return account;
     }
 
@@ -71,7 +75,9 @@ public class AccountDispatcher {
         content.put("sortType", -1);
         content.put("sortDirection", -1);
         content.put("active", newAccount.isActive() ? 1 : 0 );
-        return db.insert(TABLE_NAME, null, content);
+        long result = db.insert(TABLE_NAME, null, content);
+        db.close();
+        return result;
     }
 
     public long updateAccount( Account account ){
@@ -83,6 +89,8 @@ public class AccountDispatcher {
         content.put("sortType", type == null ? -1 : type.getValue());
         content.put("sortDirection", direction == null ? -1 : direction.getValue());
         content.put("active", account.isActive() ? 1 : 0);
-        return db.update(TABLE_NAME, content, "id = " + account.getId(), null);
+        long result = db.update(TABLE_NAME, content, "id = " + account.getId(), null);
+        db.close();
+        return result;
     }
 }

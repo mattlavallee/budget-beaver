@@ -29,10 +29,16 @@ public class DatabaseDispatcher extends SQLiteOpenHelper {
         Transactions.onCreate(db);
         Tags.onCreate(db);
         Settings.onCreate(db);
+        db.close();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onCreate(db);
+    }
+
+    @Override
+    public void close(){
+        super.close();
     }
 }

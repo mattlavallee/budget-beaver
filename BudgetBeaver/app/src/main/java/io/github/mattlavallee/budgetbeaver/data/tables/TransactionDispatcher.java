@@ -56,6 +56,8 @@ public class TransactionDispatcher {
 
             result.moveToNext();
         }
+        result.close();
+        db.close();
         return transactions;
     }
 
@@ -84,6 +86,8 @@ public class TransactionDispatcher {
 
             result.moveToNext();
         }
+        result.close();
+        db.close();
         return currTrans;
     }
 
@@ -98,7 +102,9 @@ public class TransactionDispatcher {
         content.put("active", newTransaction.isActive() ? 1 : 0);
         content.put("currencyId", -1);
 
-        return db.insert(TABLE_NAME, null, content);
+        long result = db.insert(TABLE_NAME, null, content);
+        db.close();
+        return result;
     }
 
     public long updateTransaction( Transaction transaction ){
@@ -111,7 +117,9 @@ public class TransactionDispatcher {
         content.put("dateModified", dateFormatter.format(date));
         content.put("active", transaction.isActive() ? 1 : 0);
         content.put("currencyId", -1);
-        return db.update(TABLE_NAME, content, "id = " + transaction.getId(), null);
+        long result = db.update(TABLE_NAME, content, "id = " + transaction.getId(), null);
+        db.close();
+        return result;
     }
 }
 

@@ -58,6 +58,7 @@ public class SettingsDispatcher {
             appSettings.setDefaultCurrencyId(result.getInt(result.getColumnIndex("defaultCurrencyId")));
             result.moveToNext();
         }
+        result.close();
         db.close();
 
         return appSettings;
@@ -66,7 +67,9 @@ public class SettingsDispatcher {
     public long updateSettings(Settings appSettings){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues content = getSettingsAsContentValues(appSettings);
-        return db.update(TABLE_NAME, content, "id >= 0", null);
+        long result = db.update(TABLE_NAME, content, "id >= 0", null);
+        db.close();
+        return result;
     }
 
     private ContentValues getSettingsAsContentValues(Settings appSettings){

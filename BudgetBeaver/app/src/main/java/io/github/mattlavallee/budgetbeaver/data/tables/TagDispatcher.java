@@ -34,6 +34,8 @@ public class TagDispatcher {
             tags.add(new Tag(id, transactionId, name));
             result.moveToNext();
         }
+        result.close();
+        db.close();
         return tags;
     }
 
@@ -50,6 +52,7 @@ public class TagDispatcher {
             if(finalResult >= 0)
                 finalResult = result;
         }
+        db.close();
         return finalResult;
     }
 
@@ -62,6 +65,7 @@ public class TagDispatcher {
             if(finalResult >= 0)
                 finalResult = result;
         }
+        db.close();
         return finalResult;
     }
 
@@ -79,6 +83,8 @@ public class TagDispatcher {
             tags.add(new Tag(id, transactionId, name));
             result.moveToNext();
         }
+        result.close();
+        db.close();
         return tags;
     }
 }
