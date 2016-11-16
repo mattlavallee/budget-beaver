@@ -22,9 +22,16 @@
             android:id="@+id/edit_transaction_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="0123456789."
             android:inputType="numberSigned|numberDecimal"
             android:hint="Amount"/>
     </android.support.design.widget.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/edit_transaction_deduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply transaction as a deduction"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"

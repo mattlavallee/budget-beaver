@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -111,11 +112,17 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         EditText location = (EditText)view.findViewById(R.id.edit_transaction_location);
         EditText amount = (EditText)view.findViewById(R.id.edit_transaction_amount);
         EditText description = (EditText)view.findViewById(R.id.edit_transaction_description);
+        CheckBox applyAsDeduction = (CheckBox)view.findViewById(R.id.edit_transaction_deduction);
         DatePicker date = (DatePicker)view.findViewById(R.id.edit_transaction_date);
 
         location.setText(transToEdit.getLocation());
         description.setText(transToEdit.getDescription());
-        amount.setText(new DecimalFormat("0.00").format( transToEdit.getAmount() ));
+        double transAmount = transToEdit.getAmount();
+        if(transAmount < 0){
+            transAmount *= -1;
+            applyAsDeduction.setChecked(true);
+        }
+        amount.setText(new DecimalFormat("0.00").format( transAmount ));
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(transToEdit.getTransactionDate());
@@ -133,6 +140,7 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         EditText location = (EditText)view.findViewById(R.id.edit_transaction_location);
         EditText amount = (EditText)view.findViewById(R.id.edit_transaction_amount);
         EditText description = (EditText)view.findViewById(R.id.edit_transaction_description);
+        CheckBox applyDeduction = (CheckBox)view.findViewById(R.id.edit_transaction_deduction);
         DatePicker date = (DatePicker)view.findViewById(R.id.edit_transaction_date);
         //accountId is -1 if we're adding a transaction from the Overview screen
         if(accountId == -1){
@@ -151,6 +159,9 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         double transAmount = 0.0;
         if(!amount.getText().toString().isEmpty()){
             transAmount = Double.parseDouble(amount.getText().toString());
+        }
+        if(applyDeduction.isChecked()){
+            transAmount *= -1;
         }
         Date transDate = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth()).getTime();
 
