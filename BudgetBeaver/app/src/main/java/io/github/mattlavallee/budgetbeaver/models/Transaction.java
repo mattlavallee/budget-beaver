@@ -85,11 +85,11 @@ public class Transaction {
                             sortEvaluation = transaction.getTransactionDate().compareTo(t1.getTransactionDate());
                         }
                         break;
-                    case Date:
-                        sortEvaluation = transaction.getTransactionDate().compareTo(t1.getTransactionDate());
+                    case Location:
+                        sortEvaluation = transaction.getLocation().compareTo(t1.getLocation());
                         //secondary sort
                         if(sortEvaluation == 0){
-                            sortEvaluation = transaction.getLocation().compareTo(t1.getLocation());
+                            sortEvaluation = transaction.getTransactionDate().compareTo(t1.getTransactionDate());
                         }
                         break;
                     case Description:
@@ -100,11 +100,12 @@ public class Transaction {
                         }
                         break;
                     case Tag:
+                        //TODO: implement tag sorting
                     default:
-                        sortEvaluation = transaction.getLocation().compareTo(t1.getLocation());
+                        sortEvaluation = transaction.getTransactionDate().compareTo(t1.getTransactionDate());
                         //secondary sort
                         if(sortEvaluation == 0){
-                            sortEvaluation = transaction.getTransactionDate().compareTo(t1.getTransactionDate());
+                            sortEvaluation = transaction.getLocation().compareTo(t1.getLocation());
                         }
                         break;
                 }

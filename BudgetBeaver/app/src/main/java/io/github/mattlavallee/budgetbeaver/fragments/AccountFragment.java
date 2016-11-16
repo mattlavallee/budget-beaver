@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -50,7 +51,9 @@ public class AccountFragment extends Fragment {
 
         //load all transactions
         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
-        Transaction.sortTransactions(allTransactions, appSettings.getDefaultSortType(), appSettings.getDefaultSortDirection());
+        Transaction.sortTransactions(allTransactions,
+                activeAccount.getSortType(appSettings.getDefaultSortType()),
+                activeAccount.getSortDirection(appSettings.getDefaultSortDirection()));
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
@@ -184,6 +187,7 @@ public class AccountFragment extends Fragment {
 
         final RadioGroup sortType = (RadioGroup)layout.findViewById(R.id.sort_selection_group);
         final CheckBox reverseSort = (CheckBox)layout.findViewById(R.id.sort_reverse_order);
+        setSortState(layout);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setView(layout)
@@ -197,6 +201,10 @@ public class AccountFragment extends Fragment {
                         SortDirection direction = reverseSort.isChecked() ?
                                 SortDirection.Descending : SortDirection.Ascending;
                         SortType sortTarget = getSortType( sortType.getCheckedRadioButtonId() );
+
+                        activeAccount.setSortType(sortTarget);
+                        activeAccount.setSortDirection(direction);
+                        dbDispatcher.Accounts.updateAccount(activeAccount);
 
                         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(activeAccount.getId());
                         Transaction.sortTransactions( allTransactions, sortTarget, direction );
@@ -212,7 +220,7 @@ public class AccountFragment extends Fragment {
         builder.create().show();
     }
 
-    public SortType getSortType( int selectedSortResourceTarget ){
+    private SortType getSortType( int selectedSortResourceTarget ){
         switch( selectedSortResourceTarget ){
             case R.id.sort_selection_tag:
                 return SortType.Tag;
@@ -272,5 +280,37 @@ public class AccountFragment extends Fragment {
     private void updateActivityTitle( ArrayList<Transaction> transactions ){
         String transactionTotal = Transaction.getFormattedTotal(transactions);
         getActivity().setTitle(activeAccount.getName() + " (" + transactionTotal + ")");
+    }
+
+    private void setSortState(View layout){
+        final CheckBox reverseSort = (CheckBox)layout.findViewById(R.id.sort_reverse_order);
+        reverseSort.setChecked(false);
+        if(activeAccount.getSortDirection() == SortDirection.Descending){
+            reverseSort.setChecked(true);
+        }
+
+        Settings appSettings = dbDispatcher.Settings.getSettings();
+        SortType sortType = activeAccount.getSortType(appSettings.getDefaultSortType());
+        RadioButton btn = null;
+        switch(sortType){
+            case Amount:
+                btn = (RadioButton)layout.findViewById(R.id.sort_selection_amount);
+                break;
+            case Description:
+                btn = (RadioButton)layout.findViewById(R.id.sort_selection_description);
+                break;
+            case Location:
+                btn = (RadioButton)layout.findViewById(R.id.sort_selection_location);
+                break;
+            case Tag:
+                btn = (RadioButton)layout.findViewById(R.id.sort_selection_tag);
+                break;
+            case Date:
+                btn = (RadioButton)layout.findViewById(R.id.sort_selection_date);
+                break;
+        }
+        if(btn != null){
+            btn.setChecked(true);
+        }
     }
 }

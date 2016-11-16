@@ -14,8 +14,7 @@
             android:id="@+id/sort_selection_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location"
-            android:checked="true" />
+            android:text="Location" />
         <RadioButton
             android:id="@+id/sort_selection_tag"
             android:layout_width="wrap_content"
@@ -47,6 +46,5 @@
         android:id="@+id/sort_reverse_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reverse Direction"
-        android:checked="false" />
+        android:text="Reverse Direction" />
 </LinearLayout>
