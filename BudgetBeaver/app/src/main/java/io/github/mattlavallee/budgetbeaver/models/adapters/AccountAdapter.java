@@ -1,5 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.models.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -16,14 +17,17 @@ import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Settings;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountViewHolder> {
     private ArrayList<Account> accounts;
     private OverviewFragment adapterContainer;
+    private Settings appSettings;
 
-    public AccountAdapter(ArrayList<Account> allAccounts, OverviewFragment container) {
+    public AccountAdapter(ArrayList<Account> allAccounts, Settings settings, OverviewFragment container) {
         accounts = allAccounts;
+        appSettings = settings;
         adapterContainer = container;
     }
 
@@ -95,6 +99,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         ArrayList<Transaction> transactions = new DatabaseDispatcher(adapterContainer.getContext())
                 .Transactions.getTransactionsForAccount(account.getId());
         String totalForAccount = Transaction.getFormattedTotal(transactions);
+
+        String accountTotalColor = appSettings.getPositiveAccountColor();
+        if(Transaction.getTotal(transactions) < 0){
+            accountTotalColor = appSettings.getNegativeAccountColor();
+        }
+        viewHolder.accountTotal.setTextColor(Color.parseColor(accountTotalColor));
         viewHolder.accountTotal.setText( totalForAccount );
         viewHolder.overflow.setTag(account.getId());
     }

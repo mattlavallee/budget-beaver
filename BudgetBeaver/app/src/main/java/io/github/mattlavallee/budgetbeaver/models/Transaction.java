@@ -54,13 +54,17 @@ public class Transaction {
     public boolean isActive(){ return active; }
     public Date getTransactionDate(){ return dateModified; }
 
-    public static String getFormattedTotal(ArrayList<Transaction> transactions){
+    public static double getTotal(ArrayList<Transaction> transactions){
         double total = 0;
         for(int i = 0; i < transactions.size(); i++){
             if(transactions.get(i).isActive()) {
                 total += transactions.get(i).getAmount();
             }
         }
+        return total;
+    }
+    public static String getFormattedTotal(ArrayList<Transaction> transactions){
+        double total = Transaction.getTotal(transactions);
 
         String formattedAmount = new DecimalFormat("0.00").format( total );
         return "$" + formattedAmount;

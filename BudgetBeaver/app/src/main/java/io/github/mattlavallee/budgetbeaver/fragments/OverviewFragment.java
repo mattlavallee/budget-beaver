@@ -20,6 +20,7 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Settings;
 import io.github.mattlavallee.budgetbeaver.models.adapters.AccountAdapter;
 
 public class OverviewFragment extends Fragment {
@@ -45,9 +46,10 @@ public class OverviewFragment extends Fragment {
         //Load all accounts
         dbDispatcher = new DatabaseDispatcher(getContext());
         allAccounts = dbDispatcher.Accounts.getAccounts();
+        Settings appSettings = dbDispatcher.Settings.getSettings();
 
         //set account adapter on the recycle view
-        accountAdapter = new AccountAdapter(allAccounts, this);
+        accountAdapter = new AccountAdapter(allAccounts, appSettings, this);
         recyclerViewLayout.setAdapter(accountAdapter);
 
         registerFabClickEvents(getActivity());

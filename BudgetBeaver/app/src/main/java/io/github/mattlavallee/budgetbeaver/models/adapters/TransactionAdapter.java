@@ -1,6 +1,7 @@
 package io.github.mattlavallee.budgetbeaver.models.adapters;
 
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
+import io.github.mattlavallee.budgetbeaver.models.Settings;
 import io.github.mattlavallee.budgetbeaver.models.Tag;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 
@@ -96,12 +98,19 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(TransactionViewHolder viewHolder, int position){
+        Settings appSettings = dbDispatcher.Settings.getSettings();
         Transaction transaction = transactions.get(position);
         viewHolder.transactionLocation.setText(transaction.getLocation());
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy");
         String strDate = formatter.format(transaction.getTransactionDate());
         viewHolder.transactionDescription.setText(strDate + ": " + transaction.getDescription());
         viewHolder.transactionAmount.setText(transaction.getFormattedAmount());
+
+        String transAmtColor = appSettings.getPositiveTransactionColor();
+        if(transaction.getAmount() < 0){
+            transAmtColor = appSettings.getNegativeTransactionColor();
+        }
+        viewHolder.transactionAmount.setTextColor(Color.parseColor(transAmtColor));
 
         ArrayList<Tag> allTags = dbDispatcher.Tags.getTagsForTransaction(transaction.getId());
         ArrayList<String> tagNames = new ArrayList<>();
