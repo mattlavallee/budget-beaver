@@ -94,7 +94,7 @@ public class TransactionDispatcher {
         content.put("location", newTransaction.getLocation());
         content.put("amount", newTransaction.getAmount());
         content.put("description", newTransaction.getDescription());
-        content.put("dateModified", dateFormatter.format(new Date()));
+        content.put("dateModified", dateFormatter.format(newTransaction.getTransactionDate()));
         content.put("active", newTransaction.isActive() ? 1 : 0);
         content.put("currencyId", -1);
 
