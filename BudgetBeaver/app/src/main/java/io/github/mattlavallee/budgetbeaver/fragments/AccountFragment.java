@@ -25,6 +25,7 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Settings;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 import io.github.mattlavallee.budgetbeaver.models.adapters.TransactionAdapter;
 import io.github.mattlavallee.budgetbeaver.models.enums.SortDirection;
@@ -45,9 +46,11 @@ public class AccountFragment extends Fragment {
 
         dbDispatcher = new DatabaseDispatcher(getContext());
         activeAccount = dbDispatcher.Accounts.getAccountById(accountId);
+        Settings appSettings = dbDispatcher.Settings.getSettings();
 
         //load all transactions
         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
+        Transaction.sortTransactions(allTransactions, appSettings.getDefaultSortType(), appSettings.getDefaultSortDirection());
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
