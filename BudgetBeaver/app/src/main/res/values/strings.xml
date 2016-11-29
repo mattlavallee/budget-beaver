@@ -4,4 +4,6 @@
     <string name="vertical_ellipsis">&#8942;</string>
 
     <string name="account_prompt">Select an Account</string>
+
+    <string name="app_drawerPlaceholder">Menu</string>
 </resources>

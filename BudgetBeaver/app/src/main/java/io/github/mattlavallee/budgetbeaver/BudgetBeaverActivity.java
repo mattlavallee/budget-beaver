@@ -1,10 +1,12 @@
 package io.github.mattlavallee.budgetbeaver;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,6 +27,7 @@ public class BudgetBeaverActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout _drawerLayout;
+    ActionBarDrawerToggle _drawerToggle;
 
     private void loadNavigationDrawerMenu(){
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
@@ -32,7 +35,6 @@ public class BudgetBeaverActivity
 
         SubMenu accountsSubMenu = drawerMenu.getItem(2).getSubMenu();
 
-        //TODO: this should load accounts from the database when we get to that point
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Account> accounts = dbDispatcher.Accounts.getAccounts();
 
@@ -66,6 +68,20 @@ public class BudgetBeaverActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.budget_beaver_toolbar);
         setSupportActionBar(toolbar);
         setTitle("Budget Beaver");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        _drawerToggle = new ActionBarDrawerToggle( this, _drawerLayout, toolbar,
+                R.string.app_drawerPlaceholder, R.string.app_drawerPlaceholder ) {
+            public void onDrawerClosed(){
+                supportInvalidateOptionsMenu();
+            }
+            public void onDrawerOpened(){
+                supportInvalidateOptionsMenu();
+            }
+        };
+        _drawerToggle.setDrawerIndicatorEnabled(true);
+        _drawerToggle.syncState();
 
         //populate the menu with account information and set default menu item
         loadNavigationDrawerMenu();
@@ -115,5 +131,19 @@ public class BudgetBeaverActivity
         //close the app drawer
         _drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        _drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        _drawerToggle.onConfigurationChanged(newConfig);
     }
 }
