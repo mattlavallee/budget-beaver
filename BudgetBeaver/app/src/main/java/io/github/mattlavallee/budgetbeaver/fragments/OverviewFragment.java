@@ -46,7 +46,7 @@ public class OverviewFragment extends Fragment {
         //Load all accounts
         dbDispatcher = new DatabaseDispatcher(getContext());
         allAccounts = dbDispatcher.Accounts.getAccounts();
-        Settings appSettings = dbDispatcher.Settings.getSettings();
+        Settings appSettings = new Settings(getContext());
 
         //set account adapter on the recycle view
         accountAdapter = new AccountAdapter(allAccounts, appSettings, this);

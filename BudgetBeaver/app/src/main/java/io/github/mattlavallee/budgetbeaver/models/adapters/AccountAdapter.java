@@ -100,11 +100,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
                 .Transactions.getTransactionsForAccount(account.getId());
         String totalForAccount = Transaction.getFormattedTotal(transactions);
 
-        String accountTotalColor = appSettings.getPositiveAccountColor();
+        int accountTotalColor = appSettings.getPositiveAccountColor();
         if(Transaction.getTotal(transactions) < 0){
             accountTotalColor = appSettings.getNegativeAccountColor();
         }
-        viewHolder.accountTotal.setTextColor(Color.parseColor(accountTotalColor));
+        viewHolder.accountTotal.setTextColor(accountTotalColor);
         viewHolder.accountTotal.setText( totalForAccount );
         viewHolder.overflow.setTag(account.getId());
     }

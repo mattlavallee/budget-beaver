@@ -98,7 +98,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(TransactionViewHolder viewHolder, int position){
-        Settings appSettings = dbDispatcher.Settings.getSettings();
+        Settings appSettings = new Settings(adapterContainer.getContext());
         Transaction transaction = transactions.get(position);
         viewHolder.transactionLocation.setText(transaction.getLocation());
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy");
@@ -106,11 +106,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         viewHolder.transactionDescription.setText(strDate + ": " + transaction.getDescription());
         viewHolder.transactionAmount.setText(transaction.getFormattedAmount());
 
-        String transAmtColor = appSettings.getPositiveTransactionColor();
+        int transAmtColor = appSettings.getPositiveTransactionColor();
         if(transaction.getAmount() < 0){
             transAmtColor = appSettings.getNegativeTransactionColor();
         }
-        viewHolder.transactionAmount.setTextColor(Color.parseColor(transAmtColor));
+        viewHolder.transactionAmount.setTextColor(transAmtColor);
 
         ArrayList<Tag> allTags = dbDispatcher.Tags.getTagsForTransaction(transaction.getId());
         ArrayList<String> tagNames = new ArrayList<>();

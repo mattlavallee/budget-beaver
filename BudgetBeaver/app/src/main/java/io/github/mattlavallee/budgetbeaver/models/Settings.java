@@ -1,55 +1,41 @@
 package io.github.mattlavallee.budgetbeaver.models;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 
 import io.github.mattlavallee.budgetbeaver.models.enums.SortDirection;
 import io.github.mattlavallee.budgetbeaver.models.enums.SortType;
 
 public class Settings {
-    private SortType defaultSortType;
-    private SortDirection defaultSortDirection;
-    private String positiveTransactionColor;
-    private String negativeTransactionColor;
-    private String positiveAccountColor;
-    private String negativeAccountColor;
-    private int defaultCurrencyId;
-
-    public Settings(){
-        defaultSortType = SortType.Date;
-        defaultSortDirection = SortDirection.Ascending;
-        positiveTransactionColor = "";
-        negativeTransactionColor = "";
-        positiveAccountColor = "";
-        negativeAccountColor = "";
-        defaultCurrencyId = -1;
+    private SharedPreferences _preferences;
+    public Settings(Context context){
+        _preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public SortType getDefaultSortType(){ return defaultSortType; }
-    public SortDirection getDefaultSortDirection(){ return defaultSortDirection; }
-    public String getPositiveTransactionColor(){ return positiveTransactionColor; }
-    public String getNegativeTransactionColor(){ return negativeTransactionColor; }
-    public String getPositiveAccountColor(){ return positiveAccountColor; }
-    public String getNegativeAccountColor(){ return negativeAccountColor; }
-    public int getDefaultCurrencyId(){ return defaultCurrencyId; }
+    public SortType getTransactionSortType(){
+        String sortTypeAsString = _preferences.getString("setting_transaction_sort_type", "4");
+        return SortType.fromInt(Integer.parseInt(sortTypeAsString));
+    }
+    public SortDirection getTransactionSortDirection(){
+        boolean reverseSort = _preferences.getBoolean("setting_transaction_sort_direction", false);
+        return SortDirection.fromInt( reverseSort ? 1 : 0 );
+    }
 
-    public void setDefaultSortType(SortType type){
-        defaultSortType = type;
+    public int getPositiveTransactionColor(){
+        return _preferences.getInt("setting_transaction_positive_color", Color.parseColor("#333333"));
     }
-    public void setDefaultSortDirection(SortDirection direction){
-        defaultSortDirection = direction;
+
+    public int getNegativeTransactionColor(){
+        return _preferences.getInt("setting_transaction_negative_color", Color.parseColor("#cc0000"));
     }
-    public void setPositiveTransactionColor(String color){
-        positiveTransactionColor = color;
+
+    public int getPositiveAccountColor(){
+        return _preferences.getInt("setting_account_positive_color", Color.parseColor("#333333"));
     }
-    public void setNegativeTransactionColor(String color){
-        negativeTransactionColor = color;
-    }
-    public void setPositiveAccountColor(String color){
-        positiveAccountColor = color;
-    }
-    public void setNegativeAccountColor(String color){
-        negativeAccountColor = color;
-    }
-    public void setDefaultCurrencyId(int currencyId){
-        defaultCurrencyId = currencyId;
+
+    public int getNegativeAccountColor(){
+        return _preferences.getInt("setting_account_negative_color", Color.parseColor("#cc0000"));
     }
 }

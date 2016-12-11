@@ -1,8 +1,10 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -47,13 +49,13 @@ public class AccountFragment extends Fragment {
 
         dbDispatcher = new DatabaseDispatcher(getContext());
         activeAccount = dbDispatcher.Accounts.getAccountById(accountId);
-        Settings appSettings = dbDispatcher.Settings.getSettings();
+        Settings appSettings = new Settings( getContext() );
 
         //load all transactions
         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
         Transaction.sortTransactions(allTransactions,
-                activeAccount.getSortType(appSettings.getDefaultSortType()),
-                activeAccount.getSortDirection(appSettings.getDefaultSortDirection()));
+                activeAccount.getSortType(appSettings.getTransactionSortType()),
+                activeAccount.getSortDirection(appSettings.getTransactionSortDirection()));
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
@@ -289,8 +291,8 @@ public class AccountFragment extends Fragment {
             reverseSort.setChecked(true);
         }
 
-        Settings appSettings = dbDispatcher.Settings.getSettings();
-        SortType sortType = activeAccount.getSortType(appSettings.getDefaultSortType());
+        Settings appSettings = new Settings(getContext());
+        SortType sortType = activeAccount.getSortType(appSettings.getTransactionSortType());
         RadioButton btn = null;
         switch(sortType){
             case Amount:

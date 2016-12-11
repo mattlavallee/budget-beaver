@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
 import io.github.mattlavallee.budgetbeaver.data.tables.AccountDispatcher;
-import io.github.mattlavallee.budgetbeaver.data.tables.SettingsDispatcher;
 import io.github.mattlavallee.budgetbeaver.data.tables.TagDispatcher;
 import io.github.mattlavallee.budgetbeaver.data.tables.TransactionDispatcher;
 
@@ -17,7 +16,6 @@ public class DatabaseDispatcher extends SQLiteOpenHelper {
     public AccountDispatcher Accounts = new AccountDispatcher(this);
     public TransactionDispatcher Transactions = new TransactionDispatcher(this);
     public TagDispatcher Tags = new TagDispatcher(this);
-    public SettingsDispatcher Settings = new SettingsDispatcher(this);
 
     public DatabaseDispatcher(Context context){
         super(context, DATABASE_NAME, null, DB_VERSION);
@@ -28,7 +26,6 @@ public class DatabaseDispatcher extends SQLiteOpenHelper {
         Accounts.onCreate(db);
         Transactions.onCreate(db);
         Tags.onCreate(db);
-        Settings.onCreate(db);
     }
 
     @Override
