@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:key="setting_title_account_settings"
         android:title="Account Settings">
@@ -16,6 +18,18 @@
             android:title="Reverse sort direction"
             android:summary="Choose to sort in ascending or descending order"
             android:defaultValue="false"/>
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:key="setting_account_positive_color"
+            android:title="Positive Account Color"
+            android:summary="Color of a positive account balance"
+            app:colorChoices="@array/app_settings_colors"
+            android:defaultValue="@color/colorBlack" />
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:key="setting_account_negative_color"
+            android:title="Negative Account Color"
+            android:summary="Color of a negative account balance"
+            app:colorChoices="@array/app_settings_colors"
+            android:defaultValue="@color/colorRed" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="setting_title_transaction_settings"
@@ -33,5 +47,17 @@
             android:title="Reverse sort direction"
             android:summary="Choose to sort in ascending or descending order"
             android:defaultValue="false"/>
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:key="setting_transaction_positive_color"
+            android:title="Positive Transaction Color"
+            android:summary="Color of a positive transaction amount"
+            app:colorChoices="@array/app_settings_colors"
+            android:defaultValue="@color/colorBlack" />
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:key="setting_transaction_negative_color"
+            android:title="Negative Transaction Color"
+            android:summary="Color of a negative transaction amount"
+            app:colorChoices="@array/app_settings_colors"
+            android:defaultValue="@color/colorRed" />
     </PreferenceCategory>
 </PreferenceScreen>
