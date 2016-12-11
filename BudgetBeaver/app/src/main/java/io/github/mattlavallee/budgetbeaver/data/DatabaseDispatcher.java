@@ -29,7 +29,6 @@ public class DatabaseDispatcher extends SQLiteOpenHelper {
         Transactions.onCreate(db);
         Tags.onCreate(db);
         Settings.onCreate(db);
-        db.close();
     }
 
     @Override

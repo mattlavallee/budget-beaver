@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header
+        android:fragment="io.github.mattlavallee.budgetbeaver.fragments.PreferencesFragment"
+        android:title="Application Settings"
+        android:summary="Customize account colors, transaction colors, and default sort order" />
+
+</preference-headers>

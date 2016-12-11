@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="setting_title_account_settings"
+        android:title="Account Settings">
+        <ListPreference
+            android:key="setting_account_sort_type"
+            android:title="Sort Fields"
+            android:summary="Account field to sort on"
+            android:entries="@array/app_settings_account_sortType"
+            android:entryValues="@array/app_settings_account_sortType_values"
+            android:defaultValue="0"
+            android:dialogTitle="Sort Field" />
+        <CheckBoxPreference
+            android:key="setting_account_sort_direction"
+            android:title="Reverse sort direction"
+            android:summary="Choose to sort in ascending or descending order"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="setting_title_transaction_settings"
+        android:title="Transaction Settings">
+        <ListPreference
+            android:key="setting_transaction_sort_type"
+            android:title="Sort Fields"
+            android:summary="Transaction field to sort on"
+            android:entries="@array/app_settings_transaction_sortType"
+            android:entryValues="@array/app_settings_transaction_sortType_values"
+            android:defaultValue="4"
+            android:dialogTitle="Sort Field" />
+        <CheckBoxPreference
+            android:key="setting_transaction_sort_direction"
+            android:title="Reverse sort direction"
+            android:summary="Choose to sort in ascending or descending order"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+</PreferenceScreen>

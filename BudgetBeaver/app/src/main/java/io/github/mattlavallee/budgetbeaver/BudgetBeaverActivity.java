@@ -1,5 +1,6 @@
 package io.github.mattlavallee.budgetbeaver;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -19,7 +20,6 @@ import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
-import io.github.mattlavallee.budgetbeaver.fragments.SettingsFragment;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 
 
@@ -110,7 +110,10 @@ public class BudgetBeaverActivity
         } else if (id == R.id.action_reminders) {
             activeViewFragment = new RemindersFragment();
         } else if (id == R.id.action_settings) {
-            activeViewFragment = new SettingsFragment();
+            Intent intent = new Intent();
+            intent.setClassName(this, "io.github.mattlavallee.budgetbeaver.BudgetBeaverSettings");
+            startActivity(intent);
+            return true;
         } else {
             //when loading an account, we need to provide the account id so that the fragment
             //knows which account it should load
