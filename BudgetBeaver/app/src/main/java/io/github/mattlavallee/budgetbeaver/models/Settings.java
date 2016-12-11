@@ -10,6 +10,8 @@ import io.github.mattlavallee.budgetbeaver.models.enums.SortType;
 
 public class Settings {
     private SharedPreferences _preferences;
+    private int defaultPositiveColor = Color.parseColor("#333333");
+    private int defaultNegativeColor = Color.parseColor("#cc0000");
     public Settings(Context context){
         _preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
@@ -24,18 +26,18 @@ public class Settings {
     }
 
     public int getPositiveTransactionColor(){
-        return _preferences.getInt("setting_transaction_positive_color", Color.parseColor("#333333"));
+        return _preferences.getInt("setting_transaction_positive_color", defaultPositiveColor);
     }
 
     public int getNegativeTransactionColor(){
-        return _preferences.getInt("setting_transaction_negative_color", Color.parseColor("#cc0000"));
+        return _preferences.getInt("setting_transaction_negative_color", defaultNegativeColor);
     }
 
     public int getPositiveAccountColor(){
-        return _preferences.getInt("setting_account_positive_color", Color.parseColor("#333333"));
+        return _preferences.getInt("setting_account_positive_color", defaultPositiveColor);
     }
 
     public int getNegativeAccountColor(){
-        return _preferences.getInt("setting_account_negative_color", Color.parseColor("#cc0000"));
+        return _preferences.getInt("setting_account_negative_color", defaultNegativeColor);
     }
 }
