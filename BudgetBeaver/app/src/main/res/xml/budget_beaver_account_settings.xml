@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:key="setting_title_act_transaction_settings"
+        android:title="Transaction Settings">
+        <ListPreference
+            android:key="setting_act_transaction_sort_type"
+            android:title="Sort Fields"
+            android:summary="Transaction field to sort on"
+            android:entries="@array/app_settings_transaction_sortType"
+            android:entryValues="@array/app_settings_transaction_sortType_values"
+            android:dialogTitle="Sort Field" />
+        <CheckBoxPreference
+            android:key="setting_act_transaction_sort_direction"
+            android:title="Reverse sort direction"
+            android:summary="Choose to sort in ascending or descending order"/>
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:key="setting_act_transaction_positive_color"
+            android:title="Positive Transaction Color"
+            android:summary="Color of a positive transaction amount"
+            app:colorChoices="@array/app_settings_colors" />
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:key="setting_act_transaction_negative_color"
+            android:title="Negative Transaction Color"
+            android:summary="Color of a negative transaction amount"
+            app:colorChoices="@array/app_settings_colors" />
+    </PreferenceCategory>
+</PreferenceScreen>

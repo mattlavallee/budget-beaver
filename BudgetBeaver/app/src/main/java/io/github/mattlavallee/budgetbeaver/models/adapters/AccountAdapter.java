@@ -1,6 +1,5 @@
 package io.github.mattlavallee.budgetbeaver.models.adapters;
 
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;

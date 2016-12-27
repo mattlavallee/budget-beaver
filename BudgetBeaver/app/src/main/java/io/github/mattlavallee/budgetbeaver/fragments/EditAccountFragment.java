@@ -82,14 +82,11 @@ public class EditAccountFragment extends Fragment {
             return;
         }
 
-        Account currentAccount = new Account(accountId, accountName, -1, -1, 1);
+        Account currentAccount = new Account(accountId, accountName, 1);
         long result;
         if (accountId == -1) {
             result = dbDispatcher.Accounts.insertAccount(currentAccount);
         } else {
-            Account existingAccount = dbDispatcher.Accounts.getAccountById(accountId);
-            currentAccount.setSortType(existingAccount.getSortType());
-            currentAccount.setSortDirection(existingAccount.getSortDirection());
             result = dbDispatcher.Accounts.updateAccount(currentAccount);
         }
 

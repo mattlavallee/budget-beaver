@@ -54,8 +54,8 @@ public class AccountFragment extends Fragment {
         //load all transactions
         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
         Transaction.sortTransactions(allTransactions,
-                activeAccount.getSortType(appSettings.getTransactionSortType()),
-                activeAccount.getSortDirection(appSettings.getTransactionSortDirection()));
+                appSettings.getTransactionSortType(accountId),
+                appSettings.getTransactionSortDirection(accountId));
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
@@ -204,10 +204,6 @@ public class AccountFragment extends Fragment {
                                 SortDirection.Descending : SortDirection.Ascending;
                         SortType sortTarget = getSortType( sortType.getCheckedRadioButtonId() );
 
-                        activeAccount.setSortType(sortTarget);
-                        activeAccount.setSortDirection(direction);
-                        dbDispatcher.Accounts.updateAccount(activeAccount);
-
                         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(activeAccount.getId());
                         Transaction.sortTransactions( allTransactions, sortTarget, direction );
                         transAdapter.updateData(allTransactions);
@@ -285,14 +281,15 @@ public class AccountFragment extends Fragment {
     }
 
     private void setSortState(View layout){
+        Settings appSettings = new Settings(getContext());
+
         final CheckBox reverseSort = (CheckBox)layout.findViewById(R.id.sort_reverse_order);
         reverseSort.setChecked(false);
-        if(activeAccount.getSortDirection() == SortDirection.Descending){
+        if(appSettings.getTransactionSortDirection(activeAccount.getId()) == SortDirection.Descending){
             reverseSort.setChecked(true);
         }
 
-        Settings appSettings = new Settings(getContext());
-        SortType sortType = activeAccount.getSortType(appSettings.getTransactionSortType());
+        SortType sortType = appSettings.getTransactionSortType(activeAccount.getId());
         RadioButton btn = null;
         switch(sortType){
             case Amount:

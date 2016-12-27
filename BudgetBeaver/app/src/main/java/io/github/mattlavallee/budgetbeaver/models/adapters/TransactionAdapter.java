@@ -106,9 +106,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         viewHolder.transactionDescription.setText(strDate + ": " + transaction.getDescription());
         viewHolder.transactionAmount.setText(transaction.getFormattedAmount());
 
-        int transAmtColor = appSettings.getPositiveTransactionColor();
+        int transAmtColor = appSettings.getPositiveTransactionColor(transaction.getAccountId());
         if(transaction.getAmount() < 0){
-            transAmtColor = appSettings.getNegativeTransactionColor();
+            transAmtColor = appSettings.getNegativeTransactionColor(transaction.getAccountId());
         }
         viewHolder.transactionAmount.setTextColor(transAmtColor);
 

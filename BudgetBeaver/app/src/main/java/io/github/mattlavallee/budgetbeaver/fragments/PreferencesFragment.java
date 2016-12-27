@@ -1,28 +1,38 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 import io.github.mattlavallee.budgetbeaver.R;
+import io.github.mattlavallee.budgetbeaver.models.enums.PreferenceFiles;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferenceManager manager = getPreferenceManager();
+        manager.setSharedPreferencesName(PreferenceFiles.DefaultPreferences());
         addPreferencesFromResource(R.xml.budget_beaver_settings);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        getActivity().getApplicationContext()
+            .getSharedPreferences(PreferenceFiles.DefaultPreferences(), Context.MODE_PRIVATE)
+            .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        getActivity().getApplicationContext()
+            .getSharedPreferences(PreferenceFiles.DefaultPreferences(), Context.MODE_PRIVATE)
+            .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
