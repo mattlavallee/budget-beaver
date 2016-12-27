@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,10 @@ public class BudgetBeaverActivity
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Account> accounts = dbDispatcher.Accounts.getAccounts();
 
-        if(accounts.size() > 0){
-            accountsSubMenu.clear();
+        accountsSubMenu.clear();
+        if(accounts.size() == 0){
+            accountsSubMenu.add(2, -1, 0, "No Accounts");
+            accountsSubMenu.getItem(0).setEnabled(false);
         }
 
         for(int i = 0; i < accounts.size(); i++){
@@ -73,14 +76,20 @@ public class BudgetBeaverActivity
 
         _drawerToggle = new ActionBarDrawerToggle( this, _drawerLayout, toolbar,
                 R.string.app_drawerPlaceholder, R.string.app_drawerPlaceholder ) {
-            public void onDrawerClosed(){
+            @Override
+            public void onDrawerClosed(View drawerView){
+                super.onDrawerClosed(drawerView);
                 supportInvalidateOptionsMenu();
             }
-            public void onDrawerOpened(){
+            @Override
+            public void onDrawerOpened(View drawerView){
+                super.onDrawerOpened(drawerView);
+                loadNavigationDrawerMenu();
                 supportInvalidateOptionsMenu();
             }
         };
         _drawerToggle.setDrawerIndicatorEnabled(true);
+        _drawerLayout.addDrawerListener(_drawerToggle);
         _drawerToggle.syncState();
 
         //populate the menu with account information and set default menu item

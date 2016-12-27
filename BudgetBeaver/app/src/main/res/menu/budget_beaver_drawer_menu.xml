@@ -21,7 +21,7 @@
             app:showAsAction="never"
             android:title="Accounts">
             <menu>
-                <item android:title="No accounts"
+                <item android:title="No Accounts"
                     android:enabled="false"></item>
             </menu>
         </item>
