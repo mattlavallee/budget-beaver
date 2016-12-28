@@ -44,6 +44,7 @@ public class EditReminderFragment extends Fragment {
         } else{
             currentReminder = dbDispatcher.Reminders.getReminderById(reminderId);
             getActivity().setTitle("Edit Reminder");
+            initializeFields(fragmentView, currentReminder);
         }
 
         //no FAB on Add/Edit account layout
@@ -115,7 +116,7 @@ public class EditReminderFragment extends Fragment {
         });
     }
 
-    public void saveReminder( View view, int reminderId, int accountId ){
+    private void saveReminder( View view, int reminderId, int accountId ){
         EditText messageField = (EditText)view.findViewById(R.id.edit_reminder_messsage);
         EditText dayOfMonthField = (EditText)view.findViewById(R.id.edit_reminder_dayOfMonth);
         EditText daysUntilExpirationField = (EditText)view.findViewById(R.id.edit_reminder_daysUntilExpiration);
@@ -169,5 +170,18 @@ public class EditReminderFragment extends Fragment {
         }
 
         closeEditReminderFragment();
+    }
+
+    private void initializeFields(View view, Reminder reminder){
+        EditText message = (EditText)view.findViewById(R.id.edit_reminder_messsage);
+        EditText dayOfMonth = (EditText)view.findViewById(R.id.edit_reminder_dayOfMonth);
+        EditText daysUntilExpiration = (EditText)view.findViewById(R.id.edit_reminder_daysUntilExpiration);
+        //Note: account spinner is handled in populateAccountSpinner
+
+        message.setText(reminder.getMessage());
+        dayOfMonth.setText(reminder.getDayOfMonth());
+        if(reminder.getDaysUntilExpiration() >= 0){
+            daysUntilExpiration.setText(reminder.getDaysUntilExpiration());
+        }
     }
 }
