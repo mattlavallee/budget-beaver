@@ -60,6 +60,37 @@ public class ReminderDispatcher {
         return reminders;
     }
 
+    public Reminder getReminderById( int reminderId ){
+        Reminder reminder = new Reminder();
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME +
+                "WHERE active = 1 and id = " + reminderId, null);
+        result.moveToFirst();
+
+        while(result.isAfterLast() == false){
+            int id = result.getInt(result.getColumnIndex("id"));
+            int accountId = result.getInt(result.getColumnIndex("accountId"));
+            String message = result.getString(result.getColumnIndex("message"));
+            int dayOfMonth = result.getInt(result.getColumnIndex("dayOfMonth"));
+            int daysUntilExpired = result.getInt(result.getColumnIndex("daysUntilExpired"));
+            String lastDateActivatedStr = result.getString(result.getColumnIndex("lastDateActivated"));
+            Date dateActivated;
+            try{
+                dateActivated= dateFormatter.parse(lastDateActivatedStr);
+            } catch(ParseException ex){
+                dateActivated = new Date();
+            }
+            int isActiveNotification = result.getInt(result.getColumnIndex("isActiveNotification"));
+            int isActive = result.getInt(result.getColumnIndex("active"));
+            reminder = new Reminder(id, accountId, message, dayOfMonth, daysUntilExpired,
+                    dateActivated, isActiveNotification == 1 ? true : false, isActive == 1 ? true : false );
+        }
+        result.close();
+        db.close();
+        return reminder;
+    }
+
     public long insertReminder(Reminder reminder){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues content = new ContentValues();
