@@ -46,7 +46,7 @@ public class RemindersFragment extends Fragment {
         dbDispatcher = new DatabaseDispatcher(getContext());
         allReminders = dbDispatcher.Reminders.getReminders();
 
-        reminderAdapter = new ReminderAdapter(allReminders, this);
+        reminderAdapter = new ReminderAdapter(allReminders, this, dbDispatcher);
         recyclerViewLayout.setAdapter(reminderAdapter);
 
         registerFabClickEvents(getActivity());

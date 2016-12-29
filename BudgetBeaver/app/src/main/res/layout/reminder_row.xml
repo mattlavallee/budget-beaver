@@ -20,12 +20,12 @@
             android:orientation="horizontal"
             android:weightSum="6">
             <TextView
-                android:id="@+id/reminder_message"
+                android:id="@+id/reminder_account_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="24dp"
+                android:textSize="14dp"
                 android:maxLines="1"
-                android:textColor="@color/colorAccentDark"
+                android:textColor="@color/colorLightGray"
                 android:ellipsize="end"
                 android:layout_weight="5"/>
             <TextView
@@ -37,5 +37,18 @@
                 android:layout_weight="1"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
+        <TextView
+            android:id="@+id/reminder_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="@color/colorAccentDark"/>
+        <TextView
+            android:id="@+id/reminder_timeFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textStyle="italic"
+            android:textColor="@color/colorLightGray"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

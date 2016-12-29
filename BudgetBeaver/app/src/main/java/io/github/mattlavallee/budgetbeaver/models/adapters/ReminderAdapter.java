@@ -1,5 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.models.adapters;
 
+import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -13,22 +14,28 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.R;
+import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
+import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder> {
     private ArrayList<Reminder> reminders;
     private RemindersFragment adapterContainer;
+    private DatabaseDispatcher dbHelper;
 
-    public ReminderAdapter(ArrayList<Reminder> allReminders, RemindersFragment container){
+    public ReminderAdapter(ArrayList<Reminder> allReminders, RemindersFragment container, DatabaseDispatcher helper){
         reminders = allReminders;
         adapterContainer = container;
+        dbHelper = helper;
     }
 
     public static class ReminderViewHolder extends RecyclerView.ViewHolder{
         RemindersFragment _container;
         CardView cardView;
         TextView reminderMessage;
+        TextView reminderAccount;
+        TextView reminderTimeframe;
         View overflow;
 
         ReminderViewHolder(View itemView, RemindersFragment container){
@@ -36,6 +43,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
             _container = container;
             cardView = (CardView) itemView.findViewById(R.id.reminder_card_view);
             reminderMessage = (TextView)itemView.findViewById(R.id.reminder_message);
+            reminderAccount = (TextView)itemView.findViewById(R.id.reminder_account_name);
+            reminderTimeframe = (TextView) itemView.findViewById(R.id.reminder_timeFrame);
             overflow = itemView.findViewById(R.id.reminder_overflow);
             overflow.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -79,7 +88,28 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
     @Override
     public void onBindViewHolder(ReminderViewHolder viewHolder, int position){
         Reminder reminder = reminders.get(position);
+        Account accountForReminder = dbHelper.Accounts.getAccountById(reminder.getAccountId());
+        viewHolder.reminderAccount.setText(accountForReminder.getName());
         viewHolder.reminderMessage.setText(reminder.getMessage());
+
+        int dayOfMonth = reminder.getDayOfMonth();
+        String suffix = "th";
+        if(dayOfMonth == 1 || dayOfMonth == 21 || dayOfMonth == 31){
+            suffix = "st";
+        } else if( dayOfMonth == 2 || dayOfMonth == 22){
+            suffix = "nd";
+        } else if( dayOfMonth == 3 || dayOfMonth == 23){
+            suffix = "rd";
+        }
+        String activationMsg = "Notification activates on the " + dayOfMonth + suffix + " of the month";
+
+        int expiration = reminder.getDaysUntilExpiration();
+        String expirationMsg = "When activated, the notification will not expire until dismissed";
+        if(expiration > 0){
+            expirationMsg = "When activated, the notification will expire after " + expiration +
+                    (expiration <= 1 ? " day" : " days");
+        }
+        viewHolder.reminderTimeframe.setText(activationMsg + "\n" + expirationMsg);
         viewHolder.overflow.setTag(reminder.getId());
     }
 
