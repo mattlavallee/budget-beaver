@@ -28,6 +28,7 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Reminder;
 import io.github.mattlavallee.budgetbeaver.models.Settings;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 import io.github.mattlavallee.budgetbeaver.models.adapters.TransactionAdapter;
@@ -119,12 +120,17 @@ public class AccountFragment extends Fragment {
     public void deleteAccount(int accountId){
         final Account accountToDelete = dbDispatcher.Accounts.getAccountById(accountId);
         final ArrayList<Transaction> accountTransactions = dbDispatcher.Transactions.getTransactionsForAccount(accountId);
+        final ArrayList<Reminder> accountReminders = dbDispatcher.Reminders.getRemindersForAccount(accountId);
 
         accountToDelete.setIsActive(false);
         dbDispatcher.Accounts.updateAccount(accountToDelete);
         for(int i = 0; i < accountTransactions.size(); i++){
             accountTransactions.get(i).setIsActive(false);
             dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+        }
+        for(int r = 0; r < accountReminders.size(); r++){
+            accountReminders.get(r).setIsActive(false);
+            dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
         }
 
         Snackbar snack = Snackbar.make(getView(), accountToDelete.getName() + " deleted", Snackbar.LENGTH_LONG)
@@ -134,6 +140,10 @@ public class AccountFragment extends Fragment {
                         for(int i = 0; i < accountTransactions.size(); i++){
                             accountTransactions.get(i).setIsActive(true);
                             dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+                        }
+                        for(int r = 0; r < accountReminders.size(); r++){
+                            accountReminders.get(r).setIsActive(true);
+                            dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
                         }
 
                         accountToDelete.setIsActive(true);
