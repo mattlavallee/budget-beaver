@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -29,6 +32,11 @@ public class EditReminderFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private ArrayList<Account> allAccounts;
 
+    private EditText message;
+    private EditText dayOfMonth;
+    private EditText daysUntilExpiration;
+    private TextView preview;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,13 +46,19 @@ public class EditReminderFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_edit_reminder, container, false);
+
+        message = (EditText)fragmentView.findViewById(R.id.edit_reminder_messsage);
+        dayOfMonth = (EditText)fragmentView.findViewById(R.id.edit_reminder_dayOfMonth);
+        daysUntilExpiration = (EditText)fragmentView.findViewById(R.id.edit_reminder_daysUntilExpiration);
+        preview = (TextView)fragmentView.findViewById(R.id.edit_reminder_preview);
+
         Reminder currentReminder = new Reminder();
         if(reminderId == -1) {
             getActivity().setTitle("Add a Reminder");
         } else{
             currentReminder = dbDispatcher.Reminders.getReminderById(reminderId);
             getActivity().setTitle("Edit Reminder");
-            initializeFields(fragmentView, currentReminder);
+            initializeFields(currentReminder);
         }
 
         //no FAB on Add/Edit account layout
@@ -53,6 +67,7 @@ public class EditReminderFragment extends Fragment {
 
         initializeButtons(fragmentView, reminderId, currentReminder.getAccountId());
         populateAccountSpinner(fragmentView, currentReminder.getAccountId());
+        registerEditTextListeners();
         return fragmentView;
     }
 
@@ -172,10 +187,8 @@ public class EditReminderFragment extends Fragment {
         closeEditReminderFragment();
     }
 
-    private void initializeFields(View view, Reminder reminder){
-        EditText message = (EditText)view.findViewById(R.id.edit_reminder_messsage);
-        EditText dayOfMonth = (EditText)view.findViewById(R.id.edit_reminder_dayOfMonth);
-        EditText daysUntilExpiration = (EditText)view.findViewById(R.id.edit_reminder_daysUntilExpiration);
+    private void initializeFields(Reminder reminder){
+        preview.setText(generatePreviewText(reminder));
         //Note: account spinner is handled in populateAccountSpinner
 
         message.setText(reminder.getMessage());
@@ -183,5 +196,72 @@ public class EditReminderFragment extends Fragment {
         if(reminder.getDaysUntilExpiration() >= 0){
             daysUntilExpiration.setText(String.valueOf(reminder.getDaysUntilExpiration()));
         }
+    }
+
+    private void registerEditTextListeners(){
+        message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String message = editable.toString();
+                String dayStr = dayOfMonth.getText().toString();
+                int day = dayStr.length() == 0 ? 1 : Integer.parseInt(dayStr);
+                String expireStr = daysUntilExpiration.getText().toString();
+                int expire = expireStr.length() == 0 ? -1 : Integer.parseInt(expireStr);
+                preview.setText(generatePreviewText(new Reminder(-1, -1, message, day, expire, new Date(), false, true)));
+            }
+        });
+
+        dayOfMonth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String msg = message.getText().toString();
+                String dayStr = editable.toString();
+                int day = dayStr.length() == 0 ? 1 : Integer.parseInt(dayStr);
+                String expireStr = daysUntilExpiration.getText().toString();
+                int expire = expireStr.length() == 0 ? -1 : Integer.parseInt(expireStr);
+                preview.setText(generatePreviewText(new Reminder(-1, -1, msg, day, expire, new Date(), false, true)));
+            }
+        });
+
+        daysUntilExpiration.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String msg = message.getText().toString();
+                String dayStr = dayOfMonth.getText().toString();
+                int day = dayStr.length() == 0 ? 1 : Integer.parseInt(dayStr);
+                String expireStr = editable.toString();
+                int expire = expireStr.length() == 0 ? -1 : Integer.parseInt(expireStr);
+                preview.setText(generatePreviewText(new Reminder(-1, -1, msg, day, expire, new Date(), false, true)));
+            }
+        });
+    }
+
+    private String generatePreviewText(Reminder reminder){
+        ArrayList<Integer> suffixSt = new ArrayList<>(Arrays.asList(1, 21, 31));
+        ArrayList<Integer> suffixNd = new ArrayList<>(Arrays.asList(2, 22));
+        ArrayList<Integer> suffixRd = new ArrayList<>(Arrays.asList(3, 23));
+
+        int monthDay = reminder.getDayOfMonth();
+        int expireDays = reminder.getDaysUntilExpiration();
+
+        String suffix = suffixSt.contains(monthDay) ? "st" :
+                suffixNd.contains(monthDay) ? "nd" :
+                        suffixRd.contains(monthDay) ? "rd" : "th";
+        String dayOrDays = expireDays <= 1 ? "day" : "days";
+
+        return reminder.getMessage() + " \n\nwill notify on the " + monthDay + suffix +
+                " day of the month" + (expireDays > 0 ? " and will expire after " + expireDays + dayOrDays : "");
     }
 }

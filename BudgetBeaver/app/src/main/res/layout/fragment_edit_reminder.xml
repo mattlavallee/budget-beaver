@@ -44,6 +44,14 @@
         android:layout_height="wrap_content"
         android:prompt="@string/account_prompt" />
 
+    <TextView
+        android:id="@+id/edit_reminder_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:gravity="center"
+        android:textStyle="italic" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
