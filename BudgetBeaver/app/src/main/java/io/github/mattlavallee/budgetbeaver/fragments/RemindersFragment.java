@@ -1,12 +1,15 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -16,6 +19,7 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 import io.github.mattlavallee.budgetbeaver.models.adapters.ReminderAdapter;
 
@@ -67,11 +71,32 @@ public class RemindersFragment extends Fragment {
     }
 
     public void editReminder(int reminderId){
-
+        addEditReminder(reminderId);
     }
 
     public void deleteReminder(int reminderId){
+        final Reminder reminderToDelete = dbDispatcher.Reminders.getReminderById(reminderId);
+        reminderToDelete.setIsActive(false);
+        dbDispatcher.Reminders.updateReminder(reminderToDelete);
 
+        Account accountForReminder = dbDispatcher.Accounts.getAccountById(reminderToDelete.getAccountId());
+        reminderAdapter.updateData(dbDispatcher.Reminders.getReminders());
+
+        Snackbar snack = Snackbar
+                .make(getView(), accountForReminder.getName() + " reminder deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        reminderToDelete.setIsActive(true);
+                        dbDispatcher.Reminders.updateReminder(reminderToDelete);
+                        reminderAdapter.updateData(dbDispatcher.Reminders.getReminders());
+                    }
+                });
+        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(Color.CYAN);
+        snack.show();
     }
 
     private void registerFabClickEvents(FragmentActivity view) {
@@ -80,15 +105,15 @@ public class RemindersFragment extends Fragment {
         reminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addReminder();
+                addEditReminder(-1);
             }
         });
     }
 
-    private void addReminder(){
+    private void addEditReminder(int reminderId){
         Fragment editReminderFragment = new EditReminderFragment();
         Bundle dataBundle = new Bundle();
-        dataBundle.putInt("reminderId", -1);
+        dataBundle.putInt("reminderId", reminderId);
         editReminderFragment.setArguments(dataBundle);
 
         getActivity().getSupportFragmentManager()

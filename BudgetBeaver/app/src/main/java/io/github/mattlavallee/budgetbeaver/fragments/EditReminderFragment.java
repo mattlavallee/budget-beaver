@@ -179,9 +179,9 @@ public class EditReminderFragment extends Fragment {
         //Note: account spinner is handled in populateAccountSpinner
 
         message.setText(reminder.getMessage());
-        dayOfMonth.setText(reminder.getDayOfMonth());
+        dayOfMonth.setText(String.valueOf(reminder.getDayOfMonth()));
         if(reminder.getDaysUntilExpiration() >= 0){
-            daysUntilExpiration.setText(reminder.getDaysUntilExpiration());
+            daysUntilExpiration.setText(String.valueOf(reminder.getDaysUntilExpiration()));
         }
     }
 }

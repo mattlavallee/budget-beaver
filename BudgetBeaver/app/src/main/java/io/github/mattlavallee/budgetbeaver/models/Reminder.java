@@ -43,4 +43,6 @@ public class Reminder {
     public Date getLastDateActivated(){ return _lastDateActivated; }
     public boolean isNotificationActive(){ return _isActiveNotification; }
     public boolean isActive(){ return _active; }
+
+    public void setIsActive(boolean activeState){ _active = activeState; }
 }
