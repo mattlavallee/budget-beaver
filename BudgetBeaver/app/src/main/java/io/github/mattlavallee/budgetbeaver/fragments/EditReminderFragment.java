@@ -198,6 +198,9 @@ public class EditReminderFragment extends Fragment {
         }
     }
 
+    private int getPreviewInteger(String val, int defaultVal){
+        return val.length() == 0 ? defaultVal : Integer.parseInt(val);
+    }
     private void registerEditTextListeners(){
         message.addTextChangedListener(new TextWatcher() {
             @Override
@@ -207,10 +210,8 @@ public class EditReminderFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 String message = editable.toString();
-                String dayStr = dayOfMonth.getText().toString();
-                int day = dayStr.length() == 0 ? 1 : Integer.parseInt(dayStr);
-                String expireStr = daysUntilExpiration.getText().toString();
-                int expire = expireStr.length() == 0 ? -1 : Integer.parseInt(expireStr);
+                int day = getPreviewInteger(dayOfMonth.getText().toString(), 1);
+                int expire = getPreviewInteger(daysUntilExpiration.getText().toString(), -1);
                 preview.setText(generatePreviewText(new Reminder(-1, -1, message, day, expire, new Date(), false, true)));
             }
         });
@@ -223,10 +224,8 @@ public class EditReminderFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 String msg = message.getText().toString();
-                String dayStr = editable.toString();
-                int day = dayStr.length() == 0 ? 1 : Integer.parseInt(dayStr);
-                String expireStr = daysUntilExpiration.getText().toString();
-                int expire = expireStr.length() == 0 ? -1 : Integer.parseInt(expireStr);
+                int day = getPreviewInteger(editable.toString(), 1);
+                int expire = getPreviewInteger(daysUntilExpiration.getText().toString(), -1);
                 preview.setText(generatePreviewText(new Reminder(-1, -1, msg, day, expire, new Date(), false, true)));
             }
         });
@@ -239,10 +238,8 @@ public class EditReminderFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 String msg = message.getText().toString();
-                String dayStr = dayOfMonth.getText().toString();
-                int day = dayStr.length() == 0 ? 1 : Integer.parseInt(dayStr);
-                String expireStr = editable.toString();
-                int expire = expireStr.length() == 0 ? -1 : Integer.parseInt(expireStr);
+                int day = getPreviewInteger(dayOfMonth.getText().toString(), 1);
+                int expire = getPreviewInteger(editable.toString(), -1);
                 preview.setText(generatePreviewText(new Reminder(-1, -1, msg, day, expire, new Date(), false, true)));
             }
         });
@@ -262,6 +259,6 @@ public class EditReminderFragment extends Fragment {
         String dayOrDays = expireDays <= 1 ? "day" : "days";
 
         return reminder.getMessage() + " \n\nwill notify on the " + monthDay + suffix +
-                " day of the month" + (expireDays > 0 ? " and will expire after " + expireDays + dayOrDays : "");
+                " day of the month" + (expireDays > 0 ? " and will expire after " + expireDays + " " + dayOrDays : "");
     }
 }
