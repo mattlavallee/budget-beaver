@@ -74,6 +74,33 @@ public class RemindersFragment extends Fragment {
         addEditReminder(reminderId);
     }
 
+    public void deleteReminders(){
+        final ArrayList<Reminder> remindersToDelete = dbDispatcher.Reminders.getReminders();
+        for(int i = 0; i < remindersToDelete.size(); i++){
+            remindersToDelete.get(i).setIsActive(false);
+            dbDispatcher.Reminders.updateReminder(remindersToDelete.get(i));
+        }
+        reminderAdapter.updateData(new ArrayList<Reminder>());
+
+        Snackbar snack = Snackbar
+                .make(getView(), "All reminders deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo", new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        for(int i = 0; i < remindersToDelete.size(); i++){
+                            remindersToDelete.get(i).setIsActive(true);
+                            dbDispatcher.Reminders.updateReminder(remindersToDelete.get(i));
+                        }
+                        reminderAdapter.updateData(remindersToDelete);
+                    }
+                });
+        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(Color.CYAN);
+        snack.show();
+    }
+
     public void deleteReminder(int reminderId){
         final Reminder reminderToDelete = dbDispatcher.Reminders.getReminderById(reminderId);
         reminderToDelete.setIsActive(false);
@@ -101,11 +128,18 @@ public class RemindersFragment extends Fragment {
 
     private void registerFabClickEvents(FragmentActivity view) {
         FloatingActionButton reminderBtn = (FloatingActionButton) view.findViewById(R.id.fab_reminder_add_reminder);
+        FloatingActionButton deleteBtn = (FloatingActionButton) view.findViewById(R.id.fab_reminder_delete_reminders);
 
         reminderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addEditReminder(-1);
+            }
+        });
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                deleteReminders();
             }
         });
     }

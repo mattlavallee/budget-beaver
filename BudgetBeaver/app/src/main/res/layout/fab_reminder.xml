@@ -45,6 +45,16 @@
     app:menu_openDirection="up"
     app:menu_backgroundColor="@android:color/transparent">
     <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/fab_reminder_delete_reminders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        app:fab_size="mini"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccentPressed"
+        app:fab_colorRipple="@color/colorAccent"
+        app:fab_label="Delete Reminders" />
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_reminder_add_reminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
