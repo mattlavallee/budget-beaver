@@ -125,7 +125,7 @@ public class EditReminderFragment extends Fragment {
             int selectedAccountPosition = accountSelect.getSelectedItemPosition();
             try{
                 accountId = allAccounts.get(selectedAccountPosition).getId();
-            } catch(NullPointerException except){
+            } catch(Exception except){
                 displaySnack("Could not get account information", view);
                 return;
             }

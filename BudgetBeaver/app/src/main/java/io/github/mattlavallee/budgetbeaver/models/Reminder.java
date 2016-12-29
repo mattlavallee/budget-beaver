@@ -18,7 +18,7 @@ public class Reminder {
         _message = "";
         _dayOfMonth = 1;
         _daysUntilExpiration = 0;
-        _lastDateActivated = new Date( Long.MIN_VALUE );
+        _lastDateActivated = new Date(Long.MIN_VALUE);
         _isActiveNotification = false;
         _active = false;
     }
