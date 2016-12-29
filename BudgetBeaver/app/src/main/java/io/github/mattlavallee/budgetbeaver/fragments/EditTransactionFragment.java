@@ -50,6 +50,11 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
 
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_edit_transaction, container, false);
+
+        //set the max date for the date picker dynamically...no future transactions!
+        DatePicker date = (DatePicker)fragmentView.findViewById(R.id.edit_transaction_date);
+        date.setMaxDate(new Date().getTime());
+
         if(transactionId == -1) {
             getActivity().setTitle("Add a Transaction");
         } else{

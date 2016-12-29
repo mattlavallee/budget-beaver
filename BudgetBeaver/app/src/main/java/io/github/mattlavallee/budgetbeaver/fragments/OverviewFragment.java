@@ -36,7 +36,7 @@ public class OverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        getActivity().setTitle("Budget Beaver - Overview");
+        getActivity().setTitle("Account Overview");
         //setup the Floating Action Menu for the overview fragment
         BudgetBeaverFabSetup.addFabToView(getActivity(), inflater, R.id.budget_beaver_fragment_wrapper,
                 R.layout.fab_overview, R.id.bb_fab_menu_overview);

@@ -68,8 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        android:endYear="2016" />
+        android:datePickerMode="spinner" />
 
     <LinearLayout
         android:layout_width="match_parent"
