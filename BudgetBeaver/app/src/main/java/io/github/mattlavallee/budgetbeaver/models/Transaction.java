@@ -27,7 +27,7 @@ public class Transaction {
         description = "";
         amount = 0;
         active = false;
-        dateModified = new Date(Long.MIN_VALUE);
+        dateModified = new Date(0);
     }
 
     public Transaction(int transactionId, int transAccountId, String transactionLocation,

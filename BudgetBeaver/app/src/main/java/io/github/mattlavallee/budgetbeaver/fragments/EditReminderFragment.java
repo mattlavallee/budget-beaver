@@ -171,7 +171,7 @@ public class EditReminderFragment extends Fragment {
         }
 
         Reminder reminderToSave = new Reminder(reminderId, accountId, message, dayOfMonth,
-                daysUntilExpiration, new Date(Long.MAX_VALUE), false, true );
+                daysUntilExpiration, new Date(0), false, true );
         long result;
         if(reminderId == -1){
             result = dbDispatcher.Reminders.insertReminder(reminderToSave);

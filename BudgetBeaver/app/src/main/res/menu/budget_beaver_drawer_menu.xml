@@ -4,12 +4,17 @@
     <group
         android:id="@+id/menu_top"
         android:checkableBehavior="single">
-        <item android:id="@+id/action_account_overview"
+        <item android:id="@+id/action_notifications"
             android:orderInCategory="100"
+            android:title="Notifications"
+            app:showAsAction="never"
+            android:visible="false" />
+        <item android:id="@+id/action_account_overview"
+            android:orderInCategory="101"
             android:title="Account Overview"
             app:showAsAction="never" />
         <item android:id="@+id/action_reminders"
-            android:orderInCategory="101"
+            android:orderInCategory="102"
             android:title="Reminders"
             app:showAsAction="never" />
     </group>
@@ -17,7 +22,7 @@
         android:id="@+id/menu_middle"
         android:checkableBehavior="single">
         <item android:id="@+id/action_accounts_header"
-            android:orderInCategory="102"
+            android:orderInCategory="103"
             app:showAsAction="never"
             android:title="Accounts">
             <menu>
@@ -30,7 +35,7 @@
         android:id="@+id/menu_bottom"
         android:checkableBehavior="single">
         <item android:id="@+id/action_settings"
-            android:orderInCategory="103"
+            android:orderInCategory="104"
             android:title="Settings"
             app:showAsAction="never" />
     </group>

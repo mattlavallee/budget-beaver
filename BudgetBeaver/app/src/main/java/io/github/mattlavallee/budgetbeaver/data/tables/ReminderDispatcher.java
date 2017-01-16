@@ -29,12 +29,11 @@ public class ReminderDispatcher {
         "lastDateActivated text, isActiveNotification integer, active integer)");
     }
 
-    public ArrayList<Reminder> getReminders(){
+    private ArrayList<Reminder> getRemindersFromQuery( String query ){
         ArrayList<Reminder> reminders = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME +
-            " WHERE active = 1", null);
+        Cursor result = db.rawQuery( query, null );
         result.moveToFirst();
 
         while(result.isAfterLast() == false){
@@ -48,7 +47,7 @@ public class ReminderDispatcher {
             try{
                 dateActivated= dateFormatter.parse(lastDateActivatedStr);
             } catch(ParseException ex){
-                dateActivated = new Date(Long.MIN_VALUE);
+                dateActivated = new Date(0);
             }
             int isActiveNotification = result.getInt(result.getColumnIndex("isActiveNotification"));
             int isActive = result.getInt(result.getColumnIndex("active"));
@@ -59,6 +58,15 @@ public class ReminderDispatcher {
         result.close();
         db.close();
         return reminders;
+    }
+
+    public ArrayList<Reminder> getReminders(){
+        return getRemindersFromQuery("SELECT * FROM " + TABLE_NAME + " WHERE active = 1");
+    }
+
+    public ArrayList<Reminder> getActiveNotifications(){
+        return getRemindersFromQuery("SELECT * FROM " + TABLE_NAME +
+                " WHERE active = 1 AND isActiveNotification = 1");
     }
 
     public Reminder getReminderById( int reminderId ){
@@ -80,7 +88,7 @@ public class ReminderDispatcher {
             try {
                 dateActivated = dateFormatter.parse(lastDateActivatedStr);
             } catch (ParseException ex) {
-                dateActivated = new Date(Long.MIN_VALUE);
+                dateActivated = new Date(0);
             }
             int isActiveNotification = result.getInt(result.getColumnIndex("isActiveNotification"));
             int isActive = result.getInt(result.getColumnIndex("active"));
@@ -111,7 +119,7 @@ public class ReminderDispatcher {
             try{
                 dateActivated= dateFormatter.parse(lastDateActivatedStr);
             } catch(ParseException ex){
-                dateActivated = new Date(Long.MIN_VALUE);
+                dateActivated = new Date(0);
             }
             int isActiveNotification = result.getInt(result.getColumnIndex("isActiveNotification"));
             int isActive = result.getInt(result.getColumnIndex("active"));

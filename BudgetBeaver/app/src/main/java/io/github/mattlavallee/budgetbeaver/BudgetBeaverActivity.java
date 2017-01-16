@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
+import io.github.mattlavallee.budgetbeaver.fragments.NotificationsFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
 import io.github.mattlavallee.budgetbeaver.models.Account;
+import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
 
 public class BudgetBeaverActivity
@@ -34,7 +37,7 @@ public class BudgetBeaverActivity
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
         Menu drawerMenu = drawerMenuNav.getMenu();
 
-        SubMenu accountsSubMenu = drawerMenu.getItem(2).getSubMenu();
+        SubMenu accountsSubMenu = drawerMenu.getItem(3).getSubMenu();
 
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Account> accounts = dbDispatcher.Accounts.getAccounts();
@@ -51,7 +54,34 @@ public class BudgetBeaverActivity
         }
 
         drawerMenuNav.setNavigationItemSelectedListener(this);
-        drawerMenu.getItem(0).setChecked(true);
+        drawerMenu.getItem(1).setChecked(true);
+    }
+
+    private void checkForActiveNotifications(){
+        DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
+        ArrayList<Reminder> allReminders = dbDispatcher.Reminders.getReminders();
+
+        ArrayList<Reminder> expiredReminders = Reminder.invalidateExpiredNotifications( allReminders );
+        ArrayList<Reminder> newActiveReminders = Reminder.activateNewNotifications( allReminders );
+
+        for(Reminder expReminder : expiredReminders ){
+            dbDispatcher.Reminders.updateReminder(expReminder);
+        }
+        for(Reminder actReminder : newActiveReminders ){
+            dbDispatcher.Reminders.updateReminder(actReminder);
+        }
+
+        ArrayList<Reminder> activeNotifications = dbDispatcher.Reminders.getActiveNotifications();
+
+        NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
+        Menu drawerMenu = drawerMenuNav.getMenu();
+
+        MenuItem notificationsEntry = drawerMenu.getItem(0);
+        if( activeNotifications.size() > 0 ){
+            notificationsEntry.setVisible(true);
+        } else{
+            notificationsEntry.setVisible(false);
+        }
     }
 
     private void loadDefaultFragment(){
@@ -85,6 +115,7 @@ public class BudgetBeaverActivity
             public void onDrawerOpened(View drawerView){
                 super.onDrawerOpened(drawerView);
                 loadNavigationDrawerMenu();
+                checkForActiveNotifications();
                 supportInvalidateOptionsMenu();
             }
         };
@@ -101,7 +132,7 @@ public class BudgetBeaverActivity
         int order = item.getOrder() - 100;
         //less than zero we're in the accounts submenu; set checked item to accounts title
         if(order < 0){
-            order = 2;
+            order = 3;
         }
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
         drawerMenuNav.getMenu().getItem(order).setChecked(true);
@@ -116,6 +147,8 @@ public class BudgetBeaverActivity
 
         if (id == R.id.action_account_overview) {
             activeViewFragment = new OverviewFragment();
+        } else if( id == R.id.action_notifications){
+            activeViewFragment = new NotificationsFragment();
         } else if (id == R.id.action_reminders) {
             activeViewFragment = new RemindersFragment();
         } else if (id == R.id.action_settings) {

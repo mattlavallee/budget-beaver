@@ -1,6 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.models.adapters;
 
-import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -15,30 +15,40 @@ import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.fragments.NotificationsFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
 public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder> {
     private ArrayList<Reminder> reminders;
-    private RemindersFragment adapterContainer;
+    private Fragment adapterContainer;
     private DatabaseDispatcher dbHelper;
+    private boolean isNotificationView = false;
 
     public ReminderAdapter(ArrayList<Reminder> allReminders, RemindersFragment container, DatabaseDispatcher helper){
         reminders = allReminders;
         adapterContainer = container;
         dbHelper = helper;
+        isNotificationView = false;
+    }
+
+    public ReminderAdapter(ArrayList<Reminder> allReminders, NotificationsFragment container, DatabaseDispatcher helper){
+        reminders = allReminders;
+        adapterContainer = container;
+        dbHelper = helper;
+        isNotificationView = true;
     }
 
     public static class ReminderViewHolder extends RecyclerView.ViewHolder{
-        RemindersFragment _container;
+        Fragment _container;
         CardView cardView;
         TextView reminderMessage;
         TextView reminderAccount;
         TextView reminderTimeframe;
         View overflow;
 
-        ReminderViewHolder(View itemView, RemindersFragment container){
+        ReminderViewHolder(View itemView, Fragment container, final boolean isNotificationView){
             super(itemView);
             _container = container;
             cardView = (CardView) itemView.findViewById(R.id.reminder_card_view);
@@ -53,15 +63,21 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                     final Menu menu = popupMenu.getMenu();
                     final int reminderId = (Integer) view.getTag();
 
-                    popupMenu.getMenuInflater().inflate(R.menu.reminder_popup_menu, menu);
+                    if(isNotificationView){
+                        popupMenu.getMenuInflater().inflate(R.menu.notification_popup_menu, menu);
+                    } else {
+                        popupMenu.getMenuInflater().inflate(R.menu.reminder_popup_menu, menu);
+                    }
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                         @Override
                         public boolean onMenuItemClick(MenuItem item){
                             int itemId = item.getItemId();
                             if(itemId == R.id.action_reminder_popup_edit){
-                                _container.editReminder(reminderId);
+                                ((RemindersFragment)_container).editReminder(reminderId);
                             } else if(itemId == R.id.action_reminder_popup_delete){
-                                _container.deleteReminder(reminderId);
+                                ((RemindersFragment)_container).deleteReminder(reminderId);
+                            } else if(itemId == R.id.action_notification_popup_dismiss){
+                                ((NotificationsFragment)_container).dismissNotification(reminderId);
                             }
                             return false;
                         }
@@ -75,7 +91,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
     @Override
     public ReminderAdapter.ReminderViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.reminder_row, viewGroup, false);
-        ReminderViewHolder viewHolder = new ReminderViewHolder(view, adapterContainer);
+        ReminderViewHolder viewHolder = new ReminderViewHolder(view, adapterContainer, isNotificationView);
         return viewHolder;
     }
 
