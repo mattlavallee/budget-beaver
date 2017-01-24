@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
@@ -117,15 +119,37 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         } else if( dayOfMonth == 3 || dayOfMonth == 23){
             suffix = "rd";
         }
-        String activationMsg = "Notification activates on the " + dayOfMonth + suffix + " of the month";
+        if(!isNotificationView) {
+            String activationMsg = "Notification activates on the " + dayOfMonth + suffix + " of the month";
 
-        int expiration = reminder.getDaysUntilExpiration();
-        String expirationMsg = "When activated, the notification will not expire until dismissed";
-        if(expiration > 0){
-            expirationMsg = "When activated, the notification will expire after " + expiration +
-                    (expiration <= 1 ? " day" : " days");
+            int expiration = reminder.getDaysUntilExpiration();
+            String expirationMsg = "When activated, the notification will not expire until dismissed";
+            if (expiration > 0) {
+                expirationMsg = "When activated, the notification will expire after " + expiration +
+                        (expiration <= 1 ? " day" : " days");
+            }
+            viewHolder.reminderTimeframe.setText(activationMsg + "\n" + expirationMsg);
+        } else{
+            String msg = "This notification will remain active until dismissed";
+            if( reminder.getDaysUntilExpiration() > 0){
+                Calendar cal = Calendar.getInstance();
+                cal.set( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
+                int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+                Date currentDate = new Date();
+                int reminderDay = reminder.getDayOfMonth();
+                cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay );
+                cal.add(Calendar.DATE, reminder.getDaysUntilExpiration());
+                int daysRemaining = 0;
+                while( cal.getTime().after(currentDate)){
+                    cal.add(Calendar.DATE, -1);
+                    daysRemaining++;
+                }
+                msg = "This notification will expire after " + daysRemaining +
+                        (daysRemaining == 1 ? " day" : " days");
+            }
+            viewHolder.reminderTimeframe.setText(msg);
         }
-        viewHolder.reminderTimeframe.setText(activationMsg + "\n" + expirationMsg);
         viewHolder.overflow.setTag(reminder.getId());
     }
 

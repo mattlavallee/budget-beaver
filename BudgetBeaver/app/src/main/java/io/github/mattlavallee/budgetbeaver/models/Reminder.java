@@ -72,8 +72,11 @@ public class Reminder {
             cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay );
             Date minNotificationDate = cal.getTime();
             //get the max notification date
-            cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
-            Date maxNotificationDate = cal.getTime();
+            Date maxNotificationDate = new Date(Long.MAX_VALUE);
+            if( currReminder.getDaysUntilExpiration() != -1) {
+                cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
+                maxNotificationDate = cal.getTime();
+            }
 
             //if the current date is before the minNotificationDate or after the maxNotificationDate it's expired
             if(currentDate.before(minNotificationDate) || currentDate.after(maxNotificationDate)){
@@ -107,8 +110,11 @@ public class Reminder {
             cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay, 0, 0, 0 );
             Date minNotificationDate = cal.getTime();
             //get the max notification date
-            cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
-            Date maxNotificationDate = cal.getTime();
+            Date maxNotificationDate = new Date(Long.MAX_VALUE);
+            if( currReminder.getDaysUntilExpiration() != -1) {
+                cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
+                maxNotificationDate = cal.getTime();
+            }
 
             //is valid active date iif currDate >= minDate && currDate <= maxDate
             boolean currentDateIsValid = currentDate.compareTo(minNotificationDate) > -1 &&

@@ -57,7 +57,7 @@ public class BudgetBeaverActivity
         drawerMenu.getItem(1).setChecked(true);
     }
 
-    private void checkForActiveNotifications(){
+    private void invalidateOldAndActivateNewNotifications(){
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Reminder> allReminders = dbDispatcher.Reminders.getReminders();
 
@@ -71,6 +71,13 @@ public class BudgetBeaverActivity
             dbDispatcher.Reminders.updateReminder(actReminder);
         }
 
+        BudgetBeaverStatusBarNotifier.generate(this, newActiveReminders);
+    }
+
+    private void checkForActiveNotifications(){
+        invalidateOldAndActivateNewNotifications();
+
+        DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Reminder> activeNotifications = dbDispatcher.Reminders.getActiveNotifications();
 
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
@@ -126,6 +133,14 @@ public class BudgetBeaverActivity
         //populate the menu with account information and set default menu item
         loadNavigationDrawerMenu();
         loadDefaultFragment();
+        invalidateOldAndActivateNewNotifications();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        invalidateOldAndActivateNewNotifications();
     }
 
     private void setSelectedNavigationViewItem(MenuItem item){
