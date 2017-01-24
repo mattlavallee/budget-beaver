@@ -1,10 +1,13 @@
 package io.github.mattlavallee.budgetbeaver.models;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
 
 import io.github.mattlavallee.budgetbeaver.models.enums.SortDirection;
 import io.github.mattlavallee.budgetbeaver.models.enums.SortType;
@@ -17,8 +20,6 @@ public class Transaction {
     private double amount;
     private Date dateModified;
     private boolean active;
-    //TODO: add Currency Support
-    //TODO: add tag support
 
     public Transaction(){
         id = -1;
@@ -48,8 +49,7 @@ public class Transaction {
     public String getDescription(){ return description; }
     public double getAmount(){ return amount; }
     public String getFormattedAmount(){
-        String formattedAmount = new DecimalFormat("0.00").format( amount );
-        return "$" + formattedAmount;
+        return getLocalizedCurrencyString(amount);
     }
     public boolean isActive(){ return active; }
     public Date getTransactionDate(){ return dateModified; }
@@ -65,9 +65,13 @@ public class Transaction {
     }
     public static String getFormattedTotal(ArrayList<Transaction> transactions){
         double total = Transaction.getTotal(transactions);
+        return getLocalizedCurrencyString(total);
+    }
 
-        String formattedAmount = new DecimalFormat("0.00").format( total );
-        return "$" + formattedAmount;
+    private static String getLocalizedCurrencyString(double amount){
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        format.setCurrency(Currency.getInstance(Locale.getDefault()));
+        return format.format(amount);
     }
 
     public static void sortTransactions(ArrayList<Transaction> transactions,

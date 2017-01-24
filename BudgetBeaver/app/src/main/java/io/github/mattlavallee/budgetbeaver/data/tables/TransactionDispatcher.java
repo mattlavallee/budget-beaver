@@ -26,7 +26,7 @@ public class TransactionDispatcher {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
         "id integer primary key, accountId integer not null, location text, amount double, " +
-        "description text, dateModified text, active integer, currencyId integer)");
+        "description text, dateModified text, active integer)");
     }
 
     public ArrayList<Transaction> getTransactionsForAccount(int accountId){
@@ -100,7 +100,6 @@ public class TransactionDispatcher {
         content.put("description", newTransaction.getDescription());
         content.put("dateModified", dateFormatter.format(newTransaction.getTransactionDate()));
         content.put("active", newTransaction.isActive() ? 1 : 0);
-        content.put("currencyId", -1);
 
         long result = db.insert(TABLE_NAME, null, content);
         db.close();
@@ -116,7 +115,6 @@ public class TransactionDispatcher {
         Date date = transaction.getTransactionDate();
         content.put("dateModified", dateFormatter.format(date));
         content.put("active", transaction.isActive() ? 1 : 0);
-        content.put("currencyId", -1);
         long result = db.update(TABLE_NAME, content, "id = " + transaction.getId(), null);
         db.close();
         return result;
