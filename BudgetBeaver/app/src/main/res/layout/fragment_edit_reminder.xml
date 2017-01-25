@@ -7,11 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:id="@+id/edit_reminder_messsage"
+            android:id="@+id/edit_reminder_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:inputType="textAutoComplete|textCapSentences|textMultiLine"
-            android:hint="Note"/>
+            android:hint="Note">
+            <requestFocus/>
+        </EditText>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout

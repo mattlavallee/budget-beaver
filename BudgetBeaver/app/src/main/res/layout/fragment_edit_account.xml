@@ -15,7 +15,11 @@
                 android:id="@+id/edit_account_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Account Name"/>
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="Account Name">
+                <requestFocus />
+            </EditText>
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"

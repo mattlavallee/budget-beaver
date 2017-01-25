@@ -47,7 +47,7 @@ public class EditReminderFragment extends Fragment {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_edit_reminder, container, false);
 
-        message = (EditText)fragmentView.findViewById(R.id.edit_reminder_messsage);
+        message = (EditText)fragmentView.findViewById(R.id.edit_reminder_message);
         dayOfMonth = (EditText)fragmentView.findViewById(R.id.edit_reminder_dayOfMonth);
         daysUntilExpiration = (EditText)fragmentView.findViewById(R.id.edit_reminder_daysUntilExpiration);
         preview = (TextView)fragmentView.findViewById(R.id.edit_reminder_preview);
@@ -132,7 +132,7 @@ public class EditReminderFragment extends Fragment {
     }
 
     private void saveReminder( View view, int reminderId, int accountId ){
-        EditText messageField = (EditText)view.findViewById(R.id.edit_reminder_messsage);
+        EditText messageField = (EditText)view.findViewById(R.id.edit_reminder_message);
         EditText dayOfMonthField = (EditText)view.findViewById(R.id.edit_reminder_dayOfMonth);
         EditText daysUntilExpirationField = (EditText)view.findViewById(R.id.edit_reminder_daysUntilExpiration);
         if(accountId == -1){
