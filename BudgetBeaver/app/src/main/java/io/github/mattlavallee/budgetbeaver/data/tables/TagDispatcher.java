@@ -7,17 +7,10 @@ import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.models.Tag;
 
-public class TagDispatcher {
-    private SQLiteOpenHelper dbHelper;
-    private static final String TABLE_NAME = "tags";
-
+public class TagDispatcher extends DispatcherBase{
     public TagDispatcher( SQLiteOpenHelper helper ){
-        dbHelper = helper;
-    }
-
-    public void onCreate(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-        "id integer primary key, transactionId integer not null, name text)");
+        super(helper, "tags");
+        tableFields = "id integer primary key, transactionId integer not null, name text";
     }
 
     public ArrayList<Tag> getTagsForTransaction( int transactionId ){

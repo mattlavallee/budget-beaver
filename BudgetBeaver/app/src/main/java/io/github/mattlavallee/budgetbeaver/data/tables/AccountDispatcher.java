@@ -1,9 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.data.tables;
 
-
 import io.github.mattlavallee.budgetbeaver.models.Account;
-import io.github.mattlavallee.budgetbeaver.models.enums.SortDirection;
-import io.github.mattlavallee.budgetbeaver.models.enums.SortType;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -12,17 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-public class AccountDispatcher {
-    private SQLiteOpenHelper dbHelper;
-    private static final String TABLE_NAME = "accounts";
-
+public class AccountDispatcher extends DispatcherBase {
     public AccountDispatcher( SQLiteOpenHelper helper ){
-        dbHelper = helper;
-    }
-
-    public void onCreate(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-        "id integer primary key, name text, active integer)");
+        super(helper, "accounts");
+        tableFields = "id integer primary key, name text, active integer";
     }
 
     public ArrayList<Account> getAccounts(){

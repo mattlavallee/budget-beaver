@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,19 +13,13 @@ import java.util.Date;
 
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
 
-public class TransactionDispatcher {
-    private SQLiteOpenHelper dbHelper;
-    private static final String TABLE_NAME = "transactions";
+public class TransactionDispatcher extends DispatcherBase {
     private DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
 
     public TransactionDispatcher( SQLiteOpenHelper helper ){
-        dbHelper = helper;
-    }
-
-    public void onCreate(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-        "id integer primary key, accountId integer not null, location text, amount double, " +
-        "description text, dateModified text, active integer)");
+        super(helper, "transactions");
+        tableFields = "id integer primary key, accountId integer not null, location text, amount double, " +
+                "description text, dateModified text, active integer";
     }
 
     public ArrayList<Transaction> getTransactionsForAccount(int accountId){

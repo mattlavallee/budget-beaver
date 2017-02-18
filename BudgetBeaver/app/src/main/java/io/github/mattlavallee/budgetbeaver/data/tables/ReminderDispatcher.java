@@ -13,20 +13,14 @@ import java.util.Date;
 
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
-public class ReminderDispatcher {
-    private SQLiteOpenHelper dbHelper;
-    private static final String TABLE_NAME = "reminders";
+public class ReminderDispatcher extends DispatcherBase{
     private DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
 
     public ReminderDispatcher( SQLiteOpenHelper helper ){
-        dbHelper = helper;
-    }
-
-    public void onCreate(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-        "id integer primary key, accountId integer not null, message text not null," +
-        "dayOfMonth integer not null, daysUntilExpired integer not null, " +
-        "lastDateActivated text, isActiveNotification integer, active integer)");
+        super(helper, "reminders");
+        tableFields = "id integer primary key, accountId integer not null, message text not null," +
+                "dayOfMonth integer not null, daysUntilExpired integer not null, " +
+                "lastDateActivated text, isActiveNotification integer, active integer";
     }
 
     private ArrayList<Reminder> getRemindersFromQuery( String query ){
