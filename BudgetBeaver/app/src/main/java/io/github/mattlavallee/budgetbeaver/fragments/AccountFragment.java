@@ -1,10 +1,8 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +25,7 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 import io.github.mattlavallee.budgetbeaver.models.Settings;
@@ -133,27 +132,24 @@ public class AccountFragment extends Fragment {
             dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
         }
 
-        Snackbar snack = Snackbar.make(getView(), accountToDelete.getName() + " deleted", Snackbar.LENGTH_LONG)
-                .setAction("Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        for(int i = 0; i < accountTransactions.size(); i++){
-                            accountTransactions.get(i).setIsActive(true);
-                            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
-                        }
-                        for(int r = 0; r < accountReminders.size(); r++){
-                            accountReminders.get(r).setIsActive(true);
-                            dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
-                        }
+        Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(), accountToDelete.getName() + " deleted");
 
-                        accountToDelete.setIsActive(true);
-                        dbDispatcher.Accounts.updateAccount(accountToDelete);
-                    }
-                });
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.WHITE);
-        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
-        actionText.setTextColor(Color.CYAN);
+        snack.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < accountTransactions.size(); i++){
+                    accountTransactions.get(i).setIsActive(true);
+                    dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+                }
+                for(int r = 0; r < accountReminders.size(); r++){
+                    accountReminders.get(r).setIsActive(true);
+                    dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
+                }
+
+                accountToDelete.setIsActive(true);
+                dbDispatcher.Accounts.updateAccount(accountToDelete);
+            }
+        });
         snack.show();
 
         getActivity().getSupportFragmentManager().popBackStackImmediate();
@@ -169,23 +165,19 @@ public class AccountFragment extends Fragment {
         updateActivityTitle( accountTransactions );
         transAdapter.updateData(new ArrayList<Transaction>());
 
-        Snackbar snack = Snackbar.make(getView(), "All Transactions Deleted", Snackbar.LENGTH_LONG)
-                .setAction("Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        for(int i = 0; i < accountTransactions.size(); i++){
-                            accountTransactions.get(i).setIsActive(true);
-                            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
-                        }
+        Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(), "All Transactions Deleted");
+        snack.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int i = 0; i < accountTransactions.size(); i++){
+                    accountTransactions.get(i).setIsActive(true);
+                    dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+                }
 
-                        updateActivityTitle( accountTransactions );
-                        transAdapter.updateData(accountTransactions);
-                    }
-                });
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.WHITE);
-        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
-        actionText.setTextColor(Color.CYAN);
+                updateActivityTitle( accountTransactions );
+                transAdapter.updateData(accountTransactions);
+            }
+        });
         snack.show();
     }
 
@@ -257,23 +249,20 @@ public class AccountFragment extends Fragment {
         transAdapter.updateData(allTransactions);
         updateActivityTitle(dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId()));
 
-        Snackbar snack = Snackbar.make(getView(), activeTransaction.getLocation() + " deleted", Snackbar.LENGTH_LONG)
-                .setAction("Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        activeTransaction.setIsActive(true);
-                        dbDispatcher.Transactions.updateTransaction(activeTransaction);
+        Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(),
+                activeTransaction.getLocation() + " deleted");
+        snack.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activeTransaction.setIsActive(true);
+                dbDispatcher.Transactions.updateTransaction(activeTransaction);
 
-                        ArrayList<Transaction> transactions =
-                                dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId());
-                        transAdapter.updateData(transactions);
-                        updateActivityTitle(transactions);
-                    }
-                });
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.WHITE);
-        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
-        actionText.setTextColor(Color.CYAN);
+                ArrayList<Transaction> transactions =
+                        dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId());
+                transAdapter.updateData(transactions);
+                updateActivityTitle(transactions);
+            }
+        });
         snack.show();
     }
 

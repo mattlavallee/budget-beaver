@@ -1,6 +1,5 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -19,6 +17,7 @@ import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 import io.github.mattlavallee.budgetbeaver.models.Settings;
@@ -160,29 +159,25 @@ public class OverviewFragment extends Fragment {
         ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
         accountAdapter.updateData(allAccounts);
 
-        Snackbar snack = Snackbar.make(getView(), accountToDelete.getName() + " deleted", Snackbar.LENGTH_LONG)
-                .setAction("Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        for(int i = 0; i < accountTransactions.size(); i++){
-                            accountTransactions.get(i).setIsActive(true);
-                            dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
-                        }
-                        for(int r = 0; r < accountReminders.size(); r++){
-                            accountReminders.get(r).setIsActive(true);
-                            dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
-                        }
+        Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(), accountToDelete.getName() + " deleted" );
+        snack.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (int i = 0; i < accountTransactions.size(); i++) {
+                    accountTransactions.get(i).setIsActive(true);
+                    dbDispatcher.Transactions.updateTransaction(accountTransactions.get(i));
+                }
+                for (int r = 0; r < accountReminders.size(); r++) {
+                    accountReminders.get(r).setIsActive(true);
+                    dbDispatcher.Reminders.updateReminder(accountReminders.get(r));
+                }
 
-                        accountToDelete.setIsActive(true);
-                        dbDispatcher.Accounts.updateAccount(accountToDelete);
+                accountToDelete.setIsActive(true);
+                dbDispatcher.Accounts.updateAccount(accountToDelete);
 
-                        accountAdapter.updateData(dbDispatcher.Accounts.getAccounts());
-                    }
-                });
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.WHITE);
-        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
-        actionText.setTextColor(Color.CYAN);
+                accountAdapter.updateData(dbDispatcher.Accounts.getAccounts());
+            }
+        } );
         snack.show();
     }
 }

@@ -1,8 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.tokenautocomplete.TokenCompleteTextView;
 
@@ -29,6 +26,7 @@ import java.util.GregorianCalendar;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Tag;
 import io.github.mattlavallee.budgetbeaver.models.Transaction;
@@ -155,7 +153,7 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
             try {
                 accountId = allAccounts.get(selectedAccountPosition).getId();
             } catch(Exception except){
-                displaySnack("Could not get account information", view);
+                SnackBarHandler.generateSnackBar(view, "Could not get account information").show();
                 return;
             }
         }
@@ -171,10 +169,10 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         Date transDate = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth()).getTime();
 
         if(transLocation.length() < 3){
-            displaySnack("Location must be at least 3 letters", view);
+            SnackBarHandler.generateSnackBar(view, "Location must be at least 3 letters").show();
             return;
         } else if( transAmount == 0.0){
-            displaySnack("Transaction must have a non-zero value", view);
+            SnackBarHandler.generateSnackBar(view, "Transaction must hav ea non-zero value").show();
             return;
         }
 
@@ -188,7 +186,7 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         }
 
         if(result == -1){
-            displaySnack("There was an error saving the transaction", view);
+            SnackBarHandler.generateSnackBar(view, "There was an error saving the transaction").show();
             return;
         }
 
@@ -200,7 +198,7 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         //remove tags
         long removalResult = dbDispatcher.Tags.deleteTags(findTagsToRemove(tagsOnTransaction));
         if(addResult < 0 || removalResult < 0){
-            displaySnack("There was an error updating tags on the transaction", view);
+            SnackBarHandler.generateSnackBar(view, "There was an error updating tags on the transaction").show();
             return;
         }
 
@@ -269,13 +267,6 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         if(accountId != -1){
             accountDropdown.setEnabled(false);
         }
-    }
-
-    private void displaySnack(String message, View view) {
-        Snackbar snack = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.CYAN);
-        snack.show();
     }
 
     @Override

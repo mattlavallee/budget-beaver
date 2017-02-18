@@ -1,8 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +23,7 @@ import java.util.Date;
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
@@ -69,13 +68,6 @@ public class EditReminderFragment extends Fragment {
         populateAccountSpinner(fragmentView, currentReminder.getAccountId());
         registerEditTextListeners();
         return fragmentView;
-    }
-
-    private void displaySnack(String message, View view) {
-        Snackbar snack = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.CYAN);
-        snack.show();
     }
 
     private void populateAccountSpinner(View view, int accountId){
@@ -141,7 +133,7 @@ public class EditReminderFragment extends Fragment {
             try{
                 accountId = allAccounts.get(selectedAccountPosition).getId();
             } catch(Exception except){
-                displaySnack("Could not get account information", view);
+                SnackBarHandler.generateSnackBar(view, "Could not get account information").show();
                 return;
             }
         }
@@ -157,16 +149,17 @@ public class EditReminderFragment extends Fragment {
         }
 
         if(message.length() < 3){
-            displaySnack("You must include a message for the reminder", view);
+            SnackBarHandler.generateSnackBar(view, "You must include a message for the reminder").show();
             return;
         }
         if(dayOfMonth < 1 || dayOfMonth > 31){
-            displaySnack("Day of month must be between 1 and 31", view);
+            SnackBarHandler.generateSnackBar(view, "Day of month must be between 1 and 31").show();
             return;
         }
         if(daysUntilExpiration > 31){
-            displaySnack("Reminders must expire within a month.  If you prefer to have an indefinite " +
-            "reminder, leave it blank!", view);
+            String daysUntilMsg ="Reminders must expire within a month. If you prefer to have " +
+                    "an indefinite reminder, leave it blank!";
+            SnackBarHandler.generateSnackBar(view, daysUntilMsg).show();
             return;
         }
 
@@ -180,7 +173,7 @@ public class EditReminderFragment extends Fragment {
         }
 
         if(result == -1){
-            displaySnack("There was an error saving the reminder", view);
+            SnackBarHandler.generateSnackBar(view, "There was an error saving the reminder").show();
             return;
         }
 
