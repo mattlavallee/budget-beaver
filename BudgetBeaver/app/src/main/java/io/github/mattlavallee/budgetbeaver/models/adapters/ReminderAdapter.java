@@ -68,15 +68,15 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                     if(isNotificationView){
                         popupMenu.getMenuInflater().inflate(R.menu.notification_popup_menu, menu);
                     } else {
-                        popupMenu.getMenuInflater().inflate(R.menu.reminder_popup_menu, menu);
+                        popupMenu.getMenuInflater().inflate(R.menu.default_popup_menu, menu);
                     }
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                         @Override
                         public boolean onMenuItemClick(MenuItem item){
                             int itemId = item.getItemId();
-                            if(itemId == R.id.action_reminder_popup_edit){
+                            if(itemId == R.id.action_popup_edit){
                                 ((RemindersFragment)_container).editReminder(reminderId);
-                            } else if(itemId == R.id.action_reminder_popup_delete){
+                            } else if(itemId == R.id.action_popup_delete){
                                 ((RemindersFragment)_container).deleteReminder(reminderId);
                             } else if(itemId == R.id.action_notification_popup_dismiss){
                                 ((NotificationsFragment)_container).dismissNotification(reminderId);

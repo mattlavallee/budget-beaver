@@ -58,14 +58,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                     final Menu menu = popupMenu.getMenu();
                     final int transactionId = (Integer) view.getTag();
 
-                    popupMenu.getMenuInflater().inflate(R.menu.transaction_popup_menu, menu);
+                    popupMenu.getMenuInflater().inflate(R.menu.default_popup_menu, menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             int itemId = item.getItemId();
-                            if (itemId == R.id.action_transaction_popup_edit) {
+                            if (itemId == R.id.action_popup_edit) {
                                 _container.editTransaction(transactionId);
-                            } else if (itemId == R.id.action_transaction_popup_delete) {
+                            } else if (itemId == R.id.action_popup_delete) {
                                 _container.deleteTransaction(transactionId);
                             }
                             return false;

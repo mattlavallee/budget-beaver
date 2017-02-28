@@ -57,14 +57,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
                     final Menu menu = popupMenu.getMenu();
                     final int accountId = (Integer) view.getTag();
 
-                    popupMenu.getMenuInflater().inflate(R.menu.account_popup_menu, menu);
+                    popupMenu.getMenuInflater().inflate(R.menu.default_popup_menu, menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             int itemId = item.getItemId();
-                            if (itemId == R.id.action_account_popup_edit) {
+                            if (itemId == R.id.action_popup_edit) {
                                 _container.editAccount(accountId);
-                            } else if (itemId == R.id.action_account_popup_delete) {
+                            } else if (itemId == R.id.action_popup_delete) {
                                 _container.deleteAccount(accountId);
                             }
                             return false;

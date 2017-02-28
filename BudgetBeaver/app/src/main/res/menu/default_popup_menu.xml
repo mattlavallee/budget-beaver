@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_transaction_popup_edit"
+        android:id="@+id/action_popup_edit"
         android:orderInCategory="1"
         android:title="Edit"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_transaction_popup_delete"
+        android:id="@+id/action_popup_delete"
         android:orderInCategory="2"
         android:title="Delete"
         app:showAsAction="never" />
