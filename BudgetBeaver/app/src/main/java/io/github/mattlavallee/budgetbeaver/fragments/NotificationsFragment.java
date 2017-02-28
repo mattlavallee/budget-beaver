@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
-import io.github.mattlavallee.budgetbeaver.BudgetBeaverRecyclerHandler;
+import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
