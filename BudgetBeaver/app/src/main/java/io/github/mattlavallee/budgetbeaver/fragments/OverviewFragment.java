@@ -17,6 +17,7 @@ import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.FragmentManagementHandler;
 import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
@@ -102,7 +103,7 @@ public class OverviewFragment extends Fragment {
     public void editAccount(int accountId) {
         Fragment editAccountFragment = new EditAccountFragment();
         editAccountFragment.setArguments(generateIdBundle("accountId", accountId));
-        launchNewFragment(editAccountFragment);
+        FragmentManagementHandler.launchNewFragment(getActivity(), editAccountFragment);
     }
 
     public void addTransaction() {
@@ -110,33 +111,25 @@ public class OverviewFragment extends Fragment {
         Bundle bundle = generateIdBundle("transactionId", -1);
         bundle.putInt("accountId", -1);
         editTransactionFragment.setArguments(bundle);
-        launchNewFragment(editTransactionFragment);
+        FragmentManagementHandler.launchNewFragment(getActivity(), editTransactionFragment);
     }
 
     public void addReminder() {
         Fragment editReminderFragment = new EditReminderFragment();
         editReminderFragment.setArguments(generateIdBundle("reminderId", -1));
-        launchNewFragment(editReminderFragment);
+        FragmentManagementHandler.launchNewFragment(getActivity(), editReminderFragment);
     }
 
     public void launchAccountFragment(int accountId) {
         Fragment accountFragment = new AccountFragment();
         accountFragment.setArguments(generateIdBundle("accountId", accountId));
-        launchNewFragment(accountFragment);
+        FragmentManagementHandler.launchNewFragment(getActivity(), accountFragment);
     }
 
     private Bundle generateIdBundle(String name, int id) {
         Bundle dataBundle = new Bundle();
         dataBundle.putInt(name, id);
         return dataBundle;
-    }
-
-    private void launchNewFragment(Fragment newFragment) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.budget_beaver_activity_content, newFragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     public void deleteAccount(int accountId) {

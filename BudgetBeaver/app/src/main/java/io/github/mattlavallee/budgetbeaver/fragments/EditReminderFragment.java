@@ -23,6 +23,7 @@ import java.util.Date;
 import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.FragmentManagementHandler;
 import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
@@ -101,7 +102,7 @@ public class EditReminderFragment extends Fragment {
     }
 
     private void closeEditReminderFragment() {
-        getActivity().getSupportFragmentManager().popBackStackImmediate();
+        FragmentManagementHandler.closeFragment(getActivity());
     }
 
     private void initializeButtons(final View view, final int reminderId, final int accountId){

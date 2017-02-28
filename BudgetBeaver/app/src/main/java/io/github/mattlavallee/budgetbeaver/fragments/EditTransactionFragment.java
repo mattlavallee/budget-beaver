@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.FragmentManagementHandler;
 import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Tag;
@@ -72,7 +73,7 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
     }
 
     private void closeEditTransactionFragment() {
-        getActivity().getSupportFragmentManager().popBackStackImmediate();
+        FragmentManagementHandler.closeFragment(getActivity());
     }
 
     private void initializeButtons(final View view, final int transactionId, final int accountId ){

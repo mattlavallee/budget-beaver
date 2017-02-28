@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.FragmentManagementHandler;
 import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 
@@ -61,7 +62,7 @@ public class EditAccountFragment extends Fragment {
     }
 
     private void closeEditAccountFragment() {
-        getActivity().getSupportFragmentManager().popBackStackImmediate();
+        FragmentManagementHandler.closeFragment(getActivity());
     }
 
     private void saveAccount(int accountId, View view) {

@@ -23,6 +23,7 @@ import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
+import io.github.mattlavallee.budgetbeaver.handlers.FragmentManagementHandler;
 import io.github.mattlavallee.budgetbeaver.handlers.SnackBarHandler;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
@@ -111,7 +112,7 @@ public class AccountFragment extends Fragment {
         dataBundle.putInt("accountId", accountId);
         addTransactionFragment.setArguments(dataBundle);
 
-        launchNewFragment(addTransactionFragment);
+        FragmentManagementHandler.launchNewFragment(getActivity(), addTransactionFragment);
     }
 
     public void deleteAccount(int accountId){
@@ -150,7 +151,7 @@ public class AccountFragment extends Fragment {
         });
         snack.show();
 
-        getActivity().getSupportFragmentManager().popBackStackImmediate();
+        FragmentManagementHandler.closeFragment(getActivity());
     }
 
     public void deleteTransactions(int accountId){
@@ -262,14 +263,6 @@ public class AccountFragment extends Fragment {
             }
         });
         snack.show();
-    }
-
-    private void launchNewFragment(Fragment newFragment) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.budget_beaver_activity_content, newFragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     private void updateActivityTitle( ArrayList<Transaction> transactions ){
