@@ -13,7 +13,7 @@ import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import io.github.mattlavallee.budgetbeaver.BudgetBeaverFabSetup;
+import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverFabSetup;
 import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverRecyclerHandler;
 import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;

@@ -1,4 +1,4 @@
-package io.github.mattlavallee.budgetbeaver;
+package io.github.mattlavallee.budgetbeaver.handlers;
 
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
