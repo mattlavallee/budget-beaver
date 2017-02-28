@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textAutoComplete|textCapSentences|textMultiLine"
-            android:hint="Description"/>
+            android:hint="Details"/>
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
