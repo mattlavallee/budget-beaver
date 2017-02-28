@@ -1,7 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -58,12 +56,12 @@ public class AccountFragment extends Fragment {
                 appSettings.getTransactionSortDirection(accountId));
 
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.fragment_account, container, false);
+        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
         updateActivityTitle( allTransactions );
 
         //initialize the recycler view for the fragment
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
-                .createFragmentRecyclerView(R.id.account_recycler, fragmentView, getContext());
+                .createFragmentRecyclerView(R.id.recycler_container, fragmentView, getContext());
 
         transAdapter = new TransactionAdapter(allTransactions, dbDispatcher, this);
         recyclerViewLayout.setAdapter(transAdapter);

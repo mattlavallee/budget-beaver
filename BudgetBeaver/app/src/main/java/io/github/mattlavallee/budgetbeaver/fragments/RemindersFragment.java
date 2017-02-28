@@ -32,15 +32,16 @@ public class RemindersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.fragment_reminders, container, false);
+        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
         getActivity().setTitle("Reminders");
+
 
         BudgetBeaverFabSetup.addFabToView(getActivity(), inflater, R.id.budget_beaver_fragment_wrapper,
                 R.layout.fab_reminder, R.id.bb_fab_menu_reminder);
 
         //initialize the recycler view for the fragment
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
-                .createFragmentRecyclerView(R.id.reminders_recycler, fragmentView, getContext());
+                .createFragmentRecyclerView(R.id.recycler_container, fragmentView, getContext());
 
         //load all reminders
         dbDispatcher = new DatabaseDispatcher(getContext());

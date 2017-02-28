@@ -28,7 +28,7 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         //Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.fragment_reminders, container, false);
+        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
         getActivity().setTitle("Notifications");
 
         RelativeLayout parent = (RelativeLayout) getActivity().findViewById(R.id.budget_beaver_fragment_wrapper);
@@ -36,7 +36,7 @@ public class NotificationsFragment extends Fragment {
 
         //initialize the recycler view for the fragment
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
-                .createFragmentRecyclerView(R.id.reminders_recycler, fragmentView, getContext());
+                .createFragmentRecyclerView(R.id.recycler_container, fragmentView, getContext());
 
         //load all notifications
         dbDispatcher = new DatabaseDispatcher(getContext());

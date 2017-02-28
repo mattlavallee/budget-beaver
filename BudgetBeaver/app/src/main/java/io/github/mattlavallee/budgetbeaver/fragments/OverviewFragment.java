@@ -33,7 +33,7 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.fragment_overview, container, false);
+        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
 
         getActivity().setTitle("Account Overview");
         //setup the Floating Action Menu for the overview fragment
@@ -42,7 +42,7 @@ public class OverviewFragment extends Fragment {
 
         //initialize the recycler view for the fragment
         RecyclerView recyclerViewLayout = BudgetBeaverRecyclerHandler
-                .createFragmentRecyclerView(R.id.overview_recycler, fragmentView, getContext());
+                .createFragmentRecyclerView(R.id.recycler_container, fragmentView, getContext());
 
         //Load all accounts
         dbDispatcher = new DatabaseDispatcher(getContext());
