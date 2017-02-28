@@ -1,4 +1,4 @@
-package io.github.mattlavallee.budgetbeaver;
+package io.github.mattlavallee.budgetbeaver.handlers;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 
 import java.util.ArrayList;
 
+import io.github.mattlavallee.budgetbeaver.R;
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;

@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -23,6 +22,7 @@ import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.NotificationsFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
+import io.github.mattlavallee.budgetbeaver.handlers.BudgetBeaverStatusBarNotifier;
 import io.github.mattlavallee.budgetbeaver.models.Account;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
