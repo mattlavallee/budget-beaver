@@ -1,7 +1,5 @@
 package io.github.mattlavallee.budgetbeaver.models;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,7 +54,8 @@ public class Reminder {
         ArrayList<Reminder> expiredNotifications = new ArrayList<>();
         for(Reminder currReminder : reminders){
             //we only are expiring already active notifications
-            if(currReminder.isNotificationActive() == false){
+            //we don't expire notifications that do not expire
+            if(currReminder.isNotificationActive() == false || currReminder.getDaysUntilExpiration() == -1){
                 continue;
             }
 
@@ -66,20 +65,28 @@ public class Reminder {
             int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
             //get current date for comparison
-            Date currentDate = new Date();
+            Calendar rightNow = Calendar.getInstance();
+            rightNow.set(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH), rightNow.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+            Date currentDate = rightNow.getTime();
             //get the min notification date
             int reminderDay = currReminder.getDayOfMonth();
-            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay );
+            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay, 0, 0, 0 );
             Date minNotificationDate = cal.getTime();
             //get the max notification date
-            Date maxNotificationDate = new Date(Long.MAX_VALUE);
-            if( currReminder.getDaysUntilExpiration() != -1) {
-                cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
-                maxNotificationDate = cal.getTime();
-            }
+            cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
+            Date maxNotificationDate = cal.getTime();
 
-            //if the current date is before the minNotificationDate or after the maxNotificationDate it's expired
-            if(currentDate.before(minNotificationDate) || currentDate.after(maxNotificationDate)){
+            cal.set( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
+            cal.add(Calendar.MONTH, -1);
+            maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay, 0, 0, 0);
+            cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
+            Date lastMonthsMaxNotificationDate = cal.getTime();
+
+            //IF After last months maxNotificationDate and BEFORE this month's minNotificationDate
+            //OR AFTER this month's maxNotificationDate
+            if( ( currentDate.after(lastMonthsMaxNotificationDate) && currentDate.before(minNotificationDate) )
+                    || currentDate.after(maxNotificationDate) ) {
                 currReminder.setIsNotificationActive(false);
                 expiredNotifications.add(currReminder);
             }
