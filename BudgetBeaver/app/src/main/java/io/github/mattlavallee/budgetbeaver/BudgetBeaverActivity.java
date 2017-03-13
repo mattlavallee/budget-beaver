@@ -61,8 +61,8 @@ public class BudgetBeaverActivity
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Reminder> allReminders = dbDispatcher.Reminders.getReminders();
 
-        ArrayList<Reminder> expiredReminders = Reminder.invalidateExpiredNotifications( allReminders );
         ArrayList<Reminder> newActiveReminders = Reminder.activateNewNotifications( allReminders );
+        ArrayList<Reminder> expiredReminders = Reminder.invalidateExpiredNotifications( allReminders );
 
         for(Reminder expReminder : expiredReminders ){
             dbDispatcher.Reminders.updateReminder(expReminder);

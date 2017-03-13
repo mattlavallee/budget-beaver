@@ -52,6 +52,18 @@ public class Reminder {
     public void setIsNotificationActive(boolean activeState){ _isActiveNotification = activeState; }
     public void setLastDateActivated(Date date){ _lastDateActivated = date; }
 
+    private static Date getCurrentDate(){
+        Calendar cal = Calendar.getInstance();
+        //we want to set the date to midnight of the current day
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0 ,0);
+        return cal.getTime();
+    }
+
+    private static int getMaxDayOfMonth(){
+        Calendar cal = Calendar.getInstance();
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
     public static ArrayList<Reminder> invalidateExpiredNotifications( ArrayList<Reminder> reminders ){
         ArrayList<Reminder> expiredNotifications = new ArrayList<>();
         for(Reminder currReminder : reminders){
@@ -60,29 +72,29 @@ public class Reminder {
                 continue;
             }
 
-            //initialize a calendar to the current year and month to get the maximum date for the month
-            Calendar cal = Calendar.getInstance();
-            cal.set( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
-            int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-            //get current date for comparison
-            Date currentDate = new Date();
-            //get the min notification date
-            int reminderDay = currReminder.getDayOfMonth();
-            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay );
-            Date minNotificationDate = cal.getTime();
-            //get the max notification date
-            Date maxNotificationDate = new Date(Long.MAX_VALUE);
-            if( currReminder.getDaysUntilExpiration() != -1) {
-                cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
-                maxNotificationDate = cal.getTime();
-            }
-
-            //if the current date is before the minNotificationDate or after the maxNotificationDate it's expired
-            if(currentDate.before(minNotificationDate) || currentDate.after(maxNotificationDate)){
-                currReminder.setIsNotificationActive(false);
-                expiredNotifications.add(currReminder);
-            }
+//            //initialize a calendar to the current year and month to get the maximum date for the month
+//            Calendar cal = Calendar.getInstance();
+//            cal.set( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
+//            int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+//
+//            //get current date for comparison
+//            Date currentDate = new Date();
+//            //get the min notification date
+//            int reminderDay = currReminder.getDayOfMonth();
+//            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay );
+//            Date minNotificationDate = cal.getTime();
+//            //get the max notification date
+//            Date maxNotificationDate = new Date(Long.MAX_VALUE);
+//            if( currReminder.getDaysUntilExpiration() != -1) {
+//                cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
+//                maxNotificationDate = cal.getTime();
+//            }
+//
+//            //if the current date is before the minNotificationDate or after the maxNotificationDate it's expired
+//            if(currentDate.before(minNotificationDate) || currentDate.after(maxNotificationDate)){
+//                currReminder.setIsNotificationActive(false);
+//                expiredNotifications.add(currReminder);
+//            }
         }
 
         return expiredNotifications;
@@ -91,41 +103,36 @@ public class Reminder {
         ArrayList<Reminder> newNotifications = new ArrayList<>();
 
         for(Reminder currReminder : reminders){
-            //we only are expiring already active notifications
+            //we only are activating inactive notifications
             if(currReminder.isNotificationActive() == true){
                 continue;
             }
 
-            //initialize a calendar to the current year and month to get the maximum date for the month
-            Calendar cal = Calendar.getInstance();
-            cal.set( cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
-            int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int maxDayInCurrentMonth = getMaxDayOfMonth();
+            Date currDate = getCurrentDate();
 
-            //get current date for comparison
-            Calendar rightNow = Calendar.getInstance();
-            rightNow.set(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH), rightNow.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-            Date currentDate = rightNow.getTime();
-            //get the min notification date
             int reminderDay = currReminder.getDayOfMonth();
-            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), reminderDay > maxDay ? maxDay : reminderDay, 0, 0, 0 );
-            Date minNotificationDate = cal.getTime();
-            //get the max notification date
-            Date maxNotificationDate = new Date(Long.MAX_VALUE);
-            if( currReminder.getDaysUntilExpiration() != -1) {
+
+            Calendar cal = Calendar.getInstance();
+            int dayInMonth = reminderDay > maxDayInCurrentMonth ? maxDayInCurrentMonth : reminderDay;
+            cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), dayInMonth, 0, 0 ,0);
+            Date dateToActivate = cal.getTime();
+            Date dateToInvalidate = new Date(Long.MAX_VALUE);
+            if(currReminder.getDaysUntilExpiration() != -1){
                 cal.add(Calendar.DATE, currReminder.getDaysUntilExpiration());
-                maxNotificationDate = cal.getTime();
+                dateToInvalidate = cal.getTime();
             }
 
             //is valid active date iif currDate >= minDate && currDate <= maxDate
-            boolean currentDateIsValid = currentDate.compareTo(minNotificationDate) > -1 &&
-                    currentDate.compareTo(maxNotificationDate) < 1;
+            boolean currDateIsValid = currDate.compareTo(dateToActivate) > -1 &&
+                    currDate.compareTo(dateToInvalidate) < 1;
             //check if it's been activated for the current month by ensuring that the notification
             //was last active at a date before the current minNotificationDate.
             //if it was already activated for this month, lastDateActive >= minNotificationDate
-            boolean notActivatedForThisMonth = currReminder.getLastDateActivated().compareTo(minNotificationDate) < 0;
-            if(currentDateIsValid && notActivatedForThisMonth){
+            boolean notActivatedForThisMonth = currReminder.getLastDateActivated().compareTo(dateToActivate) < 0;
+            if(currDateIsValid && notActivatedForThisMonth){
                 currReminder.setIsNotificationActive(true);
-                currReminder.setLastDateActivated(new Date());
+                currReminder.setLastDateActivated(currDate);
                 newNotifications.add(currReminder);
             }
         }

@@ -57,7 +57,7 @@ public class NotificationsFragment extends Fragment {
             public void run() {
                 ArrayList<Reminder> notificationIntegrity = dbDispatcher.Reminders.getActiveNotifications();
                 if(notificationIntegrity.size() != allNotifications.size()){
-                    //notificationAdapter.updateData(notificationIntegrity);
+                    notificationAdapter.updateData(notificationIntegrity);
                 }
             }
             //about the length of Snackbar.LENGTH_LONG
