@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/BudgetBeaverActionBar</item>
+        <item name="android:popupMenuStyle">@style/BudgetBeaverPopupMenu</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -35,5 +36,9 @@
     <style name="BudgetBeaverCheckbox" parent="Base.Theme.AppCompat">
         <item name="colorControlNormal">@color/colorLightGray</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="BudgetBeaverPopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:textSize">12dp</item>
     </style>
 </resources>
