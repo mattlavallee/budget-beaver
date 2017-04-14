@@ -1,94 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edit_transaction_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:inputType="textCapCharacters|textAutoCorrect|text"
-            android:hint="Location">
-            <requestFocus/>
-        </EditText>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edit_transaction_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:digits="0123456789."
-            android:inputType="numberSigned|numberDecimal"
-            android:hint="Amount"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <CheckBox
-        android:id="@+id/edit_transaction_deduction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Apply transaction as a deduction"/>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edit_transaction_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textAutoComplete|textCapSentences|textMultiLine"
-            android:hint="Description"/>
-    </android.support.design.widget.TextInputLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-        <io.github.mattlavallee.budgetbeaver.models.adapters.TagCompletionView
-            android:id="@+id/edit_transaction_tags"
+        android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Tags" />
+            android:theme="@style/BudgetBeaverTextBox">
+            <EditText
+                android:id="@+id/edit_transaction_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="textCapCharacters|textAutoCorrect|text"
+                android:hint="Location">
+                <requestFocus/>
+            </EditText>
+        </android.support.design.widget.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/edit_transaction_account"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="@string/account_prompt" />
+            android:theme="@style/BudgetBeaverTextBox">
+            <EditText
+                android:id="@+id/edit_transaction_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789."
+                android:inputType="numberSigned|numberDecimal"
+                android:hint="Amount"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/edit_transaction_deduction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/BudgetBeaverCheckbox"
+            android:text="Apply transaction as a deduction"
+            android:textColor="@color/colorLightGray"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/BudgetBeaverTextBox">
+            <EditText
+                android:id="@+id/edit_transaction_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textAutoComplete|textCapSentences|textMultiLine"
+                android:hint="Description"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <io.github.mattlavallee.budgetbeaver.models.adapters.TagCompletionView
+                android:id="@+id/edit_transaction_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Tags"
+                android:backgroundTint="@color/colorLightGray"/>
+
+            <Spinner
+                android:id="@+id/edit_transaction_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/account_prompt" />
+        </LinearLayout>
+
+        <DatePicker
+            android:id="@+id/edit_transaction_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"/>
     </LinearLayout>
-
-    <DatePicker
-        android:id="@+id/edit_transaction_date"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-        <Button
-            android:id="@+id/edit_transaction_cancel_btn"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel"/>
-        <Button
-            android:id="@+id/edit_transaction_save_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"/>
-    </LinearLayout>
-</LinearLayout>
+            android:orientation="horizontal"
+            android:background="@color/colorLightGray"
+            android:paddingTop="1dp"
+            android:weightSum="2">
+            <Button
+                android:id="@+id/edit_transaction_cancel_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bb_ripple_btn"
+                android:layout_marginRight="1dp"
+                android:text="Cancel"/>
+            <Button
+                android:id="@+id/edit_transaction_save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bb_ripple_btn"
+                android:layout_weight="1"
+                android:text="Save"/>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    android:layout_height="fill_parent">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:paddingTop="5dp">
         <android.support.design.widget.TextInputLayout
             android:id="@+id/edit_account_name_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/BudgetBeaverTextBox">
             <EditText
                 android:id="@+id/edit_account_name"
                 android:layout_width="match_parent"
@@ -21,23 +22,34 @@
                 <requestFocus />
             </EditText>
         </android.support.design.widget.TextInputLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-            <Button
-                android:id="@+id/edit_account_cancel_btn"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancel"/>
-            <Button
-                android:id="@+id/edit_account_save_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save"/>
-        </LinearLayout>
-    </LinearLayout>
+                android:orientation="horizontal"
+                android:background="@color/colorLightGray"
+                android:paddingTop="1dp"
+                android:weightSum="2">
+                <Button
+                    android:id="@+id/edit_account_cancel_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bb_ripple_btn"
+                    android:layout_marginRight="1dp"
+                    android:text="Cancel"/>
+                <Button
+                    android:id="@+id/edit_account_save_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bb_ripple_btn"
+                    android:text="Save"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 </LinearLayout>

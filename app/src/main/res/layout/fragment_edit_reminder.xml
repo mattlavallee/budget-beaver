@@ -1,77 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edit_reminder_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:inputType="textAutoComplete|textCapSentences|textMultiLine"
-            android:hint="Note">
-            <requestFocus/>
-        </EditText>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edit_reminder_dayOfMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:digits="0123456789."
-            android:inputType="numberSigned"
-            android:hint="Day of Month"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/edit_reminder_daysUntilExpiration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:digits="0123456789."
-            android:inputType="numberSigned"
-            android:hint="Reminder Length (days)"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <Spinner
-        android:id="@+id/edit_reminder_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/account_prompt" />
-
-    <TextView
-        android:id="@+id/edit_reminder_preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:gravity="center"
-        android:textStyle="italic" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-        <Button
-            android:id="@+id/edit_reminder_cancel_btn"
+        android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel"/>
-        <Button
-            android:id="@+id/edit_reminder_save_btn"
+            android:theme="@style/BudgetBeaverTextBox">
+            <EditText
+                android:id="@+id/edit_reminder_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="textAutoComplete|textCapSentences|textMultiLine"
+                android:hint="Note">
+                <requestFocus/>
+            </EditText>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"/>
+            android:theme="@style/BudgetBeaverTextBox">
+            <EditText
+                android:id="@+id/edit_reminder_dayOfMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789."
+                android:inputType="numberSigned"
+                android:hint="Day of Month"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/BudgetBeaverTextBox">
+            <EditText
+                android:id="@+id/edit_reminder_daysUntilExpiration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789."
+                android:inputType="numberSigned"
+                android:hint="Reminder Length (days)"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/edit_reminder_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/account_prompt" />
+
+        <TextView
+            android:id="@+id/edit_reminder_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textStyle="italic" />
     </LinearLayout>
-</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorLightGray"
+            android:paddingTop="1dp"
+            android:weightSum="2">
+            <Button
+                android:id="@+id/edit_reminder_cancel_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/bb_ripple_btn"
+                android:text="Cancel"/>
+            <Button
+                android:id="@+id/edit_reminder_save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bb_ripple_btn"
+                android:text="Save"/>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
