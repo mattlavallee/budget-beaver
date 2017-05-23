@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -32,29 +31,42 @@ public class BudgetBeaverActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout _drawerLayout;
     ActionBarDrawerToggle _drawerToggle;
+    private int currentSelectedMenuId = R.id.action_account_overview;
 
     private void loadNavigationDrawerMenu(){
         NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
         Menu drawerMenu = drawerMenuNav.getMenu();
 
-        SubMenu accountsSubMenu = drawerMenu.getItem(3).getSubMenu();
-
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Account> accounts = dbDispatcher.Accounts.getAccounts();
 
-        accountsSubMenu.clear();
+        //clear the set of all accounts previously loaded in the nav menu because it could have changed
+        //and clearing a small set and re-adding is significantly less complicated than doing a diff to
+        //figure out what needs to be added and where
+        int index = 0;
+        while(index < drawerMenu.size()){
+            MenuItem currItem = drawerMenu.getItem(index);
+            if(currItem.getGroupId() == R.id.menu_middle && !currItem.getTitle().toString().equals("Accounts")){
+                drawerMenu.removeItem(currItem.getItemId());
+            } else {
+                index++;
+            }
+        }
+
         if(accounts.size() == 0){
-            accountsSubMenu.add(2, -1, 0, "No Accounts");
-            accountsSubMenu.getItem(0).setEnabled(false);
+            int noAccountId = View.generateViewId();
+            drawerMenu.add(R.id.menu_middle, noAccountId, 103, "No Accounts");
+            drawerMenu.findItem(noAccountId).setEnabled(false);
         }
 
         for(int i = 0; i < accounts.size(); i++){
             Account currAccount = accounts.get(i);
-            accountsSubMenu.add(2, currAccount.getId(), i, currAccount.getName());
+            drawerMenu.add(R.id.menu_middle, currAccount.getId(), 103 + i, currAccount.getName());
+            drawerMenu.findItem(currAccount.getId()).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            drawerMenu.findItem(currAccount.getId()).setCheckable(true);
         }
 
         drawerMenuNav.setNavigationItemSelectedListener(this);
-        drawerMenu.getItem(1).setChecked(true);
     }
 
     private void invalidateOldAndActivateNewNotifications(){
@@ -124,6 +136,9 @@ public class BudgetBeaverActivity
                 loadNavigationDrawerMenu();
                 checkForActiveNotifications();
                 supportInvalidateOptionsMenu();
+
+                NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
+                drawerMenuNav.getMenu().findItem(currentSelectedMenuId).setChecked(true);
             }
         };
         _drawerToggle.setDrawerIndicatorEnabled(true);
@@ -134,6 +149,7 @@ public class BudgetBeaverActivity
         loadNavigationDrawerMenu();
         loadDefaultFragment();
         invalidateOldAndActivateNewNotifications();
+        supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -144,13 +160,8 @@ public class BudgetBeaverActivity
     }
 
     private void setSelectedNavigationViewItem(MenuItem item){
-        int order = item.getOrder() - 100;
-        //less than zero we're in the accounts submenu; set checked item to accounts title
-        if(order < 0){
-            order = 3;
-        }
-        NavigationView drawerMenuNav = (NavigationView) findViewById(R.id.budget_beaver_navigation_view);
-        drawerMenuNav.getMenu().getItem(order).setChecked(true);
+        item.setChecked(true);
+        currentSelectedMenuId = item.getItemId();
     }
 
     @Override

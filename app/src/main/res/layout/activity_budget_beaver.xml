@@ -32,5 +32,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        app:menu="@menu/budget_beaver_drawer_menu"/>
+        app:menu="@menu/budget_beaver_drawer_menu"
+        android:background="#ffffff"
+        app:itemIconTint="@color/colorLight"/>
 </android.support.v4.widget.DrawerLayout>

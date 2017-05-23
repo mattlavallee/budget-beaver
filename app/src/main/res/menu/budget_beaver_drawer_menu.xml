@@ -12,6 +12,7 @@
         <item android:id="@+id/action_account_overview"
             android:orderInCategory="101"
             android:title="Account Overview"
+            android:checked="true"
             app:showAsAction="never" />
         <item android:id="@+id/action_reminders"
             android:orderInCategory="102"
@@ -24,19 +25,19 @@
         <item android:id="@+id/action_accounts_header"
             android:orderInCategory="103"
             app:showAsAction="never"
-            android:title="Accounts">
-            <menu>
-                <item android:title="No Accounts"
-                    android:enabled="false"></item>
-            </menu>
-        </item>
+            android:enabled="false"
+            android:title="Accounts"></item>
     </group>
     <group
         android:id="@+id/menu_bottom"
         android:checkableBehavior="single">
         <item android:id="@+id/action_settings"
-            android:orderInCategory="104"
+            android:orderInCategory="204"
             android:title="Settings"
+            app:showAsAction="never" />
+        <item android:id="@+id/action_about"
+            android:orderInCategory="205"
+            android:title="About &amp; Feedback"
             app:showAsAction="never" />
     </group>
 </menu>
