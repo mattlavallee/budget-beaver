@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import io.github.mattlavallee.budgetbeaver.data.DatabaseDispatcher;
 import io.github.mattlavallee.budgetbeaver.fragments.AccountFragment;
+import io.github.mattlavallee.budgetbeaver.fragments.FeedbackFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.NotificationsFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.OverviewFragment;
 import io.github.mattlavallee.budgetbeaver.fragments.RemindersFragment;
@@ -177,6 +178,8 @@ public class BudgetBeaverActivity
             activeViewFragment = new NotificationsFragment();
         } else if (id == R.id.action_reminders) {
             activeViewFragment = new RemindersFragment();
+        } else if(id == R.id.action_about) {
+            activeViewFragment = new FeedbackFragment();
         } else if (id == R.id.action_settings) {
             Intent intent = new Intent();
             intent.setClassName(this, "io.github.mattlavallee.budgetbeaver.BudgetBeaverSettings");
