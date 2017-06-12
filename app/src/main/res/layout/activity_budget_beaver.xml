@@ -34,5 +34,6 @@
         android:choiceMode="singleChoice"
         app:menu="@menu/budget_beaver_drawer_menu"
         android:background="#ffffff"
+        app:itemTextAppearance="@style/BudgetBeaverTextView"
         app:itemIconTint="@color/colorLight"/>
 </android.support.v4.widget.DrawerLayout>
