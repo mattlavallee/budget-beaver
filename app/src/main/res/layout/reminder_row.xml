@@ -34,6 +34,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/vertical_ellipsis"
                 android:textColor="@color/colorLightGray"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
                 android:layout_weight="1"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
