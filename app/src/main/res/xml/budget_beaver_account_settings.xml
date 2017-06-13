@@ -2,7 +2,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
+    <io.github.mattlavallee.budgetbeaver.models.adapters.BudgetBeaverPreferencesCategory
         android:key="setting_title_act_transaction_settings"
         android:title="Transaction Settings">
         <ListPreference
@@ -26,5 +26,5 @@
             android:title="Negative Transaction Color"
             android:summary="Color of a negative transaction amount"
             app:colorChoices="@array/app_settings_colors" />
-    </PreferenceCategory>
+    </io.github.mattlavallee.budgetbeaver.models.adapters.BudgetBeaverPreferencesCategory>
 </PreferenceScreen>
