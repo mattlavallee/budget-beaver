@@ -82,6 +82,7 @@
                 android:layout_weight="1"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/bb_ripple_btn"
+                android:fontFamily="sans-serif-light"
                 android:text="Cancel"/>
             <Button
                 android:id="@+id/edit_reminder_save_btn"
@@ -89,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bb_ripple_btn"
+                android:fontFamily="sans-serif-light"
                 android:text="Save"/>
         </LinearLayout>
     </RelativeLayout>

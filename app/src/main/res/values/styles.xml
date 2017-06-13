@@ -10,7 +10,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textViewStyle">@style/BudgetBeaverTextView</item>
         <item name="android:editTextStyle">@style/BudgetBeaverTextView</item>
-        <item name="android:buttonStyle">@style/BudgetBeaverTextView</item>
     </style>
 
     <style name="BudgetBeaverActionBar">
