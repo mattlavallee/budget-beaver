@@ -98,9 +98,9 @@ public class BudgetBeaverActivity
 
         MenuItem notificationsEntry = drawerMenu.getItem(0);
         if( activeNotifications.size() > 0 ){
-            notificationsEntry.setVisible(true);
+            notificationsEntry.setEnabled(true);
         } else{
-            notificationsEntry.setVisible(false);
+            notificationsEntry.setEnabled(false);
         }
     }
 
