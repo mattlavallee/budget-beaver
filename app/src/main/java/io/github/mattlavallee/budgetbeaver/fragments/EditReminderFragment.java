@@ -170,6 +170,16 @@ public class EditReminderFragment extends Fragment {
         if(reminderId == -1){
             result = dbDispatcher.Reminders.insertReminder(reminderToSave);
         } else{
+            Reminder existingReminder = dbDispatcher.Reminders.getReminderById(reminderId);
+            // if nothing was edited but the reminder was saved again,
+            // don't clear out active state and last date activated fields
+            if(existingReminder.getMessage().equals(reminderToSave.getMessage()) &&
+               existingReminder.getDayOfMonth() == reminderToSave.getDayOfMonth() &&
+               existingReminder.getDaysUntilExpiration() == reminderToSave.getDaysUntilExpiration()){
+                reminderToSave.setLastDateActivated(existingReminder.getLastDateActivated());
+                reminderToSave.setIsNotificationActive(existingReminder.isNotificationActive());
+            }
+
             result = dbDispatcher.Reminders.updateReminder(reminderToSave);
         }
 
