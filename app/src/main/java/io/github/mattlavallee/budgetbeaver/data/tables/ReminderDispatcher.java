@@ -14,7 +14,7 @@ import java.util.Date;
 import io.github.mattlavallee.budgetbeaver.models.Reminder;
 
 public class ReminderDispatcher extends DispatcherBase{
-    private DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+    private DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     public ReminderDispatcher( SQLiteOpenHelper helper ){
         super(helper, "reminders");
