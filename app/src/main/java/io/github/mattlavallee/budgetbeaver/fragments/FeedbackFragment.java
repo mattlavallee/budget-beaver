@@ -24,7 +24,7 @@ public class FeedbackFragment extends Fragment{
 
         TextView credits = (TextView)fragmentView.findViewById(R.id.feedback_credits);
         TextView about = (TextView)fragmentView.findViewById(R.id.feedback_feedback);
-        String content = "Icons made by <a href=\"http://www.flaticon.com/authors/madebyoliver\">Madebyoliver</a> and <a href=\"http://www.freepik.com\">Freepik</a> from <a href=\"http://www.flaticon.com\">www.flaticon.com</a>. Both are licensed by <a href=\"http://creativecommons.org/licenses/by/3.0/\">CC 3.0 BY</a>";
+        String content = "App icon made by <a href=\"http://www.freepik.com\">Freepik</a> from <a href=\"http://www.flaticon.com\">www.flaticon.com</a>. Icon is licensed by <a href=\"http://creativecommons.org/licenses/by/3.0/\">CC 3.0 BY</a>";
 
         String aboutTxt = "Thanks for using my app!<br />I am an individual developer creating this app in my free time." +
                 " I welcome any feedback that you may have. If something does not work as expected or " +
