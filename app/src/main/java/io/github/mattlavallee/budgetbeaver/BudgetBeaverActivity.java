@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,9 +105,10 @@ public class BudgetBeaverActivity
         }
     }
 
-    private void loadDefaultFragment(){
+    private void loadDefaultFragment(boolean shouldStartOnNotificationFragment){
+        Fragment startingFragment = shouldStartOnNotificationFragment ? new NotificationsFragment() : new OverviewFragment();
         getSupportFragmentManager().beginTransaction()
-            .replace(R.id.budget_beaver_activity_content, new OverviewFragment())
+            .replace(R.id.budget_beaver_activity_content, startingFragment)
             .commit();
     }
 
@@ -114,6 +116,13 @@ public class BudgetBeaverActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_beaver);
+        boolean startOnNotification = false;
+        if(savedInstanceState == null){
+            Bundle bundle = getIntent().getExtras();
+            if(bundle != null) {
+                startOnNotification = bundle.getBoolean("startOnNotifications");
+            }
+        }
 
         _drawerLayout = (DrawerLayout)findViewById(R.id.budget_beaver_drawer_layout);
 
@@ -148,7 +157,7 @@ public class BudgetBeaverActivity
 
         //populate the menu with account information and set default menu item
         loadNavigationDrawerMenu();
-        loadDefaultFragment();
+        loadDefaultFragment(startOnNotification);
         invalidateOldAndActivateNewNotifications();
         supportInvalidateOptionsMenu();
     }
