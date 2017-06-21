@@ -35,6 +35,11 @@ public class BudgetBeaverStatusBarNotifier {
             Account notificationAccount = dbDispatcher.Accounts.getAccountById( newNotification.getAccountId() );
             notifyBuilder.setContentText( notificationAccount.getName() + ": " + newNotification.getMessage() );
 
+            NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+            bigTextStyle.setBigContentTitle("Budget Beaver");
+            bigTextStyle.bigText(notificationAccount.getName() + ": " + newNotification.getMessage());
+            notifyBuilder.setStyle(bigTextStyle);
+
             //we want to launch BudgetBeaver on the notifications fragment when a notification is tapped
             Intent resultIntent = new Intent(activity, BudgetBeaverActivity.class);
             resultIntent.putExtra("startOnNotifications", true);
