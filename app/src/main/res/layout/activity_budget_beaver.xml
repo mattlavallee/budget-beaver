@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
         <FrameLayout
             android:id="@+id/budget_beaver_activity_content"
@@ -33,7 +34,7 @@
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         app:menu="@menu/budget_beaver_drawer_menu"
-        android:background="#ffffff"
         app:itemTextAppearance="@style/BudgetBeaverTextView"
-        app:itemIconTint="@color/colorLight"/>
+        app:itemIconTint="@color/menu_text_color"
+        app:itemTextColor="@color/menu_text_color"/>
 </android.support.v4.widget.DrawerLayout>
