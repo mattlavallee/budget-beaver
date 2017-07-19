@@ -34,6 +34,7 @@
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         app:menu="@menu/budget_beaver_drawer_menu"
+        app:headerLayout="@layout/budget_beaver_drawer_header"
         app:itemTextAppearance="@style/BudgetBeaverTextView"
         app:itemIconTint="@color/menu_text_color"
         app:itemTextColor="@color/menu_text_color"/>
