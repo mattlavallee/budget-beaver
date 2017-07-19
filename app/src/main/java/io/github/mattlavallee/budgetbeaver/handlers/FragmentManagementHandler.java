@@ -1,7 +1,11 @@
 package io.github.mattlavallee.budgetbeaver.handlers;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import io.github.mattlavallee.budgetbeaver.R;
 
@@ -15,6 +19,15 @@ public class FragmentManagementHandler {
     }
 
     public static void closeFragment(FragmentActivity activity){
+        closeKeyboardIfOpen(activity);
         activity.getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    private static void closeKeyboardIfOpen(FragmentActivity activity){
+        View currentFocus = activity.getCurrentFocus();
+        if (currentFocus != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+        }
     }
 }
