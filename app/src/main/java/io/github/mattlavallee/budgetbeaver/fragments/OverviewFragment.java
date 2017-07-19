@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 
@@ -69,6 +70,7 @@ public class OverviewFragment extends Fragment {
                 ArrayList<Account> accountIntegrity = dbDispatcher.Accounts.getAccounts();
                 if(accountIntegrity.size() != allAccounts.size()){
                     accountAdapter.updateData(accountIntegrity);
+                    allAccounts = accountIntegrity;
                 }
             }
         //about the length of Snackbar.LENGTH_LONG
@@ -107,11 +109,19 @@ public class OverviewFragment extends Fragment {
     }
 
     public void addTransaction() {
-        Fragment editTransactionFragment = new EditTransactionFragment();
-        Bundle bundle = generateIdBundle("transactionId", -1);
-        bundle.putInt("accountId", -1);
-        editTransactionFragment.setArguments(bundle);
-        FragmentManagementHandler.launchNewFragment(getActivity(), editTransactionFragment);
+        if(allAccounts.size() == 0){
+            Snackbar snack = SnackBarHandler.generateSnackBar(getView(), "Please create an account first");
+            snack.show();
+
+            FloatingActionMenu fam = (FloatingActionMenu)getActivity().findViewById(R.id.bb_fab_menu_overview);
+            fam.toggle(true);
+        } else {
+            Fragment editTransactionFragment = new EditTransactionFragment();
+            Bundle bundle = generateIdBundle("transactionId", -1);
+            bundle.putInt("accountId", -1);
+            editTransactionFragment.setArguments(bundle);
+            FragmentManagementHandler.launchNewFragment(getActivity(), editTransactionFragment);
+        }
     }
 
     public void addReminder() {
