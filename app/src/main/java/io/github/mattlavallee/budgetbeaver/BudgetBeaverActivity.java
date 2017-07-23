@@ -217,13 +217,6 @@ public class BudgetBeaverActivity
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
-        super.onPostCreate(savedInstanceState);
-        _drawerToggle.syncState();
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
