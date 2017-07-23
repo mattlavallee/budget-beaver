@@ -153,7 +153,6 @@ public class BudgetBeaverActivity
         };
         _drawerToggle.setDrawerIndicatorEnabled(true);
         _drawerLayout.addDrawerListener(_drawerToggle);
-        _drawerToggle.syncState();
 
         //populate the menu with account information and set default menu item
         loadNavigationDrawerMenu();
@@ -214,6 +213,13 @@ public class BudgetBeaverActivity
         //close the app drawer
         _drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        _drawerToggle.syncState();
     }
 
     @Override
