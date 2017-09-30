@@ -116,6 +116,11 @@ public class BudgetBeaverActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_beaver);
+
+        Intent intent = new Intent();
+        intent.setAction("io.github.mattlavallee.budgetbeaver.receive");
+        sendBroadcast(intent);
+
         boolean startOnNotification = false;
         if(savedInstanceState == null){
             Bundle bundle = getIntent().getExtras();
