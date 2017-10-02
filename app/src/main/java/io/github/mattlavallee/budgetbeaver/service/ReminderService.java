@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -51,7 +50,6 @@ public class ReminderService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i("TEST", "do all the things!");
         DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
         ArrayList<Reminder> newNotifications = invalidateOldAndActivateNewNotifications(dbDispatcher);
         BudgetBeaverStatusBarNotifier.generateFromService(this, newNotifications);

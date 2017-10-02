@@ -9,7 +9,8 @@ import android.content.Intent;
 import java.util.Calendar;
 
 public class ReminderSetupReceiver extends BroadcastReceiver {
-    private static final int FREQUENCY = 60 * 1000;
+    //run the service intent once an hour
+    private static final int FREQUENCY = 60 * 60 * 1000;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {

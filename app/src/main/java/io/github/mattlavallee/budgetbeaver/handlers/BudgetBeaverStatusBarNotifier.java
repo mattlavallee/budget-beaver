@@ -25,18 +25,10 @@ public class BudgetBeaverStatusBarNotifier {
 
         for(Reminder newNotification : notifications){
             NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(activity);
-            notifyBuilder.setSmallIcon(R.mipmap.ic_stat_check);
             Bitmap bmp = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.ic_budget_beaver);
-            notifyBuilder.setLargeIcon(bmp);
-            notifyBuilder.setColor(Color.WHITE);
-            notifyBuilder.setContentTitle("Budget Beaver");
             Account notificationAccount = dbDispatcher.Accounts.getAccountById( newNotification.getAccountId() );
-            notifyBuilder.setContentText( notificationAccount.getName() + ": " + newNotification.getMessage() );
 
-            NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-            bigTextStyle.setBigContentTitle("Budget Beaver");
-            bigTextStyle.bigText(notificationAccount.getName() + ": " + newNotification.getMessage());
-            notifyBuilder.setStyle(bigTextStyle);
+            setNotificationProperties(notifyBuilder, bmp, newNotification, notificationAccount);
 
             //we want to launch BudgetBeaver on the notifications fragment when a notification is tapped
             Intent resultIntent = new Intent(activity, BudgetBeaverActivity.class);
@@ -48,9 +40,7 @@ public class BudgetBeaverStatusBarNotifier {
             NotificationManager mNotificationManager = (NotificationManager)
                     activity.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            // notificationID allows you to update the notification later on.
-            String uuid = "budget beaver_" + newNotification.getId();
-            mNotificationManager.notify(uuid.hashCode(), notifyBuilder.build());
+            activateNotification(mNotificationManager, notifyBuilder, newNotification);
         }
     }
 
@@ -59,18 +49,10 @@ public class BudgetBeaverStatusBarNotifier {
 
         for(Reminder newNotification : notifications){
             NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(service);
-            notifyBuilder.setSmallIcon(R.mipmap.ic_stat_check);
             Bitmap bmp = BitmapFactory.decodeResource(service.getResources(), R.mipmap.ic_budget_beaver);
-            notifyBuilder.setLargeIcon(bmp);
-            notifyBuilder.setColor(Color.WHITE);
-            notifyBuilder.setContentTitle("Budget Beaver");
             Account notificationAccount = dbDispatcher.Accounts.getAccountById( newNotification.getAccountId() );
-            notifyBuilder.setContentText( notificationAccount.getName() + ": " + newNotification.getMessage() );
 
-            NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-            bigTextStyle.setBigContentTitle("Budget Beaver");
-            bigTextStyle.bigText(notificationAccount.getName() + ": " + newNotification.getMessage());
-            notifyBuilder.setStyle(bigTextStyle);
+            setNotificationProperties(notifyBuilder, bmp, newNotification, notificationAccount);
 
             //we want to launch BudgetBeaver on the notifications fragment when a notification is tapped
             Intent resultIntent = new Intent(service, BudgetBeaverActivity.class);
@@ -82,9 +64,28 @@ public class BudgetBeaverStatusBarNotifier {
             NotificationManager mNotificationManager = (NotificationManager)
                     service.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            // notificationID allows you to update the notification later on.
-            String uuid = "budget beaver_" + newNotification.getId();
-            mNotificationManager.notify(uuid.hashCode(), notifyBuilder.build());
+            activateNotification(mNotificationManager, notifyBuilder, newNotification);
         }
+    }
+
+    private static void setNotificationProperties(NotificationCompat.Builder builder, Bitmap bmp,
+                                                  Reminder notification, Account account) {
+        builder.setSmallIcon(R.mipmap.ic_stat_check);
+        builder.setLargeIcon(bmp);
+        builder.setColor(Color.WHITE);
+        builder.setContentTitle("Budget Beaver");
+        builder.setContentText( account.getName() + ": " + notification.getMessage() );
+
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle("Budget Beaver");
+        bigTextStyle.bigText(account.getName() + ": " + notification.getMessage());
+        builder.setStyle(bigTextStyle);
+    }
+
+    private static void activateNotification(NotificationManager mgr, NotificationCompat.Builder builder,
+                                             Reminder notification) {
+        // notificationID allows you to update the notification later on.
+        String uuid = "budget beaver_" + notification.getId();
+        mgr.notify(uuid.hashCode(), builder.build());
     }
 }
