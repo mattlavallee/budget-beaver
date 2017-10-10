@@ -24,11 +24,12 @@ public class NotificationsFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private ReminderAdapter notificationAdapter;
     private ArrayList<Reminder> allNotifications;
+    private View fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         //Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
+        fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
         getActivity().setTitle("Notifications");
 
         RelativeLayout parent = (RelativeLayout) getActivity().findViewById(R.id.budget_beaver_fragment_wrapper);
@@ -45,6 +46,11 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter = new ReminderAdapter(allNotifications, this, dbDispatcher);
         recyclerViewLayout.setAdapter(notificationAdapter);
 
+        TextView emptyMessage = (TextView)fragmentView.findViewById(R.id.empty_recycler_message);
+        emptyMessage.setText("There are no active notifications");
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, allNotifications.size());
+
         return fragmentView;
     }
 
@@ -58,6 +64,8 @@ public class NotificationsFragment extends Fragment {
                 ArrayList<Reminder> notificationIntegrity = dbDispatcher.Reminders.getActiveNotifications();
                 if(notificationIntegrity.size() != allNotifications.size()){
                     //notificationAdapter.updateData(notificationIntegrity);
+                    BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                            R.id.empty_recycler_message, notificationIntegrity.size());
                 }
             }
             //about the length of Snackbar.LENGTH_LONG
@@ -69,7 +77,10 @@ public class NotificationsFragment extends Fragment {
         notification.setIsNotificationActive(false);
         dbDispatcher.Reminders.updateReminder(notification);
 
-        notificationAdapter.updateData(dbDispatcher.Reminders.getActiveNotifications());
+        final ArrayList<Reminder> notifications = dbDispatcher.Reminders.getActiveNotifications();
+        notificationAdapter.updateData(notifications);
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, notifications.size());
         Snackbar snack = Snackbar
                 .make(getView(), "Notification Dismissed", Snackbar.LENGTH_LONG)
                 .setAction("Undo", new View.OnClickListener(){
@@ -77,7 +88,11 @@ public class NotificationsFragment extends Fragment {
                     public void onClick(View view){
                         notification.setIsNotificationActive(true);
                         dbDispatcher.Reminders.updateReminder(notification);
-                        notificationAdapter.updateData(dbDispatcher.Reminders.getActiveNotifications());
+
+                        ArrayList<Reminder> notificationState = dbDispatcher.Reminders.getActiveNotifications();
+                        notificationAdapter.updateData(notificationState);
+                        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                                R.id.empty_recycler_message, notificationState.size());
                     }
                 });
         TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);

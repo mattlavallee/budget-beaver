@@ -27,12 +27,13 @@ public class RemindersFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private ReminderAdapter reminderAdapter;
     private ArrayList<Reminder> allReminders;
+    private View fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
+        fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
         getActivity().setTitle("Reminders");
 
 
@@ -52,6 +53,11 @@ public class RemindersFragment extends Fragment {
 
         registerFabClickEvents(getActivity());
 
+        TextView emptyMessage = (TextView)fragmentView.findViewById(R.id.empty_recycler_message);
+        emptyMessage.setText("Use the button below to add a reminder");
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, allReminders.size());
+
         return fragmentView;
     }
 
@@ -65,6 +71,8 @@ public class RemindersFragment extends Fragment {
                 ArrayList<Reminder> reminderIntegrity = dbDispatcher.Reminders.getReminders();
                 if(reminderIntegrity.size() != allReminders.size()){
                     reminderAdapter.updateData(reminderIntegrity);
+                    BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                            R.id.empty_recycler_message, reminderIntegrity.size());
                 }
             }
             //about the length of Snackbar.LENGTH_LONG
@@ -82,6 +90,8 @@ public class RemindersFragment extends Fragment {
             dbDispatcher.Reminders.updateReminder(remindersToDelete.get(i));
         }
         reminderAdapter.updateData(new ArrayList<Reminder>());
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, 0);
 
         Snackbar snack = Snackbar
                 .make(getView(), "All reminders deleted", Snackbar.LENGTH_LONG)
@@ -93,6 +103,8 @@ public class RemindersFragment extends Fragment {
                             dbDispatcher.Reminders.updateReminder(remindersToDelete.get(i));
                         }
                         reminderAdapter.updateData(remindersToDelete);
+                        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                                R.id.empty_recycler_message, remindersToDelete.size());
                     }
                 });
         TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -108,7 +120,10 @@ public class RemindersFragment extends Fragment {
         dbDispatcher.Reminders.updateReminder(reminderToDelete);
 
         Account accountForReminder = dbDispatcher.Accounts.getAccountById(reminderToDelete.getAccountId());
-        reminderAdapter.updateData(dbDispatcher.Reminders.getReminders());
+        ArrayList<Reminder> reminders = dbDispatcher.Reminders.getReminders();
+        reminderAdapter.updateData(reminders);
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, reminders.size());
 
         Snackbar snack = Snackbar
                 .make(getView(), accountForReminder.getName() + " reminder deleted", Snackbar.LENGTH_LONG)
@@ -117,7 +132,10 @@ public class RemindersFragment extends Fragment {
                     public void onClick(View view){
                         reminderToDelete.setIsActive(true);
                         dbDispatcher.Reminders.updateReminder(reminderToDelete);
-                        reminderAdapter.updateData(dbDispatcher.Reminders.getReminders());
+                        ArrayList<Reminder> reminderState = dbDispatcher.Reminders.getReminders();
+                        reminderAdapter.updateData(reminderState);
+                        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                                R.id.empty_recycler_message, reminderState.size());
                     }
                 });
         TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -30,12 +31,13 @@ public class OverviewFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private AccountAdapter accountAdapter;
     private ArrayList<Account> allAccounts;
+    private View fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
+        fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
 
         getActivity().setTitle("Account Overview");
         //setup the Floating Action Menu for the overview fragment
@@ -57,6 +59,11 @@ public class OverviewFragment extends Fragment {
 
         registerFabClickEvents(getActivity());
 
+        TextView emptyMessage = (TextView)fragmentView.findViewById(R.id.empty_recycler_message);
+        emptyMessage.setText("Use the button below to add an account");
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, allAccounts.size());
+
         return fragmentView;
     }
 
@@ -71,6 +78,8 @@ public class OverviewFragment extends Fragment {
                 if(accountIntegrity.size() != allAccounts.size()){
                     accountAdapter.updateData(accountIntegrity);
                     allAccounts = accountIntegrity;
+                    BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                            R.id.empty_recycler_message, allAccounts.size());
                 }
             }
         //about the length of Snackbar.LENGTH_LONG
@@ -162,6 +171,9 @@ public class OverviewFragment extends Fragment {
         ArrayList<Account> allAccounts = dbDispatcher.Accounts.getAccounts();
         accountAdapter.updateData(allAccounts);
 
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, allAccounts.size());
+
         Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(), accountToDelete.getName() + " deleted" );
         snack.setAction("Undo", new View.OnClickListener() {
             @Override
@@ -178,7 +190,10 @@ public class OverviewFragment extends Fragment {
                 accountToDelete.setIsActive(true);
                 dbDispatcher.Accounts.updateAccount(accountToDelete);
 
-                accountAdapter.updateData(dbDispatcher.Accounts.getAccounts());
+                ArrayList<Account> accountState = dbDispatcher.Accounts.getAccounts();
+                accountAdapter.updateData(accountState);
+                BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                        R.id.empty_recycler_message, accountState.size());
             }
         } );
         snack.show();

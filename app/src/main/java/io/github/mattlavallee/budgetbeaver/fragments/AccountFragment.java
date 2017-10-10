@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -39,6 +40,7 @@ public class AccountFragment extends Fragment {
     private DatabaseDispatcher dbDispatcher;
     private TransactionAdapter transAdapter;
     private Account activeAccount;
+    private View fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +59,7 @@ public class AccountFragment extends Fragment {
                 appSettings.getTransactionSortDirection(accountId));
 
         // Inflate the layout for this fragment
-        View fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
+        fragmentView = inflater.inflate(R.layout.recycler_view, container, false);
         updateActivityTitle( allTransactions );
 
         //initialize the recycler view for the fragment
@@ -71,6 +73,12 @@ public class AccountFragment extends Fragment {
                 R.layout.fab_account, R.id.bb_fab_menu_account);
 
         registerFabClickEvents( getActivity(), accountId );
+
+        TextView emptyMessage = (TextView)fragmentView.findViewById(R.id.empty_recycler_message);
+        emptyMessage.setText("Use the button below to add a transaction");
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, allTransactions.size());
+
         return fragmentView;
     }
 
@@ -164,6 +172,9 @@ public class AccountFragment extends Fragment {
         updateActivityTitle( accountTransactions );
         transAdapter.updateData(new ArrayList<Transaction>());
 
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, 0);
+
         Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(), "All Transactions Deleted");
         snack.setAction("Undo", new View.OnClickListener() {
             @Override
@@ -175,6 +186,8 @@ public class AccountFragment extends Fragment {
 
                 updateActivityTitle( accountTransactions );
                 transAdapter.updateData(accountTransactions);
+                BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                        R.id.empty_recycler_message, accountTransactions.size());
             }
         });
         snack.show();
@@ -250,6 +263,9 @@ public class AccountFragment extends Fragment {
 
         Snackbar snack = SnackBarHandler.generateActionableSnackBar(getView(),
                 activeTransaction.getLocation() + " deleted");
+        BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                R.id.empty_recycler_message, allTransactions.size());
+
         snack.setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,6 +276,9 @@ public class AccountFragment extends Fragment {
                         dbDispatcher.Transactions.getTransactionsForAccount(activeTransaction.getAccountId());
                 transAdapter.updateData(transactions);
                 updateActivityTitle(transactions);
+
+                BudgetBeaverRecyclerHandler.updateViewVisibility(fragmentView, R.id.recycler_container,
+                        R.id.empty_recycler_message, transactions.size());
             }
         });
         snack.show();
