@@ -31,9 +31,9 @@ Budget Beaver allows you to set reminders that will activate once a month on the
 serve as a little reminder to do something associated with an account...pay a bill, check the status
 of something, etc.
 
-Note: reminders will only activate when you use the app and **should not** replace your other means
+Note: reminders are checked to be activated hourly or when you use the app and **should not** replace your other means
 of remembering to pay your bills.
-The developers assume no responsibility in reminding you to pay your bills
+The developers assume **absolutely no responsibility** in reminding you to pay your bills
 
 <img src="https://raw.githubusercontent.com/mattlavallee/budget-beaver/master/images/reminders.png" width="200" />
 
