@@ -41,6 +41,8 @@ public class AccountFragment extends Fragment {
     private TransactionAdapter transAdapter;
     private Account activeAccount;
     private View fragmentView;
+    private SortType sessionSortType = null;
+    private SortDirection sessionSortDirection = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -218,6 +220,9 @@ public class AccountFragment extends Fragment {
                                 SortDirection.Descending : SortDirection.Ascending;
                         SortType sortTarget = getSortType( sortType.getCheckedRadioButtonId() );
 
+                        sessionSortDirection = direction;
+                        sessionSortType = sortTarget;
+
                         ArrayList<Transaction> allTransactions = dbDispatcher.Transactions.getTransactionsForAccount(activeAccount.getId());
                         Transaction.sortTransactions( allTransactions, sortTarget, direction );
                         transAdapter.updateData(allTransactions);
@@ -294,11 +299,15 @@ public class AccountFragment extends Fragment {
 
         final CheckBox reverseSort = (CheckBox)layout.findViewById(R.id.sort_reverse_order);
         reverseSort.setChecked(false);
-        if(appSettings.getTransactionSortDirection(activeAccount.getId()) == SortDirection.Descending){
+
+        SortDirection currSortDirection = sessionSortDirection != null ? sessionSortDirection :
+                appSettings.getTransactionSortDirection(activeAccount.getId());
+        if(currSortDirection == SortDirection.Descending){
             reverseSort.setChecked(true);
         }
 
-        SortType sortType = appSettings.getTransactionSortType(activeAccount.getId());
+        SortType sortType = sessionSortType != null ? sessionSortType :
+                appSettings.getTransactionSortType(activeAccount.getId());
         RadioButton btn = null;
         switch(sortType){
             case Amount:
