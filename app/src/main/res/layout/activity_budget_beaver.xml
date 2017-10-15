@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/BBAppTheme.PopupOverlay" />
         <FrameLayout
             android:id="@+id/budget_beaver_activity_content"
             android:layout_width="match_parent"

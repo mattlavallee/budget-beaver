@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BBAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/BudgetBeaverActionBar</item>
         <item name="android:popupMenuStyle">@style/BudgetBeaverPopupMenu</item>
@@ -18,14 +18,14 @@
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="BBAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="BBAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="BBAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="BudgetBeaverTextView" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>

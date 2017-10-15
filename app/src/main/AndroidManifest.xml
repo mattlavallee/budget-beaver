@@ -10,11 +10,11 @@
         android:icon="@mipmap/ic_budget_beaver"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/BBAppTheme">
         <activity
             android:name=".BudgetBeaverActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/BBAppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
