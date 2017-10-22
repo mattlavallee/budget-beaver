@@ -43,7 +43,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             cardView = (CardView) itemView.findViewById(R.id.account_card_view);
             accountTotal = (TextView) itemView.findViewById(R.id.account_transaction_total);
             accountName = (TextView) itemView.findViewById(R.id.info_text);
-            accountName.setOnClickListener(new View.OnClickListener() {
+            cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     _container.launchAccountFragment((Integer) view.getTag());
@@ -93,6 +93,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
     @Override
     public void onBindViewHolder(AccountViewHolder viewHolder, int position) {
         Account account = accounts.get(position);
+        viewHolder.cardView.setTag(account.getId());
         viewHolder.accountName.setText(account.getName());
         viewHolder.accountName.setTag(account.getId());
         ArrayList<Transaction> transactions = new DatabaseDispatcher(adapterContainer.getContext())
