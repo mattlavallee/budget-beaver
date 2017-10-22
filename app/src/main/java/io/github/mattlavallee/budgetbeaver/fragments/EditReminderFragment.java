@@ -1,5 +1,6 @@
 package io.github.mattlavallee.budgetbeaver.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -7,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,6 +70,16 @@ public class EditReminderFragment extends Fragment {
         initializeButtons(fragmentView, reminderId, currentReminder.getAccountId());
         populateAccountSpinner(fragmentView, currentReminder.getAccountId());
         registerEditTextListeners();
+
+        final EditText firstEntry = (EditText)fragmentView.findViewById(R.id.edit_reminder_message);
+        firstEntry.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager keyboard = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(firstEntry, 0);
+            }
+        }, 100);
+
         return fragmentView;
     }
 
