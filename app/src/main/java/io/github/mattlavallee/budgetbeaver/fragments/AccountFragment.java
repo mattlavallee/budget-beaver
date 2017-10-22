@@ -291,7 +291,7 @@ public class AccountFragment extends Fragment {
 
     private void updateActivityTitle( ArrayList<Transaction> transactions ){
         String transactionTotal = Transaction.getFormattedTotal(transactions);
-        getActivity().setTitle(activeAccount.getName() + " (" + transactionTotal + ")");
+        getActivity().setTitle(activeAccount.getName() + "  " + transactionTotal);
     }
 
     private void setSortState(View layout){
