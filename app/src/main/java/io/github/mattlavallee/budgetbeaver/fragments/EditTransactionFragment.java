@@ -174,7 +174,7 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         double transAmount = 0.0;
         if(!amount.getText().toString().isEmpty()){
             transAmount = Double.parseDouble(amount.getText().toString());
-        }comac 
+        }
         if(applyDeduction.isChecked()){
             transAmount *= -1;
         }
