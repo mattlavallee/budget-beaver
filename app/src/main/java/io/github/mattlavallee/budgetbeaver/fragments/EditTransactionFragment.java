@@ -169,8 +169,8 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
                 return;
             }
         }
-        String transLocation = location.getText().toString();
-        String transDescription = description.getText().toString();
+        String transLocation = location.getText().toString().trim();
+        String transDescription = description.getText().toString().trim();
         double transAmount = 0.0;
         if(!amount.getText().toString().isEmpty()){
             transAmount = Double.parseDouble(amount.getText().toString());
@@ -180,11 +180,11 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         }
         Date transDate = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth()).getTime();
 
-        if(transLocation.length() < 3){
-            SnackBarHandler.generateSnackBar(view, "Location must be at least 3 letters").show();
+        if(transLocation.length() < 1){
+            SnackBarHandler.generateSnackBar(view, "You must provide a location").show();
             return;
         } else if( transAmount == 0.0){
-            SnackBarHandler.generateSnackBar(view, "Transaction must hav ea non-zero value").show();
+            SnackBarHandler.generateSnackBar(view, "Transaction must have a non-zero value").show();
             return;
         }
 
