@@ -3,6 +3,9 @@ package io.github.mattlavallee.budgetbeaver.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +65,8 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
             getActivity().setTitle("Edit Transaction");
             initializeFields(fragmentView, transactionId);
         }
+
+        initializeTransactionAsADeductionListener(fragmentView);
 
         //no FAB on Add/Edit transaction layout
         RelativeLayout parent = (RelativeLayout)getActivity().findViewById(R.id.budget_beaver_fragment_wrapper);
@@ -149,6 +154,28 @@ public class EditTransactionFragment extends Fragment implements TokenCompleteTe
         for(Tag tag : addedTags){
             tagTypeahead.addObject(tag);
         }
+    }
+
+    private void initializeTransactionAsADeductionListener(View view) {
+        EditText amount = (EditText)view.findViewById(R.id.edit_transaction_amount);
+        final CheckBox applyDeduction = (CheckBox)view.findViewById(R.id.edit_transaction_deduction);
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().startsWith("-")) {
+                    s.delete(0,1);
+                    applyDeduction.setChecked(true);
+                }
+
+                if (s.toString().endsWith("-")) {
+                    s.delete(s.length() - 1, s.length());
+                }
+            }
+        });
     }
 
     private void saveTransaction( View view, int transactionId, int accountId ){
