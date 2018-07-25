@@ -8,11 +8,15 @@ import android.os.Build;
 public class ReminderEventReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        Intent eventService = new Intent(context, ReminderService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(eventService);
-        } else {
-            context.startService(eventService);
+        try {
+            Intent eventService = new Intent(context, ReminderService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(eventService);
+            } else {
+                context.startService(eventService);
+            }
+        } catch(Exception e) {
+            /* TODO: fix this for real at some point */
         }
     }
 }
