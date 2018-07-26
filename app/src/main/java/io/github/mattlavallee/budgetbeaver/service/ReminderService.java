@@ -50,10 +50,12 @@ public class ReminderService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
-        ArrayList<Reminder> newNotifications = invalidateOldAndActivateNewNotifications(dbDispatcher);
-        BudgetBeaverStatusBarNotifier.generateFromService(this, newNotifications);
+        try {
+            DatabaseDispatcher dbDispatcher = new DatabaseDispatcher(getApplicationContext());
+            ArrayList<Reminder> newNotifications = invalidateOldAndActivateNewNotifications(dbDispatcher);
+            BudgetBeaverStatusBarNotifier.generateFromService(this, newNotifications);
 
-        this.stopSelf();
+            this.stopSelf();
+        } catch(Exception e) { /* not sure this is necessary */ }
     }
 }

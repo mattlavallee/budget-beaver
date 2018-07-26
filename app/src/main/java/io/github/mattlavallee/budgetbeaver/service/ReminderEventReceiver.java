@@ -11,7 +11,7 @@ public class ReminderEventReceiver extends BroadcastReceiver {
         try {
             Intent eventService = new Intent(context, ReminderService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(eventService);
+                ///context.startForegroundService(eventService);
             } else {
                 context.startService(eventService);
             }
