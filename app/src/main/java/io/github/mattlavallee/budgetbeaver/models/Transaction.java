@@ -113,7 +113,7 @@ public class Transaction {
                         sortEvaluation = transaction.getTransactionDate().compareTo(t1.getTransactionDate());
                         //secondary sort
                         if(sortEvaluation == 0){
-                            sortEvaluation = transaction.getLocation().compareTo(t1.getLocation());
+                            sortEvaluation = (new Integer(transaction.getId())).compareTo(new Integer(t1.getId()));
                         }
                         break;
                 }
