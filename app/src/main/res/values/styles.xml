@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="BBAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BBAppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/BudgetBeaverActionBar</item>
         <item name="android:popupMenuStyle">@style/BudgetBeaverPopupMenu</item>
@@ -23,18 +23,21 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="BBAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="BBAppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="BBAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="BBAppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="BudgetBeaverTextView" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
-    <style name="BudgetBeaverTextBox" parent="TextAppearance.AppCompat">
+<!--    Widget.MaterialComponents.TextInputLayout.FilledBox-->
+    <style name="BudgetBeaverTextBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">@color/colorLightGray</item>
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorControlNormal">@color/colorAccentDark</item>

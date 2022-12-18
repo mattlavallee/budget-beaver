@@ -2,10 +2,10 @@ package io.github.mattlavallee.budgetbeaver.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,9 +107,9 @@ public class RemindersFragment extends Fragment {
                                 R.id.empty_recycler_message, remindersToDelete.size());
                     }
                 });
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView snackText = (TextView) snack.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         snackText.setTextColor(Color.WHITE);
-        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        TextView actionText = (TextView) snack.getView().findViewById(com.google.android.material.R.id.snackbar_action);
         actionText.setTextColor(Color.CYAN);
         snack.show();
     }
@@ -138,9 +138,9 @@ public class RemindersFragment extends Fragment {
                                 R.id.empty_recycler_message, reminderState.size());
                     }
                 });
-        TextView snackText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView snackText = (TextView) snack.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         snackText.setTextColor(Color.WHITE);
-        TextView actionText = (TextView) snack.getView().findViewById(android.support.design.R.id.snackbar_action);
+        TextView actionText = (TextView) snack.getView().findViewById(com.google.android.material.R.id.snackbar_action);
         actionText.setTextColor(Color.CYAN);
         snack.show();
     }

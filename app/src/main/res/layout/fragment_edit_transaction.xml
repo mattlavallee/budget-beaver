@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/BudgetBeaverTextBox">
@@ -21,9 +21,9 @@
                 android:hint="Location">
                 <requestFocus/>
             </EditText>
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/BudgetBeaverTextBox">
@@ -36,7 +36,7 @@
                 android:imeOptions="actionNext"
                 android:nextFocusDown="@+id/edit_transaction_description"
                 android:hint="Amount"/>
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
             android:id="@+id/edit_transaction_deduction"
@@ -48,7 +48,7 @@
             android:inputType="none"
             android:textColor="@color/colorLightGray"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/BudgetBeaverTextBox">
@@ -60,7 +60,7 @@
                 android:imeOptions="actionDone"
                 android:nextFocusDown="@+id/edit_transaction_tags"
                 android:hint="Description"/>
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,7 +1,7 @@
 package io.github.mattlavallee.budgetbeaver.handlers;
 
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,8 +14,8 @@ public class SnackBarHandler {
     public static Snackbar generateActionableSnackBar( View view, String snackText){
         Snackbar snack = Snackbar.make(view, snackText, Snackbar.LENGTH_LONG);
 
-        setViewColor( snack, android.support.design.R.id.snackbar_text, Color.WHITE);
-        setViewColor( snack, android.support.design.R.id.snackbar_action, Color.CYAN);
+        setViewColor( snack, com.google.android.material.R.id.snackbar_text, Color.WHITE);
+        setViewColor( snack, com.google.android.material.R.id.snackbar_action, Color.CYAN);
 
         return snack;
     }
@@ -23,7 +23,7 @@ public class SnackBarHandler {
     public static Snackbar generateSnackBar(View view, String snackText){
         Snackbar snack = Snackbar.make(view, snackText, Snackbar.LENGTH_SHORT);
 
-        setViewColor( snack, android.support.design.R.id.snackbar_text, Color.CYAN);
+        setViewColor( snack, com.google.android.material.R.id.snackbar_text, Color.CYAN);
 
         return snack;
     }
