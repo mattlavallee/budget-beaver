@@ -19,7 +19,7 @@ public class ReminderSetupReceiver extends BroadcastReceiver {
             Intent eventReceiverIntent = new Intent(context, ReminderEventReceiver.class);
 
             PendingIntent intentExecuted = PendingIntent.getBroadcast(context, 0, eventReceiverIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.FLAG_IMMUTABLE);
             Calendar now = Calendar.getInstance();
             now.add(Calendar.SECOND, 60);
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, now.getTimeInMillis(), FREQUENCY, intentExecuted);
